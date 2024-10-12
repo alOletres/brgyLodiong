@@ -1,0 +1,35 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "openapi": "rtk-query-codegen-openapi openapi-config.ts"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.2",
+    "@mui/material": "^6.1.2",
+    "@reduxjs/toolkit": "^2.2.7",
+    "@rtk-query/codegen-openapi": "^1.2.0",
+    "formik": "^2.4.6",
+    "next": "14.2.14",
+    "react": "^18",
+    "react-dom": "^18",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.14",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
