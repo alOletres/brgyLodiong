@@ -25,3 +25,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.active {
+  background-color: #e7e6e3;
+}

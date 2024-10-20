@@ -53,6 +53,7 @@ model Requests {
   residentId    Int
   requestType   REQUEST_TYPE
   status        REQUEST_STATUS
+  purpose       String         @db.VarChar(255)
   dateRequested DateTime       @default(now()) @db.Timestamp(0)
   dateCompleted DateTime?
   resident      Residents[]
