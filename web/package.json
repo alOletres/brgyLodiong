@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "@rtk-query/codegen-openapi": "^1.2.0",
     "ajv": "^8.17.1",
+    "axios": "^1.7.7",
     "cookies-next": "^4.3.0",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",

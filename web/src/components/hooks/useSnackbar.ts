@@ -12,8 +12,9 @@ export function useSnackbar() {
   const snackbarProps = useSelector(selectSnackbarProps);
 
   const setSnackbarProps = useCallback(
-    (props: SnackProps) => {
+    ({ open = true, ...props }: SnackProps) => {
       const snackbarProps: SnackProps = {
+        open,
         autoHideDuration: 3000,
         ...props,
       };

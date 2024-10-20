@@ -6,6 +6,7 @@ import { Form, Formik } from "formik";
 import { Box, Button } from "@mui/material";
 import { LoginSchema } from "@/schema";
 import { CustomInput } from "@/components/TextFieldInput";
+import { useHooks } from "./hook";
 
 const Container = styled("div")({
   display: "flex",
@@ -30,12 +31,14 @@ const LoginContainer = styled("div")({
 });
 
 const LoginPage = () => {
+  const { handleSubmit, initialValues } = useHooks();
+
   return (
     <Container>
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={initialValues}
         validationSchema={LoginSchema}
-        onSubmit={() => console.log("hello world")}
+        onSubmit={handleSubmit}
       >
         {({ submitForm, isSubmitting }) => (
           <Form>
