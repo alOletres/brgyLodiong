@@ -1,0 +1,88 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/login": {
+      "post": {
+        "operationId": "AppController_login",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/residents/create": {
+      "post": {
+        "operationId": "ResidentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResidentsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "Brgy Lodiong Document Request APIs documents",
+    "description": "",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateResidentsDto": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "RESIDENT"
+            ]
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "email",
+          "contact",
+          "address",
+          "role",
+          "password"
+        ]
+      }
+    }
+  }
+}

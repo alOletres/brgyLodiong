@@ -1,9 +1,5 @@
-// import LoginPage from "./login/page";
-
-import { MiniDrawer } from "@/components/Drawer";
+import LoginPage from "./login/page";
 
 export default function Home() {
-  return <MiniDrawer />;
-
-  // <LoginPage />;
+  return <LoginPage />;
 }
