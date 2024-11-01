@@ -20,11 +20,11 @@ export class Officials {
   @ApiPropertyOptional({ type: Date })
   endTerm?: Date;
 
-  @ApiProperty({ type: String })
-  achievements: string;
+  @ApiPropertyOptional({ type: String })
+  achievements?: string;
 
-  @ApiPropertyOptional({ type: () => Projects })
-  Projects?: Projects;
+  @ApiProperty({ isArray: true, type: () => Projects })
+  Projects: Projects[];
 
   @ApiPropertyOptional({ type: Number })
   projectsId?: number;

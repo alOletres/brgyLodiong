@@ -29,8 +29,8 @@ export class Residents {
   @ApiPropertyOptional({ type: () => Auth })
   Auth?: Auth;
 
-  @ApiPropertyOptional({ type: () => Requests })
-  Requests?: Requests;
+  @ApiProperty({ isArray: true, type: () => Requests })
+  Requests: Requests[];
 
   @ApiPropertyOptional({ type: Number })
   requestsId?: number;
