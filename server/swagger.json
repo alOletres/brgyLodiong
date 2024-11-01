@@ -12,7 +12,7 @@
         }
       }
     },
-    "/api/residents/create": {
+    "/api/residents": {
       "post": {
         "operationId": "ResidentsController_create",
         "parameters": [],
@@ -28,6 +28,265 @@
         },
         "responses": {
           "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "ResidentsController_fetch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllResidentsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/residents/{id}": {
+      "put": {
+        "operationId": "ResidentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResidentsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/officials": {
+      "post": {
+        "operationId": "OfficialsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOfficialsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "OfficialsController_fetch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllOfficialsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/officials/{id}": {
+      "put": {
+        "operationId": "OfficialsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOfficialsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/request": {
+      "post": {
+        "operationId": "RequestController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "RequestController_fetch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllRequestsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/request/{id}": {
+      "put": {
+        "operationId": "RequestController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "post": {
+        "operationId": "ProjectsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "ProjectsController_fetch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllProjectsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{id}": {
+      "put": {
+        "operationId": "ProjectsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
             "description": ""
           }
         }
@@ -81,6 +340,676 @@
           "address",
           "role",
           "password"
+        ]
+      },
+      "USER_ROLE": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "RESIDENT"
+        ]
+      },
+      "ACCOUNT_STATUS": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE"
+        ]
+      },
+      "FindAllResidentsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/USER_ROLE"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ACCOUNT_STATUS"
+          }
+        },
+        "required": [
+          "id",
+          "firstname",
+          "lastname",
+          "email",
+          "contact",
+          "address",
+          "role",
+          "status"
+        ]
+      },
+      "Officials": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "position": {
+            "type": "string"
+          },
+          "startTerm": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endTerm": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "achievements": {
+            "type": "string"
+          },
+          "Projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Projects"
+            }
+          },
+          "projectsId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "firstname",
+          "lastname",
+          "position",
+          "startTerm",
+          "Projects"
+        ]
+      },
+      "Projects": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "projectName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "officialId": {
+            "type": "number"
+          },
+          "official": {
+            "$ref": "#/components/schemas/Officials"
+          }
+        },
+        "required": [
+          "id",
+          "projectName",
+          "description",
+          "startDate",
+          "officialId"
+        ]
+      },
+      "CreateOfficialsDto": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "position": {
+            "type": "string"
+          },
+          "startTerm": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endTerm": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "achievements": {
+            "type": "string"
+          },
+          "Projects": {
+            "$ref": "#/components/schemas/Projects"
+          },
+          "projectsId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "firstname",
+          "lastname",
+          "position",
+          "startTerm",
+          "achievements"
+        ]
+      },
+      "FindAllOfficialsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "position": {
+            "type": "string"
+          },
+          "startTerm": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endTerm": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "achievements": {
+            "type": "string"
+          },
+          "Projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Projects"
+            }
+          },
+          "projectsId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "firstname",
+          "lastname",
+          "position",
+          "startTerm",
+          "Projects"
+        ]
+      },
+      "REQUEST_TYPE": {
+        "type": "string",
+        "enum": [
+          "CLEARANCE",
+          "CERTIFICATE",
+          "PERMIT"
+        ]
+      },
+      "REQUEST_STATUS": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "APPROVED",
+          "REJECTED",
+          "COMPLETED"
+        ]
+      },
+      "REQUEST_MODE": {
+        "type": "string",
+        "enum": [
+          "WALKIN",
+          "ONLINE"
+        ]
+      },
+      "CreateRequestDto": {
+        "type": "object",
+        "properties": {
+          "residentId": {
+            "type": "number"
+          },
+          "requestType": {
+            "$ref": "#/components/schemas/REQUEST_TYPE"
+          },
+          "status": {
+            "$ref": "#/components/schemas/REQUEST_STATUS"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "requestMode": {
+            "$ref": "#/components/schemas/REQUEST_MODE"
+          }
+        },
+        "required": [
+          "residentId",
+          "requestType",
+          "status",
+          "purpose",
+          "requestMode"
+        ]
+      },
+      "Auth": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "residentId": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/USER_ROLE"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ACCOUNT_STATUS"
+          },
+          "lastLoggedIn": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "resident": {
+            "$ref": "#/components/schemas/Residents"
+          }
+        },
+        "required": [
+          "id",
+          "residentId",
+          "email",
+          "password",
+          "role",
+          "status",
+          "lastLoggedIn",
+          "resident"
+        ]
+      },
+      "NOTIFICATION_TYPE": {
+        "type": "string",
+        "enum": [
+          "SMS",
+          "EMAIL"
+        ]
+      },
+      "NOTIFICATION_STATUS": {
+        "type": "string",
+        "enum": [
+          "SENT",
+          "PENDING"
+        ]
+      },
+      "Notifications": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "residentId": {
+            "type": "number"
+          },
+          "requestId": {
+            "type": "number"
+          },
+          "notificationType": {
+            "$ref": "#/components/schemas/NOTIFICATION_TYPE"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/NOTIFICATION_STATUS"
+          },
+          "sentAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "residents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Residents"
+            }
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Requests"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "residentId",
+          "requestId",
+          "notificationType",
+          "message",
+          "status",
+          "sentAt",
+          "residents",
+          "requests"
+        ]
+      },
+      "Requests": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "residentId": {
+            "type": "number"
+          },
+          "requestType": {
+            "$ref": "#/components/schemas/REQUEST_TYPE"
+          },
+          "status": {
+            "$ref": "#/components/schemas/REQUEST_STATUS"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "dateRequested": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dateCompleted": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "resident": {
+            "$ref": "#/components/schemas/Residents"
+          },
+          "requestMode": {
+            "$ref": "#/components/schemas/REQUEST_MODE"
+          },
+          "Notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notifications"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "residentId",
+          "requestType",
+          "status",
+          "purpose",
+          "dateRequested",
+          "resident",
+          "requestMode",
+          "Notifications"
+        ]
+      },
+      "Events": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "eventName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "eventDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "EventNotifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventNotifications"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "eventName",
+          "description",
+          "eventDate",
+          "location",
+          "createdAt",
+          "EventNotifications"
+        ]
+      },
+      "EventNotifications": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "residentId": {
+            "type": "number"
+          },
+          "eventId": {
+            "type": "number"
+          },
+          "notificationType": {
+            "$ref": "#/components/schemas/NOTIFICATION_TYPE"
+          },
+          "status": {
+            "$ref": "#/components/schemas/NOTIFICATION_STATUS"
+          },
+          "sentAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "residents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Residents"
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Events"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "residentId",
+          "eventId",
+          "notificationType",
+          "status",
+          "sentAt",
+          "residents",
+          "events"
+        ]
+      },
+      "Residents": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "Auth": {
+            "$ref": "#/components/schemas/Auth"
+          },
+          "Requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Requests"
+            }
+          },
+          "requestsId": {
+            "type": "number"
+          },
+          "Notifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notifications"
+            }
+          },
+          "EventNotifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventNotifications"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "firstname",
+          "lastname",
+          "email",
+          "contact",
+          "address",
+          "createdAt",
+          "Requests",
+          "Notifications",
+          "EventNotifications"
+        ]
+      },
+      "FindAllRequestsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "requestType": {
+            "$ref": "#/components/schemas/REQUEST_TYPE"
+          },
+          "status": {
+            "$ref": "#/components/schemas/REQUEST_STATUS"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "dateRequested": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dateCompleted": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "requestMode": {
+            "$ref": "#/components/schemas/REQUEST_MODE"
+          },
+          "resident": {
+            "$ref": "#/components/schemas/Residents"
+          }
+        },
+        "required": [
+          "id",
+          "requestType",
+          "status",
+          "purpose",
+          "dateRequested",
+          "requestMode",
+          "resident"
+        ]
+      },
+      "CreateProjectsDto": {
+        "type": "object",
+        "properties": {
+          "projectName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "officialId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "projectName",
+          "description",
+          "startDate",
+          "officialId"
+        ]
+      },
+      "FindAllProjectsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "projectName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "official": {
+            "$ref": "#/components/schemas/Officials"
+          }
+        },
+        "required": [
+          "id",
+          "projectName",
+          "description",
+          "startDate"
         ]
       }
     }
