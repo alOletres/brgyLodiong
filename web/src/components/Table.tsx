@@ -69,7 +69,7 @@ export interface TableActions {
  * @align the alignment of each cells
  * @format this type was able to manipulate numbers format
  */
-export interface Column<T> extends TableActions {
+export interface ColumnSchema<T> extends TableActions {
   key: keyof T;
   label: string;
   minWidth?: number;
@@ -85,7 +85,7 @@ export interface Column<T> extends TableActions {
 export interface CustomTableProps<T = any> extends TableActions {
   tableHeader?: string;
   dataSource: T[];
-  columns: Column<any>[];
+  columns: ColumnSchema<any>[];
 }
 
 const CustomTable = ({
