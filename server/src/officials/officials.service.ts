@@ -6,7 +6,7 @@ import { CreateOfficialsDto } from './dto/create-official.dto';
 export class OfficialsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(payload: CreateOfficialsDto) {
+  async create({ endTerm = null, ...payload }: CreateOfficialsDto) {
     try {
       await this.prisma.officials.create({
         data: {
@@ -14,8 +14,8 @@ export class OfficialsService {
           lastname: payload.lastname,
           position: payload.position,
           startTerm: payload.startTerm,
-          endTerm: payload.endTerm,
           achievements: payload.achievements,
+          endTerm,
         },
       });
     } catch (err) {
