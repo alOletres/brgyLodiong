@@ -13,3 +13,23 @@ export const OfficialSchema = yup.object().shape({
   startTerm: yup.date().required("This field is required").nullable(),
   endTerm: yup.date().optional(),
 });
+
+export const ProjectsSchema = yup.object().shape({
+  officialId: yup.number().min(1).required("This field is required"),
+  projectName: yup.string().required("This field is required"),
+  description: yup.string().required("This field is required"),
+  startDate: yup.date().required("This field is required").nullable(),
+  endDate: yup.date().optional(),
+});
+
+export const ResidentSchema = yup.object().shape({
+  firstname: yup.string().required("This field is required"),
+  lastname: yup.string().required("This field is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("This field is required"),
+  contact: yup.number().required("This field is required"),
+  address: yup.string().required("This field is required"),
+  password: yup.string().required("This field is required"),
+});

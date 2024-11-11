@@ -50,33 +50,14 @@ export type CreateProjectsDto = {
   endDate?: string;
   officialId: number;
 };
-export type Projects = {
-  id: number;
-  projectName: string;
-  description: string;
-  startDate: string;
-  endDate?: string;
-  officialId: number;
-  official?: Officials;
-};
-export type Officials = {
-  id: number;
-  firstname: string;
-  lastname: string;
-  position: string;
-  startTerm: string;
-  endTerm?: string;
-  achievements?: string;
-  Projects: Projects[];
-  projectsId?: number;
-};
 export type FindAllProjectsDto = {
   id: number;
   projectName: string;
   description: string;
   startDate: string;
   endDate?: string;
-  official?: Officials;
+  officialId: number;
+  officialName: string;
 };
 export const {
   useProjectsControllerCreateMutation,
