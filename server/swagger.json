@@ -1001,15 +1001,20 @@
             "format": "date-time",
             "type": "string"
           },
-          "official": {
-            "$ref": "#/components/schemas/Officials"
+          "officialId": {
+            "type": "number"
+          },
+          "officialName": {
+            "type": "string"
           }
         },
         "required": [
           "id",
           "projectName",
           "description",
-          "startDate"
+          "startDate",
+          "officialId",
+          "officialName"
         ]
       }
     }

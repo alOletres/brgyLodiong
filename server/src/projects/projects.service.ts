@@ -27,24 +27,31 @@ export class ProjectsService {
   }
 
   async fetch(): Promise<FindAllProjectsDto[]> {
-    return await this.prisma.projects.findMany({
+    const projects = await this.prisma.projects.findMany({
       select: {
         id: true,
         projectName: true,
         description: true,
         startDate: true,
         endDate: true,
+        officialId: true,
         official: {
           select: {
             firstname: true,
             lastname: true,
-            achievements: true,
-            startTerm: true,
-            endTerm: true,
             position: true,
           },
         },
       },
+    });
+
+    return projects.map((value) => {
+      const { official, ...data } = value;
+
+      return {
+        ...data,
+        officialName: `${official.position} ${official.firstname} ${official.lastname}`,
+      };
     });
   }
 }

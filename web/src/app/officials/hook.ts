@@ -18,6 +18,8 @@ import { FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import moment from "moment";
 
+export type IHandleSubmitType = "Submit" | "Save Changes";
+
 const initialValues: CreateOfficialsDto = {
   firstname: "",
   lastname: "",
@@ -28,10 +30,11 @@ const initialValues: CreateOfficialsDto = {
 };
 
 export const useHooks = () => {
-  const { officials, handleCreate, handleUpdate } = useOfficialsApi();
+  const { officials, handleCreate, handleUpdate, isFetchingOfficials } =
+    useOfficialsApi();
   const { setSnackbarProps } = useSnackbar();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [btnName, setBtnName] = useState<"Submit" | "Save Changes">("Submit");
+  const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
 
   const [initialFormValues, setInitialFormValues] =
     useState<CreateOfficialsDto>(initialValues);
@@ -238,5 +241,6 @@ export const useHooks = () => {
     btnName,
     tableCellActions,
     handleSearch,
+    isFetchingOfficials,
   };
 };

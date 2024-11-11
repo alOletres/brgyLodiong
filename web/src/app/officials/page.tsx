@@ -4,6 +4,7 @@ import { useHooks } from "./hook";
 import Modal from "@/components/Modal";
 import { OfficialSchema } from "@/schema";
 import SearchBar from "@/components/SearchBar";
+import { LinearProgress } from "@mui/material";
 
 const OfficialPage = () => {
   const {
@@ -18,6 +19,7 @@ const OfficialPage = () => {
     btnName,
     tableCellActions,
     handleSearch,
+    isFetchingOfficials,
   } = useHooks();
   return (
     <>
@@ -36,13 +38,18 @@ const OfficialPage = () => {
         width={500}
       />
       <SearchBar label="Search firstname" onChange={handleSearch} />
-      <CustomTable
-        tableHeader="Officials list"
-        columns={columnSchema}
-        dataSource={dataSource}
-        headerActions={tableHeaderActions}
-        cellActions={tableCellActions}
-      />
+
+      {isFetchingOfficials ? (
+        <LinearProgress color="primary" />
+      ) : (
+        <CustomTable
+          tableHeader="Officials list"
+          columns={columnSchema}
+          dataSource={dataSource}
+          headerActions={tableHeaderActions}
+          cellActions={tableCellActions}
+        />
+      )}
     </>
   );
 };
