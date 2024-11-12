@@ -1,6 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Requests as RequestEntity } from './../../_gen-prisma-classes/requests';
-import { Residents } from 'src/_gen-prisma-classes/residents';
 
 export class FindAllRequestsDto extends PickType(RequestEntity, [
   'id',
@@ -10,10 +9,17 @@ export class FindAllRequestsDto extends PickType(RequestEntity, [
   'dateRequested',
   'dateCompleted',
   'requestMode',
+  'residentId',
 ]) {
-  @ApiProperty({ type: () => Residents })
-  resident: Pick<
-    Residents,
-    'firstname' | 'lastname' | 'contact' | 'email' | 'address'
-  >;
+  @ApiProperty({ type: String })
+  contact: string;
+
+  @ApiProperty({ type: String })
+  email: string;
+
+  @ApiProperty({ type: String })
+  address: string;
+
+  @ApiProperty({ type: String })
+  requestedBy: string;
 }

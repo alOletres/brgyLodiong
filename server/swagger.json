@@ -609,316 +609,15 @@
           "requestMode"
         ]
       },
-      "Auth": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "residentId": {
-            "type": "number"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "role": {
-            "$ref": "#/components/schemas/USER_ROLE"
-          },
-          "status": {
-            "$ref": "#/components/schemas/ACCOUNT_STATUS"
-          },
-          "lastLoggedIn": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "resident": {
-            "$ref": "#/components/schemas/Residents"
-          }
-        },
-        "required": [
-          "id",
-          "residentId",
-          "email",
-          "password",
-          "role",
-          "status",
-          "lastLoggedIn",
-          "resident"
-        ]
-      },
-      "NOTIFICATION_TYPE": {
-        "type": "string",
-        "enum": [
-          "SMS",
-          "EMAIL"
-        ]
-      },
-      "NOTIFICATION_STATUS": {
-        "type": "string",
-        "enum": [
-          "SENT",
-          "PENDING"
-        ]
-      },
-      "Notifications": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "residentId": {
-            "type": "number"
-          },
-          "requestId": {
-            "type": "number"
-          },
-          "notificationType": {
-            "$ref": "#/components/schemas/NOTIFICATION_TYPE"
-          },
-          "message": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/NOTIFICATION_STATUS"
-          },
-          "sentAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "residents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Residents"
-            }
-          },
-          "requests": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Requests"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "residentId",
-          "requestId",
-          "notificationType",
-          "message",
-          "status",
-          "sentAt",
-          "residents",
-          "requests"
-        ]
-      },
-      "Requests": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "residentId": {
-            "type": "number"
-          },
-          "requestType": {
-            "$ref": "#/components/schemas/REQUEST_TYPE"
-          },
-          "status": {
-            "$ref": "#/components/schemas/REQUEST_STATUS"
-          },
-          "purpose": {
-            "type": "string"
-          },
-          "dateRequested": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "dateCompleted": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "resident": {
-            "$ref": "#/components/schemas/Residents"
-          },
-          "requestMode": {
-            "$ref": "#/components/schemas/REQUEST_MODE"
-          },
-          "Notifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Notifications"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "residentId",
-          "requestType",
-          "status",
-          "purpose",
-          "dateRequested",
-          "resident",
-          "requestMode",
-          "Notifications"
-        ]
-      },
-      "Events": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "eventName": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "eventDate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "location": {
-            "type": "string"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "EventNotifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EventNotifications"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "eventName",
-          "description",
-          "eventDate",
-          "location",
-          "createdAt",
-          "EventNotifications"
-        ]
-      },
-      "EventNotifications": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "residentId": {
-            "type": "number"
-          },
-          "eventId": {
-            "type": "number"
-          },
-          "notificationType": {
-            "$ref": "#/components/schemas/NOTIFICATION_TYPE"
-          },
-          "status": {
-            "$ref": "#/components/schemas/NOTIFICATION_STATUS"
-          },
-          "sentAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "residents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Residents"
-            }
-          },
-          "events": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Events"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "residentId",
-          "eventId",
-          "notificationType",
-          "status",
-          "sentAt",
-          "residents",
-          "events"
-        ]
-      },
-      "Residents": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "firstname": {
-            "type": "string"
-          },
-          "lastname": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "contact": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "Auth": {
-            "$ref": "#/components/schemas/Auth"
-          },
-          "Requests": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Requests"
-            }
-          },
-          "requestsId": {
-            "type": "number"
-          },
-          "Notifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Notifications"
-            }
-          },
-          "EventNotifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EventNotifications"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "firstname",
-          "lastname",
-          "email",
-          "contact",
-          "address",
-          "createdAt",
-          "Requests",
-          "Notifications",
-          "EventNotifications"
-        ]
-      },
       "FindAllRequestsDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "number"
           },
+          "residentId": {
+            "type": "number"
+          },
           "requestType": {
             "$ref": "#/components/schemas/REQUEST_TYPE"
           },
@@ -939,18 +638,31 @@
           "requestMode": {
             "$ref": "#/components/schemas/REQUEST_MODE"
           },
-          "resident": {
-            "$ref": "#/components/schemas/Residents"
+          "contact": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "requestedBy": {
+            "type": "string"
           }
         },
         "required": [
           "id",
+          "residentId",
           "requestType",
           "status",
           "purpose",
           "dateRequested",
           "requestMode",
-          "resident"
+          "contact",
+          "email",
+          "address",
+          "requestedBy"
         ]
       },
       "CreateProjectsDto": {
