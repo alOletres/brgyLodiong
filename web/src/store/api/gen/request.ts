@@ -53,85 +53,19 @@ export type CreateRequestDto = {
   purpose: string;
   requestMode: RequestMode;
 };
-export type UserRole = "ADMIN" | "RESIDENT";
-export type AccountStatus = "ACTIVE" | "INACTIVE";
-export type Auth = {
-  id: number;
-  residentId: number;
-  email: string;
-  password: string;
-  role: UserRole;
-  status: AccountStatus;
-  lastLoggedIn: string;
-  resident: Residents;
-};
-export type NotificationType = "SMS" | "EMAIL";
-export type NotificationStatus = "SENT" | "PENDING";
-export type Notifications = {
-  id: number;
-  residentId: number;
-  requestId: number;
-  notificationType: NotificationType;
-  message: string;
-  status: NotificationStatus;
-  sentAt: string;
-  residents: Residents[];
-  requests: Requests[];
-};
-export type Requests = {
-  id: number;
-  residentId: number;
-  requestType: RequestType;
-  status: RequestStatus;
-  purpose: string;
-  dateRequested: string;
-  dateCompleted?: string;
-  resident: Residents;
-  requestMode: RequestMode;
-  Notifications: Notifications[];
-};
-export type Events = {
-  id: number;
-  eventName: string;
-  description: string;
-  eventDate: string;
-  location: string;
-  createdAt: string;
-  EventNotifications: EventNotifications[];
-};
-export type EventNotifications = {
-  id: number;
-  residentId: number;
-  eventId: number;
-  notificationType: NotificationType;
-  status: NotificationStatus;
-  sentAt: string;
-  residents: Residents[];
-  events: Events[];
-};
-export type Residents = {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  contact: string;
-  address: string;
-  createdAt: string;
-  Auth?: Auth;
-  Requests: Requests[];
-  requestsId?: number;
-  Notifications: Notifications[];
-  EventNotifications: EventNotifications[];
-};
 export type FindAllRequestsDto = {
   id: number;
+  residentId: number;
   requestType: RequestType;
   status: RequestStatus;
   purpose: string;
   dateRequested: string;
   dateCompleted?: string;
   requestMode: RequestMode;
-  resident: Residents;
+  contact: string;
+  email: string;
+  address: string;
+  requestedBy: string;
 };
 export const {
   useRequestControllerCreateMutation,

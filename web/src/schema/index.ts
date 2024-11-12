@@ -33,3 +33,10 @@ export const ResidentSchema = yup.object().shape({
   address: yup.string().required("This field is required"),
   password: yup.string().required("This field is required"),
 });
+
+export const RequestSchema = yup.object().shape({
+  residentId: yup.number().min(1).required("This field is required"),
+  requestType: yup.string().required("This field is required"),
+  purpose: yup.string().required("This field is required"),
+  status: yup.string().required("This field is required"),
+});

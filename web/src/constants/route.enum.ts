@@ -7,4 +7,6 @@ export enum EROUTE_PROTECTED {
   PROJECTS = "projects",
   REQUEST = "request",
   RESIDENTS = "residents",
+  NOTIFICATIONS = "notifications",
+  EVENTS = "events",
 }

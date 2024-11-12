@@ -63,7 +63,9 @@ export class ResidentsService {
           email: true,
           address: true,
           contact: true,
-          Auth: { select: { role: true, status: true } },
+          Auth: {
+            select: { role: true, status: true },
+          },
         },
       });
 

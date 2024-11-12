@@ -3,6 +3,8 @@ import {
   FolderCopyOutlined,
   RequestPageRounded,
   Person2TwoTone,
+  NotificationAddOutlined,
+  EventAvailableOutlined,
 } from "@mui/icons-material";
 import { useState } from "react";
 
@@ -16,7 +18,8 @@ interface IDrawerListProps {
   icon: React.ReactNode; // Correct type for a React component in a prop
 }
 
-const { OFFICIALS, PROJECTS, REQUEST, RESIDENTS } = EROUTE_PROTECTED;
+const { OFFICIALS, PROJECTS, REQUEST, RESIDENTS, NOTIFICATIONS, EVENTS } =
+  EROUTE_PROTECTED;
 
 export const useHooks = () => {
   const theme = useTheme();
@@ -27,6 +30,8 @@ export const useHooks = () => {
     { icon: <FolderCopyOutlined />, link: PROJECTS },
     { icon: <Person2TwoTone />, link: RESIDENTS },
     { icon: <RequestPageRounded />, link: REQUEST },
+    { icon: <EventAvailableOutlined />, link: EVENTS },
+    { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },
   ]);
 
   // Url Name
