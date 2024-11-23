@@ -291,6 +291,76 @@
           }
         }
       }
+    },
+    "/api/events": {
+      "post": {
+        "operationId": "EventsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "EventsController_fetch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllEventsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/{id}": {
+      "put": {
+        "operationId": "EventsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
@@ -727,6 +797,71 @@
           "startDate",
           "officialId",
           "officialName"
+        ]
+      },
+      "CreateEventsDto": {
+        "type": "object",
+        "properties": {
+          "eventImage": {
+            "type": "string"
+          },
+          "eventName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "eventDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "eventImage",
+          "eventName",
+          "description",
+          "eventDate",
+          "location"
+        ]
+      },
+      "FindAllEventsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "eventImage": {
+            "type": "string"
+          },
+          "eventName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "eventDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "eventImage",
+          "eventName",
+          "description",
+          "eventDate",
+          "location",
+          "createdAt"
         ]
       }
     }

@@ -10,6 +10,6 @@ async function bootstrap() {
   await writeFile('./swagger.json', JSON.stringify(document, null, '  '));
 
   SwaggerModule.setup('api/swagger', app, document);
-  await app.listen(3031);
+  await app.listen(4000);
 }
 bootstrap();

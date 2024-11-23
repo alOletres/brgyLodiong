@@ -23,6 +23,9 @@ const config: ConfigFile = {
     "./src/store/api/gen/residents.ts": {
       filterEndpoints: [/residentsController/],
     },
+    "./src/store/api/gen/event.ts": {
+      filterEndpoints: [/eventsController/],
+    },
   },
 };
 

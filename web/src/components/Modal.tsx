@@ -127,10 +127,18 @@ const CustomModal = ({
                             {...field.fieldProps}
                             onChange={(e) => {
                               if (field.fieldProps.name) {
-                                setFieldValue(
-                                  field.fieldProps.name,
-                                  e.target.value
-                                );
+                                if (field.fieldProps.type === "file") {
+                                  const target = e.target as HTMLInputElement; // Type assertion
+
+                                  const file = target.files?.[0];
+
+                                  setFieldValue(field.fieldProps.name, file); // Update Formik state with file object
+                                } else {
+                                  setFieldValue(
+                                    field.fieldProps.name,
+                                    e.target.value
+                                  ); // Handle other input types
+                                }
                               }
                             }}
                             key={index}

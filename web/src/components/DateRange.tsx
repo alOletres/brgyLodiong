@@ -9,7 +9,7 @@ import {
 import { FormikHelpers } from "formik";
 
 export interface CustomDateRangePickerProps extends DateRangePickerProps<any> {
-  localeText?: undefined;
+  localeText?: any;
   onSubmit?: (value: any, helpers: FormikHelpers<any>) => void;
 }
 const CustomDateRangePicker = ({
