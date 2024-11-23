@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RequestModule } from './request/request.module';
 import { ProjectsModule } from './projects/projects.module';
+import { EventsModule } from './events/events.module';
 @Module({
   imports: [
     AuthModule,
@@ -20,6 +21,7 @@ import { ProjectsModule } from './projects/projects.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     RequestModule,
     ProjectsModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

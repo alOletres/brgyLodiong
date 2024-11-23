@@ -3,6 +3,7 @@ import { enhancedApi as officialsApi } from "@/store/api/gen/officials";
 import { enhancedApi as projectsApi } from "@/store/api/gen/projects";
 import { enhancedApi as residentsApi } from "@/store/api/gen/residents";
 import { enhancedApi as requestApi } from "@/store/api/gen/request";
+import { enhancedApi as eventApi } from "@/store/api/gen/event";
 
 const enhancedAuthApi = authApi.enhanceEndpoints({
   addTagTypes: ["auth"],
@@ -69,10 +70,26 @@ const enhanceRequestApi = requestApi.enhanceEndpoints({
   },
 });
 
+const enhanceEventsApi = eventApi.enhanceEndpoints({
+  addTagTypes: ["events"],
+  endpoints: {
+    eventsControllerFetch: {
+      providesTags: ["events"],
+    },
+    eventsControllerCreate: {
+      invalidatesTags: ["events"],
+    },
+    eventsControllerUpdate: {
+      invalidatesTags: ["events"],
+    },
+  },
+});
+
 export {
   enhancedAuthApi as authApi,
   enhanceOfficialsApi as officialsApi,
   enhanceProjectsApi as projectsApi,
   enhanceResidentsApi as residentsApi,
   enhanceRequestApi as requestApi,
+  enhanceEventsApi as eventApi,
 };

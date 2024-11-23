@@ -40,3 +40,22 @@ export const RequestSchema = yup.object().shape({
   purpose: yup.string().required("This field is required"),
   status: yup.string().required("This field is required"),
 });
+
+export const EventSchema = yup.object().shape({
+  eventImage: yup
+    .mixed<File>()
+    .nullable()
+    .required("This field is required")
+    .test("fileSize", "File size must be less than 2MB", (value) => {
+      if (!value) return true; // Skip validation if no file is selected
+      return value.size <= 2 * 1024 * 1024; // Check if file is less than 2MB
+    })
+    .test("fileType", "Only JPG and PNG formats are allowed", (value) => {
+      if (!value) return true; // Skip validation if no file is provided
+      return ["image/jpeg", "image/png"].includes(value.type); // Check file type
+    }),
+  eventName: yup.string().required("This field is required"),
+  description: yup.string().required("This field is required"),
+  eventDate: yup.date().required("This field is required"),
+  location: yup.string().required("This field is required"),
+});

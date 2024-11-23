@@ -19,7 +19,7 @@ import { useHook } from "./hooks/useTable";
 import { Typography, SxProps } from "@mui/material";
 import CustomDateRangePicker, { CustomDateRangePickerProps } from "./DateRange";
 import { Formik } from "formik";
-
+import Avatar from "@mui/material/Avatar";
 export interface DateRangeValues {
   startDate: string;
   endDate: string;
@@ -75,6 +75,7 @@ export interface ColumnSchema<T> extends TableActions {
   minWidth?: number;
   align?: TableCellProps["align"];
   format?: (value: number) => string;
+  type?: "file";
 }
 
 /**
@@ -221,13 +222,23 @@ const CustomTable = ({
                       {columns?.length &&
                         columns.map((column, cellIndex) => {
                           if (column.key !== "cellActions") {
-                            return (
-                              <TableCell key={cellIndex} align={column.align}>
-                                {column?.format && row[column.key]
-                                  ? column.format(row[column.key])
-                                  : row[column.key]}
-                              </TableCell>
-                            );
+                            {
+                              return column.type === "file" ? (
+                                <Avatar
+                                  src={`${process.env.NEXT_PUBLIC_API_ORIGIN}/${
+                                    row[column.key]
+                                  }`}
+                                  alt="Event Image"
+                                  key={cellIndex}
+                                />
+                              ) : (
+                                <TableCell key={cellIndex} align={column.align}>
+                                  {column?.format && row[column.key]
+                                    ? column.format(row[column.key])
+                                    : row[column.key]}
+                                </TableCell>
+                              );
+                            }
                           } else {
                             return (
                               cellActions?.length && (

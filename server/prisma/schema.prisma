@@ -97,6 +97,7 @@ model Notifications {
 
 model Events {
   id          Int      @id @default(autoincrement())
+  eventImage  String   @db.Text
   eventName   String   @db.VarChar(255)
   description String   @db.Text
   eventDate   DateTime

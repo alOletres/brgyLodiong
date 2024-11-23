@@ -1,28 +1,27 @@
-import { EventNotifications } from './event_notifications';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
-export class Events {
-  @ApiProperty({ type: Number })
-  id: number;
-
+export class CreateEventsDto {
   @ApiProperty({ type: String })
   eventImage: string;
 
   @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   eventName: string;
 
   @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   description: string;
 
   @ApiProperty({ type: Date })
+  @IsNotEmpty()
+  @IsDate()
   eventDate: Date;
 
   @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   location: string;
-
-  @ApiProperty({ type: Date })
-  createdAt: Date;
-
-  @ApiProperty({ isArray: true, type: () => EventNotifications })
-  EventNotifications: EventNotifications[];
 }

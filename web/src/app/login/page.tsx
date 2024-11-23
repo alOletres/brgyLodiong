@@ -3,10 +3,11 @@ import React from "react";
 import { styled } from "@mui/system";
 import { LockOpenOutlined } from "@mui/icons-material";
 import { Form, Formik } from "formik";
-import { Box, Button } from "@mui/material";
+import { Box, Button, SxProps } from "@mui/material";
 import { LoginSchema } from "@/schema";
 import { CustomInput } from "@/components/TextFieldInput";
 import { useHooks } from "./hook";
+import { Theme } from "@emotion/react";
 
 const Container = styled("div")({
   display: "flex",
@@ -29,6 +30,19 @@ const LoginContainer = styled("div")({
   textTransform: "uppercase",
   padding: "20px",
 });
+
+const buttonStyle: SxProps<Theme> = {
+  flex: 1,
+  justifyContent: "center",
+  textAlign: "center",
+  fontSize: 12,
+  color: "blue",
+  padding: 1,
+  ":hover": {
+    cursor: "pointer",
+    textDecoration: "underline",
+  },
+};
 
 const LoginPage = () => {
   const { handleSubmit, initialValues } = useHooks();
@@ -60,7 +74,7 @@ const LoginPage = () => {
                 type="password"
               />
 
-              <div style={{ paddingTop: "6px", width: "100%" }}>
+              <Box sx={{ paddingTop: "6px", width: "100%" }}>
                 <Button
                   disabled={isSubmitting}
                   style={{ width: "100%" }}
@@ -70,23 +84,10 @@ const LoginPage = () => {
                   Sign In
                 </Button>
 
-                <Box
-                  sx={{
-                    flex: 1,
-                    justifyContent: "center",
-                    textAlign: "center",
-                    fontSize: 12,
-                    color: "blue",
-                    padding: 1,
-                    ":hover": {
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                    },
-                  }}
-                >
+                <Box sx={buttonStyle}>
                   <span>Click here to register</span>
                 </Box>
-              </div>
+              </Box>
             </FormContainer>
           </Form>
         )}
