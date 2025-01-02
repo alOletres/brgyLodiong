@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { REQUEST_MODE, REQUEST_STATUS, REQUEST_TYPE } from '@prisma/client';
 
 export class CreateRequestDto {
@@ -14,9 +14,9 @@ export class CreateRequestDto {
   requestType: REQUEST_TYPE;
 
   @ApiProperty({ enum: REQUEST_STATUS, enumName: 'REQUEST_STATUS' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  status: REQUEST_STATUS;
+  status: REQUEST_STATUS = REQUEST_STATUS.PENDING;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
@@ -24,7 +24,7 @@ export class CreateRequestDto {
   purpose: string;
 
   @ApiProperty({ enum: REQUEST_MODE, enumName: 'REQUEST_MODE' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   requestMode: REQUEST_MODE = REQUEST_MODE.ONLINE;
 }

@@ -14,7 +14,7 @@ export class ResidentsService {
     ...payload
   }: CreateResidentsDto) {
     try {
-      const hash = await hashPassword(password);
+      const hash = hashPassword(password);
       await this.prisma.residents.create({
         data: {
           ...payload,

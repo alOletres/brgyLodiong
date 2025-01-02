@@ -12,6 +12,36 @@
         }
       }
     },
+    "/api/{email}": {
+      "put": {
+        "operationId": "AppController_changePassword",
+        "parameters": [
+          {
+            "name": "email",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/residents": {
       "post": {
         "operationId": "ResidentsController_create",
@@ -222,6 +252,26 @@
         }
       }
     },
+    "/api/request/find/{id}": {
+      "get": {
+        "operationId": "RequestController_findByResident",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/projects": {
       "post": {
         "operationId": "ProjectsController_create",
@@ -373,6 +423,10 @@
   "servers": [],
   "components": {
     "schemas": {
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {}
+      },
       "CreateResidentsDto": {
         "type": "object",
         "properties": {
@@ -802,9 +856,6 @@
       "CreateEventsDto": {
         "type": "object",
         "properties": {
-          "eventImage": {
-            "type": "string"
-          },
           "eventName": {
             "type": "string"
           },
@@ -820,7 +871,6 @@
           }
         },
         "required": [
-          "eventImage",
           "eventName",
           "description",
           "eventDate",
@@ -832,9 +882,6 @@
         "properties": {
           "id": {
             "type": "number"
-          },
-          "eventImage": {
-            "type": "string"
           },
           "eventName": {
             "type": "string"
@@ -856,7 +903,6 @@
         },
         "required": [
           "id",
-          "eventImage",
           "eventName",
           "description",
           "eventDate",
