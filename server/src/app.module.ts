@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RequestModule } from './request/request.module';
 import { ProjectsModule } from './projects/projects.module';
 import { EventsModule } from './events/events.module';
+import { TwilioService } from './twilio/twilio.service';
 @Module({
   imports: [
     AuthModule,
@@ -24,6 +25,6 @@ import { EventsModule } from './events/events.module';
     EventsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, TwilioService],
 })
 export class AppModule {}

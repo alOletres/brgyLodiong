@@ -21,6 +21,7 @@
     "@rtk-query/codegen-openapi": "^1.2.0",
     "ajv": "^8.17.1",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.7",
     "cookies-next": "^4.3.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
@@ -30,6 +31,7 @@
     "moment": "^2.30.1",
     "next": "14.2.14",
     "react": "^18",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^18",
     "react-redux": "^9.1.2",
     "yup": "^1.4.0"

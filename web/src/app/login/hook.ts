@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { FormikHelpers } from "formik";
@@ -5,6 +6,8 @@ import { useState } from "react";
 import { setToken } from "@/lib/tokenStorage";
 import { useRouter } from "next/navigation";
 import { EROUTE_PROTECTED } from "@/constants/route.enum";
+import { useResidentsApi } from "@/store/api/hooks/residents";
+import { CreateResidentsDto } from "@/store/api/gen/residents";
 
 interface ILoginPayload {
   email: string;
@@ -18,6 +21,10 @@ export const useHooks = () => {
   });
   const { setSnackbarProps } = useSnackbar();
   const { push } = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const { handleCreate: create } = useResidentsApi();
+  const handleToggleModal = () => setOpen((state) => !state);
 
   const handleSubmit = async (
     values: ILoginPayload,
@@ -35,11 +42,30 @@ export const useHooks = () => {
       resetForm();
       setSnackbarProps({ message: "User successfully login.." });
 
-      push(EROUTE_PROTECTED.OFFICIALS);
+      push(EROUTE_PROTECTED.DASHBOARD);
     } catch (err) {
       throw err;
     }
   };
 
-  return { handleSubmit, initialValues };
+  const handleSignUp = async (
+    values: CreateResidentsDto,
+    { resetForm, setSubmitting }: FormikHelpers<CreateResidentsDto>
+  ) => {
+    try {
+      await create({ ...values, contact: `+63${values.contact}` });
+      setSubmitting(false);
+      setOpen(false);
+      resetForm();
+      setSnackbarProps({
+        message: "Resident successfully created!",
+        severity: "success",
+      });
+    } catch (err: any) {
+      console.log("err", err);
+      setSnackbarProps({ message: err?.message, severity: "error" });
+    }
+  };
+
+  return { handleSubmit, handleSignUp, initialValues, handleToggleModal, open };
 };

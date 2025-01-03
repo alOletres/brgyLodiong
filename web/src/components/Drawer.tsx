@@ -100,7 +100,7 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
             alt="Picture of the author"
           />
           <Typography sx={{ fontWeight: "bold", fontSize: 12 }}>
-            Brgy. Lower Lodiong{" "}
+            Brgy. Lower Lodiong
           </Typography>
 
           <IconButton onClick={handleDrawerClose}>

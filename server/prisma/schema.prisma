@@ -65,7 +65,11 @@ model Officials {
   firstname    String     @db.VarChar(50)
   lastname     String     @db.VarChar(50)
   position     String     @db.VarChar(50)
+<<<<<<< HEAD
+  startTerm    DateTime   
+=======
   startTerm    DateTime
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
   endTerm      DateTime?
   achievements String?    @db.Text
   Projects     Projects[]
@@ -97,7 +101,10 @@ model Notifications {
 
 model Events {
   id          Int      @id @default(autoincrement())
+<<<<<<< HEAD
+=======
   eventImage  String   @db.Text
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
   eventName   String   @db.VarChar(255)
   description String   @db.Text
   eventDate   DateTime

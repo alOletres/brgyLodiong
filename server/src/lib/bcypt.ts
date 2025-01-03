@@ -1,9 +1,9 @@
-import { hash } from 'bcrypt';
+import { hashSync, genSaltSync } from 'bcrypt';
 
-export const hashPassword = async (password: string) => {
-  const saltRounds = parseInt(process.env.SALTROUND);
+export const hashPassword = (password: string) => {
+  const saltRounds = genSaltSync(parseInt(process.env.SALTROUND));
 
   if (!saltRounds) return undefined;
 
-  return await hash(password, saltRounds);
+  return hashSync(password, saltRounds);
 };

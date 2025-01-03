@@ -68,7 +68,6 @@ export const CustomAppBar = ({
             }}
           >
             <LogoutTwoTone />
-            <Typography>Sign out</Typography>
           </Box>
         </Box>
       </Toolbar>

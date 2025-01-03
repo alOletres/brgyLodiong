@@ -38,4 +38,9 @@ export class RequestController {
   async fetch() {
     return await this.requestService.fetch();
   }
+
+  @Get('find/:id')
+  async findByResident(@Param('id', ParseIntPipe) id: number) {
+    return await this.requestService.findByResident(id);
+  }
 }

@@ -3,13 +3,11 @@
  * @param url
  * @returns
  */
-export const convertToBase64 = async (url: string) => {
-  const response = await fetch(url);
-  const blob = await response.blob();
+export const convertToBase64 = async (url: File) => {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result as string);
     reader.onerror = reject;
-    reader.readAsDataURL(blob);
+    reader.readAsDataURL(url);
   });
 };

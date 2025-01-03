@@ -18,7 +18,11 @@ import { IHandleSubmitType } from "../officials/hook";
 import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 
+<<<<<<< HEAD
+export const residentInitialValues: CreateResidentsDto = {
+=======
 const initialValues: CreateResidentsDto = {
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
   firstname: "",
   lastname: "",
   email: "",
@@ -39,6 +43,86 @@ const columnSchema: ColumnSchema<
   { key: "cellActions", label: "action" },
 ];
 
+<<<<<<< HEAD
+export const residentFields: Field<CustomInputProps | TextareaAutosizeProps>[] =
+  [
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "firstname",
+        name: "firstname",
+        label: "Firstname",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "lastname",
+        name: "lastname",
+        label: "Lastname",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "email",
+        name: "email",
+        label: "Email",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "text",
+      fieldProps: <CustomInputProps>{
+        id: "contact",
+        name: "contact",
+        label: "Contact",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "textarea",
+      fieldProps: {
+        label: "Address",
+        name: "address",
+        id: "address",
+        type: "textarea",
+        margin: "dense",
+        placeholder: "Home Address",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "password",
+        name: "password",
+        label: "Password",
+        type: "password",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "confirmPassword",
+        name: "confirmPassword",
+        label: "confirmPassword",
+        type: "password",
+        margin: "dense",
+      },
+    },
+  ];
+=======
 const fields: Field<CustomInputProps | TextareaAutosizeProps>[] = [
   {
     fieldType: "text",
@@ -105,6 +189,7 @@ const fields: Field<CustomInputProps | TextareaAutosizeProps>[] = [
     },
   },
 ];
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
 
 export const useHooks = () => {
   const {
@@ -118,8 +203,14 @@ export const useHooks = () => {
 
   const [dataSource, setDataSource] = useState<FindAllResidentsDto[]>([]);
   const [open, setOpen] = useState<boolean>(false);
+<<<<<<< HEAD
+  const [formValues, setFormValues] = useState<CreateResidentsDto>(
+    residentInitialValues
+  );
+=======
   const [formValues, setFormValues] =
     useState<CreateResidentsDto>(initialValues);
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
 
   const handleToggleModal = (
@@ -130,7 +221,11 @@ export const useHooks = () => {
       setFormValues({ ...values, password: values.password });
     } else {
       setBtnName("Submit");
+<<<<<<< HEAD
+      setFormValues(residentInitialValues);
+=======
       setFormValues(initialValues);
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
     }
     setOpen((state) => !state);
   };
@@ -160,7 +255,11 @@ export const useHooks = () => {
     { resetForm, setSubmitting }: FormikHelpers<CreateResidentsDto>
   ) => {
     try {
+<<<<<<< HEAD
+      await create({ ...values, contact: `+63${values.contact}` });
+=======
       await create({ ...values });
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
       setSubmitting(false);
       setOpen(false);
       resetForm();
@@ -178,7 +277,14 @@ export const useHooks = () => {
     { resetForm, setSubmitting }: FormikHelpers<FindAllResidentsDto>
   ) => {
     try {
+<<<<<<< HEAD
+      await edit(id, {
+        ...values,
+        contact: `+63${values.contact}`,
+      } as unknown as CreateResidentsDto);
+=======
       await edit(id, values as unknown as CreateResidentsDto);
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
       setSubmitting(false);
       resetForm();
       setOpen(false);
@@ -240,7 +346,11 @@ export const useHooks = () => {
     tableCellActions,
     initialValues: formValues,
     handleSubmit,
+<<<<<<< HEAD
+    fields: residentFields,
+=======
     fields,
+>>>>>>> 17d2ce1253201a5fddb80f33b74e0e656cee6b3b
     btnName,
     handleSearch,
   };

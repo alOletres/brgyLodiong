@@ -3,6 +3,7 @@ export enum EROUTE_PUBLIC {
 }
 
 export enum EROUTE_PROTECTED {
+  DASHBOARD = "dashboard",
   OFFICIALS = "officials",
   PROJECTS = "projects",
   REQUEST = "request",

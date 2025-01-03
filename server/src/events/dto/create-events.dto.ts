@@ -3,9 +3,6 @@ import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateEventsDto {
   @ApiProperty({ type: String })
-  eventImage: string;
-
-  @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
   eventName: string;

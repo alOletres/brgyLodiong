@@ -25,7 +25,6 @@ const initialValues: CreateEventsDto | any = {
 };
 
 const columns: ColumnSchema<FindAllEventsDto & TableActions>[] = [
-  { key: "eventImage", label: "image", type: "file" },
   { key: "eventName", label: "event" },
   { key: "description", label: "description" },
   {
@@ -45,15 +44,6 @@ const columns: ColumnSchema<FindAllEventsDto & TableActions>[] = [
 const modalFields: Field<
   InputFieldProps | TextareaAutosizeProps | CustomDatePickerProps
 >[] = [
-  {
-    fieldType: "text",
-    fieldProps: <InputFieldProps>{
-      name: "eventImage",
-      id: "eventImage",
-      type: "file",
-      margin: "dense",
-    },
-  },
   {
     fieldType: "text",
     fieldProps: {
@@ -114,14 +104,7 @@ export const useHooks = () => {
     { setSubmitting }: FormikHelpers<CreateEventsDto>
   ) => {
     try {
-      const formData = new FormData();
-
-      for (const key of Object.keys(values)) {
-        const eventKey = key as keyof CreateEventsDto;
-        formData.append(key, values[eventKey]);
-      }
-
-      await create(formData as unknown as CreateEventsDto);
+      await create(values);
 
       setSubmitting(false);
       setOpenModal(false);
@@ -143,14 +126,7 @@ export const useHooks = () => {
     { setSubmitting }: FormikHelpers<FindAllEventsDto>
   ) => {
     try {
-      const formData = new FormData();
-
-      for (const key of Object.keys(values)) {
-        const eventKey = key as keyof CreateEventsDto;
-        formData.append(key, values[eventKey]);
-      }
-
-      await update(id, formData as unknown as CreateEventsDto);
+      await update(id, values);
 
       setSubmitting(false);
       setBtnName("Submit");
@@ -211,7 +187,13 @@ export const useHooks = () => {
   ];
 
   useEffect(() => {
-    setDataSource(events as FindAllEventsDto[]);
+    const updateDataEvents = async () => {
+      if (events?.length) {
+        setDataSource(events as FindAllEventsDto[]);
+      }
+    };
+
+    updateDataEvents();
   }, [events]);
 
   return {

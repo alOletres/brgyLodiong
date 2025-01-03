@@ -26,7 +26,7 @@ export class EventsService {
 
   async fetch(): Promise<FindAllEventsDto[]> {
     return await this.prisma.events.findMany({
-      orderBy: { eventDate: Prisma.SortOrder.asc },
+      orderBy: { eventDate: Prisma.SortOrder.desc },
     });
   }
 }

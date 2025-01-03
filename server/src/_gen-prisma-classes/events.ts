@@ -6,9 +6,6 @@ export class Events {
   id: number;
 
   @ApiProperty({ type: String })
-  eventImage: string;
-
-  @ApiProperty({ type: String })
   eventName: string;
 
   @ApiProperty({ type: String })
