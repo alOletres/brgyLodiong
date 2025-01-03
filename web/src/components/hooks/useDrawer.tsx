@@ -5,6 +5,7 @@ import {
   Person2TwoTone,
   NotificationAddOutlined,
   EventAvailableOutlined,
+  DashboardOutlined,
 } from "@mui/icons-material";
 import { useState } from "react";
 
@@ -18,14 +19,22 @@ interface IDrawerListProps {
   icon: React.ReactNode; // Correct type for a React component in a prop
 }
 
-const { OFFICIALS, PROJECTS, REQUEST, RESIDENTS, NOTIFICATIONS, EVENTS } =
-  EROUTE_PROTECTED;
+const {
+  DASHBOARD,
+  OFFICIALS,
+  PROJECTS,
+  REQUEST,
+  RESIDENTS,
+  NOTIFICATIONS,
+  EVENTS,
+} = EROUTE_PROTECTED;
 
 export const useHooks = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
   const [list] = useState<IDrawerListProps[]>([
+    { icon: <DashboardOutlined />, link: DASHBOARD },
     { icon: <Person2Rounded />, link: OFFICIALS }, // Properly invoke the component using <>
     { icon: <FolderCopyOutlined />, link: PROJECTS },
     { icon: <Person2TwoTone />, link: RESIDENTS },

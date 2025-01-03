@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, styled, TextField } from "@mui/material";
+import { Box, InputAdornment, styled, TextField } from "@mui/material";
 import { ChangeEventHandler } from "react";
 import { useField } from "formik";
 import { useHookTextField } from "./hooks/useTextField";
@@ -72,7 +72,16 @@ export const CustomInput = ({
         className={meta.touched && meta.error ? "input-error" : ""}
         sx={{ width: "100%" }}
         slotProps={{
-          htmlInput: props.type === "file" ? { accept: "image/*" } : undefined, // Use slotProps for input attributes
+          htmlInput: props.type === "file" ? { accept: "image/*" } : undefined,
+          input:
+            props.id === "contact"
+              ? {
+                  startAdornment: (
+                    <InputAdornment position="start">+63</InputAdornment>
+                  ),
+                }
+              : undefined,
+          // Use slotProps for input attributes
         }}
         type={props.type} // Pass type directly
         value={props.type === "file" ? undefined : field.value} // Ensure file input does not bind value

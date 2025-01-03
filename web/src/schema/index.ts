@@ -29,9 +29,19 @@ export const ResidentSchema = yup.object().shape({
     .string()
     .email("Invalid email format")
     .required("This field is required"),
-  contact: yup.number().required("This field is required"),
+  contact: yup
+    .string()
+    .matches(/^\d{10,10}$/, "Contact number must be 10 digits")
+    .required("This field is required"),
   address: yup.string().required("This field is required"),
-  password: yup.string().required("This field is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .required("This field is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("This field is required"),
 });
 
 export const RequestSchema = yup.object().shape({
