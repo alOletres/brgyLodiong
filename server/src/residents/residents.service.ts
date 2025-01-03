@@ -34,7 +34,7 @@ export class ResidentsService {
 
   async update(id: number, { password, role, ...payload }: CreateResidentsDto) {
     try {
-      const hash = await hashPassword(password);
+      const hash = hashPassword(password);
       await this.prisma.residents.update({
         where: { id },
         data: {
