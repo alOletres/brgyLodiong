@@ -44,7 +44,6 @@ export type EventsControllerUpdateArgs = {
   createEventsDto: CreateEventsDto;
 };
 export type CreateEventsDto = {
-  eventImage: string;
   eventName: string;
   description: string;
   eventDate: string;
@@ -52,7 +51,6 @@ export type CreateEventsDto = {
 };
 export type FindAllEventsDto = {
   id: number;
-  eventImage: string;
   eventName: string;
   description: string;
   eventDate: string;

@@ -696,6 +696,8 @@
           "PENDING",
           "APPROVED",
           "REJECTED",
+          "CLAIMED",
+          "UNCLAIMED",
           "COMPLETED"
         ]
       },

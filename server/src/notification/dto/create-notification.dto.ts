@@ -1,12 +1,7 @@
-import { Residents } from './residents';
-import { Requests } from './requests';
-import { NOTIFICATION_TYPE, NOTIFICATION_STATUS } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { NOTIFICATION_STATUS, NOTIFICATION_TYPE } from '@prisma/client';
 
-export class Notifications {
-  @ApiProperty({ type: Number })
-  id: number;
-
+export class CreateNotificationDto {
   @ApiProperty({ type: Number })
   residentId: number;
 
@@ -21,13 +16,4 @@ export class Notifications {
 
   @ApiProperty({ enum: NOTIFICATION_STATUS, enumName: 'NOTIFICATION_STATUS' })
   status: NOTIFICATION_STATUS;
-
-  @ApiProperty({ type: Date })
-  sentAt: Date;
-
-  @ApiProperty({ type: () => Residents })
-  residents: Residents;
-
-  @ApiProperty({ type: () => Requests })
-  requests: Requests;
 }

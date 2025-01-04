@@ -27,6 +27,12 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createRequestDto,
       }),
     }),
+    requestControllerFindByResident: build.query<
+      RequestControllerFindByResidentResponse,
+      RequestControllerFindByResidentArgs
+    >({
+      query: (queryArg) => ({ url: `/api/request/find/${queryArg.id}` }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -43,8 +49,18 @@ export type RequestControllerUpdateArgs = {
   id: number;
   createRequestDto: CreateRequestDto;
 };
+export type RequestControllerFindByResidentResponse = unknown;
+export type RequestControllerFindByResidentArgs = {
+  id: number;
+};
 export type RequestType = "CLEARANCE" | "CERTIFICATE" | "PERMIT";
-export type RequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "COMPLETED";
+export type RequestStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "CLAIMED"
+  | "UNCLAIMED"
+  | "COMPLETED";
 export type RequestMode = "WALKIN" | "ONLINE";
 export type CreateRequestDto = {
   residentId: number;
@@ -71,4 +87,5 @@ export const {
   useRequestControllerCreateMutation,
   useRequestControllerFetchQuery,
   useRequestControllerUpdateMutation,
+  useRequestControllerFindByResidentQuery,
 } = injectedRtkApi;

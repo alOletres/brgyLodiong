@@ -81,4 +81,12 @@ export class ResidentsService {
       throw err;
     }
   }
+
+  async findOne(id: number) {
+    try {
+      return await this.prisma.residents.findUnique({ where: { id } });
+    } catch (err) {
+      throw err;
+    }
+  }
 }

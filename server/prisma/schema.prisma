@@ -32,16 +32,16 @@ model Auth {
 }
 
 model Residents {
-  id         Int        @id @default(autoincrement())
-  firstname  String     @db.VarChar(50)
-  lastname   String     @db.VarChar(50)
-  email      String     @unique @db.VarChar(100)
-  contact    String     @db.VarChar(15)
-  address    String     @db.VarChar(255)
-  createdAt  DateTime   @default(now()) @db.Timestamp(0)
-  Auth       Auth?
-  Requests   Requests[]
-  requestsId Int?
+  id            Int             @id @default(autoincrement())
+  firstname     String          @db.VarChar(50)
+  lastname      String          @db.VarChar(50)
+  email         String          @unique @db.VarChar(100)
+  contact       String          @db.VarChar(25)
+  address       String          @db.VarChar(255)
+  createdAt     DateTime        @default(now()) @db.Timestamp(0)
+  Auth          Auth?
+  Requests      Requests[]
+  requestsId    Int?
   Notifications Notifications[]
 
   EventNotifications EventNotifications[]
@@ -65,7 +65,7 @@ model Officials {
   firstname    String     @db.VarChar(50)
   lastname     String     @db.VarChar(50)
   position     String     @db.VarChar(50)
-  startTerm    DateTime   
+  startTerm    DateTime
   endTerm      DateTime?
   achievements String?    @db.Text
   Projects     Projects[]
@@ -80,7 +80,6 @@ model Projects {
   endDate     DateTime?
   officialId  Int
   official    Officials? @relation(fields: [officialId], references: [id])
-
 }
 
 model Notifications {
@@ -91,8 +90,8 @@ model Notifications {
   message          String              @db.Text
   status           NOTIFICATION_STATUS
   sentAt           DateTime            @default(now()) @db.Timestamp(0)
-  residents        Residents[]
-  requests         Requests[]
+  residents        Residents           @relation(fields: [residentId], references: [id])
+  requests         Requests            @relation(fields: [requestId], references: [id])
 }
 
 model Events {
@@ -137,6 +136,8 @@ enum REQUEST_STATUS {
   PENDING
   APPROVED
   REJECTED
+  CLAIMED
+  UNCLAIMED
   COMPLETED
 }
 

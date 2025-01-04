@@ -12,6 +12,7 @@ import { RequestModule } from './request/request.module';
 import { ProjectsModule } from './projects/projects.module';
 import { EventsModule } from './events/events.module';
 import { TwilioService } from './twilio/twilio.service';
+import { NotificationModule } from './notification/notification.module';
 @Module({
   imports: [
     AuthModule,
@@ -23,6 +24,7 @@ import { TwilioService } from './twilio/twilio.service';
     RequestModule,
     ProjectsModule,
     EventsModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, TwilioService],

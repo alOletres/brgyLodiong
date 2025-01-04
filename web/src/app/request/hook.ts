@@ -29,6 +29,8 @@ const RequestStatusArray: RequestStatus[] = [
   "APPROVED",
   "COMPLETED",
   "REJECTED",
+  "CLAIMED",
+  "UNCLAIMED",
 ];
 
 const initialValues: CreateRequestDto = {
@@ -41,6 +43,7 @@ const initialValues: CreateRequestDto = {
 
 const columnSchema: ColumnSchema<FindAllRequestsDto & TableActions>[] = [
   { key: "requestedBy", label: "requested by" },
+  { key: "contact", label: "contact" },
   { key: "requestType", label: "request type" },
   { key: "purpose", label: "purpose" },
   { key: "requestMode", label: "request mode" },
@@ -75,12 +78,14 @@ export const useHooks = () => {
 
   const residentOptions = useMemo(
     () =>
-      residents?.map((value): OptionSelect => {
-        return {
-          key: value.id,
-          value: `${value.firstname} ${value.lastname}`,
-        };
-      }),
+      residents
+        ?.filter((value) => value.role === "RESIDENT")
+        ?.map((value): OptionSelect => {
+          return {
+            key: value.id,
+            value: `${value.firstname} ${value.lastname}`,
+          };
+        }),
     [residents]
   );
 
