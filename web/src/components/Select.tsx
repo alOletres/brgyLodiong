@@ -44,7 +44,7 @@ const CustomSelect = ({
       <Select
         {...props}
         {...field}
-        value={value}
+        value={value || ""}
         onChange={(e) => {
           if (handleChange) {
             handleChange(e.target.value);

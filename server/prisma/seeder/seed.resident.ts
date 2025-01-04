@@ -12,7 +12,7 @@ export const seedResidents = async ({ app, email }: ISeedResidentsPayload) => {
 
   const residentService = app.get(ResidentsService);
 
-  const hash = await hashPassword(process.env.DEFAULT_PASSWORD);
+  const hash = hashPassword(process.env.DEFAULT_PASSWORD || 'test');
 
   await residentService.create({
     email,
