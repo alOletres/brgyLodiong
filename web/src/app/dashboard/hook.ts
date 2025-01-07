@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChartDataset } from "chart.js";
 import { useState } from "react";
 
