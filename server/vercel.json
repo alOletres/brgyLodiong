@@ -6,6 +6,12 @@
       "use": "@vercel/node"
     }
   ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "dist/main.js"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
@@ -20,12 +26,6 @@
           "value": "Content-Type, Authorization"
         }
       ]
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "dist/main.js"
     }
   ]
 }
