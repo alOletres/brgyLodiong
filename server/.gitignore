@@ -36,3 +36,4 @@ lerna-debug.log*
 server/.env
 .env
 .env*.local
+.vercel
