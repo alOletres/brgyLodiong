@@ -22,7 +22,11 @@ export const setGlobalSetting = (app: INestApplication) => {
   app.use(text({ limit: '50mb' }));
   app.use(urlencoded({ limit: '50mb', extended: true }));
 
-  app.enableCors();
+  app.enableCors({
+    origin: '*', // Allow all origins
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   // response compression
   app.use(compression());
 
