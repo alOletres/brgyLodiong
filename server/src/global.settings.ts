@@ -22,20 +22,6 @@ export const setGlobalSetting = (app: INestApplication) => {
   app.use(text({ limit: '50mb' }));
   app.use(urlencoded({ limit: '50mb', extended: true }));
 
-  // Explicitly add CORS headers
-  app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET,HEAD,PUT,PATCH,POST,DELETE',
-    );
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Authorization',
-    );
-    next();
-  });
-
   app.enableCors({
     origin: '*', // Allow all origins
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
