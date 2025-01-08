@@ -7,7 +7,7 @@ import {
   LinearScale,
   DoughnutController,
   BarController,
-  // LineController,
+  LineController,
   ArcElement,
   BarElement,
   PointElement,
@@ -31,8 +31,8 @@ Chart.register(
   Tooltip,
   Legend,
   DoughnutController,
-  BarController
-  // LineController
+  BarController,
+  LineController
 );
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
