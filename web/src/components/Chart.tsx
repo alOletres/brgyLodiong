@@ -6,6 +6,8 @@ import {
   Chart,
   LinearScale,
   DoughnutController,
+  BarController,
+  LineController,
   ArcElement,
   BarElement,
   PointElement,
@@ -28,7 +30,9 @@ Chart.register(
   RadialLinearScale,
   Tooltip,
   Legend,
-  DoughnutController
+  DoughnutController,
+  BarController,
+  LineController
 );
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
