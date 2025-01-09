@@ -22,6 +22,7 @@ export const useHooks = () => {
   const { setSnackbarProps } = useSnackbar();
   const { push } = useRouter();
   const [open, setOpen] = useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(false);
 
   const { handleCreate: create } = useResidentsApi();
   const handleToggleModal = () => setOpen((state) => !state);
@@ -31,6 +32,7 @@ export const useHooks = () => {
     { setSubmitting, resetForm }: FormikHelpers<ILoginPayload>
   ) => {
     try {
+      setLoader(true);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_ORIGIN}/api/login`,
         values
@@ -38,6 +40,7 @@ export const useHooks = () => {
 
       setToken(response.data.access_token);
 
+      setLoader(false);
       setSubmitting(true);
       resetForm();
       setSnackbarProps({ message: "User successfully login.." });
@@ -67,5 +70,12 @@ export const useHooks = () => {
     }
   };
 
-  return { handleSubmit, handleSignUp, initialValues, handleToggleModal, open };
+  return {
+    loader,
+    handleSubmit,
+    handleSignUp,
+    initialValues,
+    handleToggleModal,
+    open,
+  };
 };

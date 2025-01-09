@@ -9,6 +9,7 @@ import { CustomInput } from "@/components/TextFieldInput";
 import { useHooks } from "./hook";
 import { residentFields } from "../residents/hook";
 import Modal from "@/components/Modal";
+import LinearLoader from "@/components/LinearLoader";
 
 const Container = styled("div")({
   display: "flex",
@@ -33,11 +34,18 @@ const LoginContainer = styled("div")({
 });
 
 const LoginPage = () => {
-  const { handleSubmit, initialValues, handleToggleModal, open, handleSignUp } =
-    useHooks();
+  const {
+    loader,
+    handleSubmit,
+    initialValues,
+    handleToggleModal,
+    open,
+    handleSignUp,
+  } = useHooks();
 
   return (
     <>
+      {loader && <LinearLoader height={4} />}
       <Modal
         title="Sign Up"
         formProps={{
