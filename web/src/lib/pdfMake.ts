@@ -3,6 +3,7 @@
 import { ECERTIFICATES } from "@/constants/certificates.enum";
 import { EMAGE } from "@/constants/logoBase64";
 import { FindAllRequestsDto } from "@/store/api/gen/request";
+import moment from "moment";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import {
@@ -159,11 +160,11 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
   if (isParagraph(props)) {
     const { data } = props;
 
-    const { type, pageContent } = data as IParagraph;
+    const { type: requestType, pageContent } = data as IParagraph;
 
     const subHeader: Content[] = [
       {
-        text: `Certificate of ${type}`.toUpperCase().split("").join(" "),
+        text: `Certificate of ${requestType}`.toUpperCase().split("").join(" "),
         color: "red",
         bold: true,
         fontSize: 12,
@@ -178,6 +179,11 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
         fontSize: 12,
       },
     ];
+
+    // Certificate purposes;
+
+    const statement = certificatePurpose(requestType);
+
     const paragraphHeader: Content[] = [
       {
         marginTop: 10,
@@ -188,9 +194,9 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
           { text: pageContent.civilStatus, bold: true }, // Bold interpolation variable
           ", is a bonafide resident of ",
           { text: pageContent.address, bold: true }, // Bold interpolation variable
-          ", belongs to an ",
-          { text: type, bold: true }, // Bold interpolation variable
-          " family.",
+          statement?.first || "",
+          { text: statement?.first ? requestType : "", bold: true }, // Bold interpolation variable
+          statement?.second || "",
         ],
         fontSize: 12,
         lineHeight: 1.5,
@@ -200,7 +206,7 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
     const paragrapContent: Content[] = [
       {
         marginTop: 10,
-        text: certificateContent(type) || "",
+        text: certificateContent(requestType) || "",
         fontSize: 12,
         lineHeight: 1.5,
       },
@@ -209,11 +215,87 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
     const paragrapGivenDate: Content[] = [
       {
         marginTop: 10,
-        text: `Given this 22nd day of January 2024, at the office of the Punong Barangay, Lower Lodiong (pob.), Tambulig, Zamboanga del Sur, Philippines.`,
+        marginBottom: 20,
+        text: `Given this ${moment(new Date()).format(
+          "Do [day of] MMMM YYYY"
+        )}, at the office of the Punong Barangay, Lower Lodiong (pob.), Tambulig, Zamboanga del Sur, Philippines.`,
         fontSize: 12,
         lineHeight: 1.5,
       },
     ];
+
+    const residenceCertificateNumber: Content[] = [
+      {
+        columns: [
+          { text: "Res. Cert. No:", bold: true, width: 100 }, // Fixed width for label
+          { text: "_____________________________", width: "auto" }, // Underline
+        ],
+        columnGap: 5,
+        margin: [0, 0, 0, 5],
+      },
+      {
+        columns: [
+          { text: "Issued on:", bold: true, width: 100 }, // Match the width of the first label
+          {
+            text: `${
+              pageContent?.dateCompleted
+                ? moment(pageContent.dateCompleted).format("MM/DD/YYYY")
+                : "_____________________________"
+            }`,
+            width: "auto",
+          },
+        ],
+        columnGap: 5,
+        margin: [0, 0, 0, 5],
+      },
+      {
+        columns: [
+          { text: "Issued At:", bold: true, width: 100 },
+          {
+            text: "LOWER LODIONG, TAMBULIG",
+            decoration: "underline",
+            width: "auto",
+          },
+        ],
+        columnGap: 5,
+        margin: [0, 0, 0, 5],
+      },
+      {
+        columns: [
+          { text: "Or No:", bold: true, width: 100 },
+          { text: "_____________________________", width: "auto" },
+        ],
+        columnGap: 5,
+        margin: [0, 0, 0, 5],
+      },
+    ];
+
+    const honorableSignature: Content[] = [
+      {
+        text: [
+          {
+            text: "HON. ROGELIO D. IGTOS\n",
+            decoration: "underline",
+            bold: true,
+          },
+          { text: "Punong Barangay", italics: true },
+        ],
+        alignment: "center",
+        margin: [0, 100, 0, 0], // Adds top margin for spacing
+      },
+    ];
+
+    const expiration: Content[] =
+      requestType === "First Time Job Seeker"
+        ? [
+            {
+              alignment: "center",
+              marginBottom: 10,
+
+              text: "This certification is valid only (one(1) year from the issuance).",
+            },
+          ]
+        : [];
 
     // Set content here!
     content.push([
@@ -223,6 +305,9 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
       ...paragraphHeader,
       ...paragrapContent,
       ...paragrapGivenDate,
+      ...expiration,
+      ...residenceCertificateNumber,
+      ...honorableSignature,
     ]);
   }
 
@@ -237,13 +322,49 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
   pdfMake.createPdf(document).open();
 };
 
+export const certificatePurpose = (requestType: `${ECERTIFICATES}`) => {
+  switch (requestType) {
+    case "Indigency":
+      return {
+        first: ", belongs to an ",
+        second: " family.",
+      };
+
+    case "First Time Job Seeker":
+      return {
+        first: " is a qualified availee of RA 11261 or the ",
+        second: " Act 2019. ",
+      };
+
+    default:
+      return {
+        first: undefined,
+        second: undefined,
+      };
+  }
+};
+
 export const certificateContent = (requestType: `${ECERTIFICATES}`) => {
   switch (requestType) {
     case "Indigency":
       return [
-        "THIS CERTIFIES further that their income is below poverty threshold level which could not meet the minimum basic needs of the family. He/she is eligible to avail the financial assistance grant from the government who is concerned to the plight of the indigent sector.\n\n",
-
+        {
+          text: "THIS CERTIFIES further that their income is below poverty threshold level which could not meet the minimum basic needs of the family. He/she is eligible to avail the financial assistance grant from the government who is concerned to the plight of the indigent sector.\n\n",
+        },
         "This CERTIFICATION is issued upon the request of the above-stated person for IMMERSION or any legal purposes that may serve her best.",
-      ] as any;
+      ];
+
+    case "First Time Job Seeker":
+      return [
+        "This further certify that the holder/bearer was informed of her rights, including the duties and responsibilities accorded by RA 11261 through the ",
+        { text: " Oath of Undertaking ", bold: true },
+        " he/she has signed and executed in the presence  of our Barangay Official, purposes that may serve him best.",
+      ];
+
+    case "FIT TO WORK":
+      return [
+        "This is to certify further that this person is FIT TO WORK. \n\n",
+        "This certification is issued upon the request of the above stated person for any legal purpose that may serve her best. ",
+      ];
   }
 };

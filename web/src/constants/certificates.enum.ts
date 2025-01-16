@@ -10,4 +10,5 @@ export enum ECERTIFICATES {
   MOTORIZE_BOAT = "Motorize Boat",
   TREE_PLANTING = "Tree Planting",
   FOUR_PS = "4PS",
+  FIT_TO_WORK = "FIT TO WORK",
 }

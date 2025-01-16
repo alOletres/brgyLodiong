@@ -47,6 +47,8 @@ export const useHooks = () => {
 
       push(EROUTE_PROTECTED.DASHBOARD);
     } catch (err) {
+      setLoader(false);
+
       throw err;
     }
   };
