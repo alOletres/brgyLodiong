@@ -3,6 +3,7 @@ import { Menu as MenuIcon, LogoutTwoTone } from "@mui/icons-material";
 
 import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
+import { useAppBar } from "./hooks/useAppBar";
 const drawerWidth = 240;
 
 export const AppBar = styled(MuiAppBar, {
@@ -34,6 +35,7 @@ export const CustomAppBar = ({
   open,
   handleDrawerOpen,
 }: ICustomAppBarProps) => {
+  const { handleSignOut, resident } = useAppBar();
   return (
     <AppBar position="fixed" open={open}>
       <Toolbar>
@@ -61,13 +63,30 @@ export const CustomAppBar = ({
           <Typography variant="h6" noWrap component="div">
             {title}
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              ":hover": { cursor: "pointer", color: "gray" },
-            }}
-          >
-            <LogoutTwoTone />
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+              }}
+            >
+              <Box sx={{ marginRight: 4 }}>
+                <Typography variant="overline" noWrap component="div">
+                  {resident.firstname} {resident.lastname}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  ":hover": {
+                    cursor: "pointer",
+                    color: "gray",
+                  },
+                }}
+                onClick={handleSignOut}
+              >
+                Sign Out <LogoutTwoTone />
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Toolbar>

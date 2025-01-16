@@ -18,5 +18,9 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
 ], FindAllProjectsDto.prototype, "officialName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String }),
+    __metadata("design:type", String)
+], FindAllProjectsDto.prototype, "members", void 0);
 exports.FindAllProjectsDto = FindAllProjectsDto;
 //# sourceMappingURL=find-all-projects.dto.js.map

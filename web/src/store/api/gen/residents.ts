@@ -43,7 +43,9 @@ export type ResidentsControllerUpdateArgs = {
   id: number;
   createResidentsDto: CreateResidentsDto;
 };
+export type CivilStatus = "SINGLE" | "MARRIED";
 export type CreateResidentsDto = {
+  civilStatus: CivilStatus;
   firstname: string;
   lastname: string;
   email: string;
@@ -57,6 +59,7 @@ export type AccountStatus = "ACTIVE" | "INACTIVE";
 export type FindAllResidentsDto = {
   id: number;
   firstname: string;
+  civilStatus: CivilStatus;
   lastname: string;
   email: string;
   contact: string;

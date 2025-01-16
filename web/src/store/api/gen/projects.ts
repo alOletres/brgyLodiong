@@ -45,18 +45,22 @@ export type ProjectsControllerUpdateArgs = {
 };
 export type CreateProjectsDto = {
   projectName: string;
+  members: string;
   description: string;
   startDate: string;
   endDate?: string;
   officialId: number;
 };
+export type ProjectStatus = "PENDING" | "SUCCEED";
 export type FindAllProjectsDto = {
   id: number;
+  members: string;
   projectName: string;
   description: string;
   startDate: string;
   endDate?: string;
   officialId: number;
+  status: ProjectStatus;
   officialName: string;
 };
 export const {

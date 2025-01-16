@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindAllRequestsDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const requests_1 = require("./../../_gen-prisma-classes/requests");
+const client_1 = require("@prisma/client");
 class FindAllRequestsDto extends (0, swagger_1.PickType)(requests_1.Requests, [
     'id',
     'requestType',
@@ -22,7 +23,19 @@ class FindAllRequestsDto extends (0, swagger_1.PickType)(requests_1.Requests, [
     'requestMode',
     'residentId',
 ]) {
+    constructor() {
+        super(...arguments);
+        this.civilStatus = client_1.CIVIL_STATUS.SINGLE;
+    }
 }
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number }),
+    __metadata("design:type", Number)
+], FindAllRequestsDto.prototype, "requestedId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.CIVIL_STATUS, enumName: 'CIVIL_STATUS' }),
+    __metadata("design:type", String)
+], FindAllRequestsDto.prototype, "civilStatus", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)

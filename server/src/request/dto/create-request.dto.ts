@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { REQUEST_MODE, REQUEST_STATUS, REQUEST_TYPE } from '@prisma/client';
+import { REQUEST_MODE, REQUEST_STATUS } from '@prisma/client';
 
 export class CreateRequestDto {
   @ApiProperty({ type: Number })
@@ -8,10 +8,10 @@ export class CreateRequestDto {
   @IsNumber()
   residentId: number;
 
-  @ApiProperty({ enum: REQUEST_TYPE, enumName: 'REQUEST_TYPE' })
+  @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
-  requestType: REQUEST_TYPE;
+  requestType: string;
 
   @ApiProperty({ enum: REQUEST_STATUS, enumName: 'REQUEST_STATUS' })
   @IsOptional()

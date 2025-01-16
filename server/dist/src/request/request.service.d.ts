@@ -15,7 +15,7 @@ export declare class RequestService {
         id: number;
         residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
-        requestType: import(".prisma/client").$Enums.REQUEST_TYPE;
+        requestType: string;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
@@ -25,7 +25,7 @@ export declare class RequestService {
         id: number;
         residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
-        requestType: import(".prisma/client").$Enums.REQUEST_TYPE;
+        requestType: string;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;

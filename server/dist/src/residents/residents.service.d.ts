@@ -11,6 +11,7 @@ export declare class ResidentsService {
         id: number;
         createdAt: Date;
         firstname: string;
+        civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
         lastname: string;
         email: string;
         contact: string;

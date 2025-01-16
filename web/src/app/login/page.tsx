@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { styled } from "@mui/system";
-import { LockOpenOutlined } from "@mui/icons-material";
+// import { LockOpenOutlined } from "@mui/icons-material";
 import { Form, Formik } from "formik";
 import { Box, Button } from "@mui/material";
 import { LoginSchema, ResidentSchema } from "@/schema";
@@ -17,20 +17,40 @@ const Container = styled("div")({
   alignItems: "center",
   width: "100vw",
   height: "100vh",
-  background: "linear-gradient(to right bottom, #430089, #82ffa1)",
+  background: "linear-gradient(to right bottom, #2e8b57, #6ec1e4)",
 });
 
 const FormContainer = styled("div")({
   display: "flex",
   flexDirection: "column",
-  background: "#ffff",
-  padding: "10px",
+  background: "#ffffff",
+  padding: "20px",
+  borderRadius: "10px",
+  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+  width: "350px",
 });
 
-const LoginContainer = styled("div")({
+const Header = styled("div")({
   textAlign: "center",
-  textTransform: "uppercase",
-  padding: "20px",
+  marginBottom: "20px",
+});
+
+const Logo = styled("img")({
+  width: "100px",
+  height: "100px",
+  marginBottom: "10px",
+});
+
+const Title = styled("h1")({
+  fontSize: "20px",
+  color: "#2e8b57",
+  margin: 0,
+  fontWeight: "bold",
+});
+
+const Subtitle = styled("p")({
+  fontSize: "14px",
+  color: "#555555",
 });
 
 const LoginPage = () => {
@@ -68,12 +88,13 @@ const LoginPage = () => {
           {({ submitForm, isSubmitting }) => (
             <Form>
               <FormContainer>
-                <LoginContainer>
-                  <LockOpenOutlined />
-                  <h2>Login</h2>
-                </LoginContainer>
+                <Header>
+                  <Logo src="/logo.png" alt="Barangay Logo" />
+                  <Title>Barangay Lower Lodiong</Title>
+                  <Subtitle>Tambulig, Zamboanga del Sur</Subtitle>
+                </Header>
                 <CustomInput
-                  label="Username"
+                  label="Email"
                   name="username"
                   id="username"
                   type="text"
@@ -85,15 +106,37 @@ const LoginPage = () => {
                   type="password"
                 />
 
-                <Box sx={{ paddingTop: "6px", width: "100%" }}>
+                <Box sx={{ paddingTop: "10px", width: "100%" }}>
                   <Button
                     disabled={isSubmitting}
-                    style={{ width: "100%" }}
+                    style={{
+                      width: "100%",
+                      backgroundColor: "#2e8b57",
+                      color: "#fff",
+                    }}
                     variant="contained"
                     onClick={submitForm}
                   >
                     Sign In
                   </Button>
+
+                  <Box
+                    sx={{
+                      flex: 1,
+                      justifyContent: "center",
+                      textAlign: "center",
+                      fontSize: 12,
+                      color: "#2e8b57",
+                      padding: 1,
+                      ":hover": {
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      },
+                    }}
+                    onClick={handleToggleModal}
+                  >
+                    <span>Click here to register</span>
+                  </Box>
                 </Box>
               </FormContainer>
             </Form>

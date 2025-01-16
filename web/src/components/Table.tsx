@@ -13,6 +13,7 @@ import {
   TableCellProps,
   Box,
   Theme,
+  Chip,
 } from "@mui/material";
 import React, { memo } from "react";
 import { useHook } from "./hooks/useTable";
@@ -20,6 +21,7 @@ import { Typography, SxProps } from "@mui/material";
 import CustomDateRangePicker, { CustomDateRangePickerProps } from "./DateRange";
 import { Formik } from "formik";
 import Avatar from "@mui/material/Avatar";
+import { Person2Rounded } from "@mui/icons-material";
 export interface DateRangeValues {
   startDate: string;
   endDate: string;
@@ -171,6 +173,7 @@ const CustomTable = ({
                         variant={variant}
                         {...props}
                         onClick={() => handleClick()}
+                        sx={{ textTransform: "capitalize" }}
                       >
                         {props.name}
                       </Button>
@@ -223,14 +226,25 @@ const CustomTable = ({
                         columns.map((column, cellIndex) => {
                           if (column.key !== "cellActions") {
                             {
-                              return column.type === "file" ? (
-                                <Avatar
-                                  src={`${process.env.NEXT_PUBLIC_API_ORIGIN}/${
-                                    row[column.key]
-                                  }`}
-                                  alt="Event Image"
-                                  key={cellIndex}
-                                />
+                              return row[column.key] &&
+                                typeof row[column.key] === "object" ? (
+                                Object.values(row[column.key]).map(
+                                  (c: any, cIndex: number) => {
+                                    return (
+                                      <Chip
+                                        key={cIndex}
+                                        label={c?.value}
+                                        icon={
+                                          <Avatar
+                                            sx={{ width: 24, height: 24 }}
+                                          >
+                                            <Person2Rounded />
+                                          </Avatar>
+                                        }
+                                      />
+                                    );
+                                  }
+                                )
                               ) : (
                                 <TableCell key={cellIndex} align={column.align}>
                                   {column?.format && row[column.key]
@@ -249,6 +263,7 @@ const CustomTable = ({
                                     display: "flex",
                                     width: "100%",
                                     gap: 1,
+                                    textTransform: "capitalize",
                                   }}
                                 >
                                   {cellActions.map((action, actionIndex) => {

@@ -44,11 +44,13 @@ let RequestService = class RequestService {
             residentId: true,
             resident: {
                 select: {
+                    id: true,
                     firstname: true,
                     lastname: true,
                     address: true,
                     email: true,
                     contact: true,
+                    civilStatus: true,
                 },
             },
         };
@@ -86,16 +88,18 @@ let RequestService = class RequestService {
             });
         }
         catch (err) {
+            console.log('error', err);
             throw err;
         }
     }
     async fetch() {
         const requests = await this.prisma.requests.findMany({
             select: Object.assign({}, this.selectRequestProperties),
+            orderBy: { dateRequested: client_1.Prisma.SortOrder.desc },
         });
         return requests.map((value) => {
             const { resident } = value, data = __rest(value, ["resident"]);
-            return Object.assign(Object.assign({}, data), { requestedBy: `${resident.firstname} ${resident.lastname}`, address: resident.address, contact: resident.contact, email: resident.email });
+            return Object.assign(Object.assign({}, data), { requestedId: resident.id, requestedBy: `${resident.firstname} ${resident.lastname}`, address: resident.address, contact: resident.contact, email: resident.email, civilStatus: resident.civilStatus });
         });
     }
     async findByResident(id) {
@@ -107,7 +111,7 @@ let RequestService = class RequestService {
             });
             return requests.map((value) => {
                 const { resident } = value, data = __rest(value, ["resident"]);
-                return Object.assign(Object.assign({}, data), { requestedBy: `${resident.firstname} ${resident.lastname}`, address: resident.address, contact: resident.contact, email: resident.email });
+                return Object.assign(Object.assign({}, data), { requestedId: resident.id, requestedBy: `${resident.firstname} ${resident.lastname}`, address: resident.address, contact: resident.contact, email: resident.email, civilStatus: resident.civilStatus });
             });
         }
         catch (err) {

@@ -1,10 +1,10 @@
 "use client";
 import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
-import { LinearProgress } from "@mui/material";
 import SearchBar from "@/components/SearchBar";
 import Modal from "@/components/Modal";
 import { RequestSchema } from "@/schema";
+import LinearLoader from "@/components/LinearLoader";
 const RequestPage = () => {
   const {
     dataSource,
@@ -19,6 +19,7 @@ const RequestPage = () => {
     handleToggleModal,
     fields,
     initialValues,
+    user,
   } = useHooks();
 
   return (
@@ -36,20 +37,16 @@ const RequestPage = () => {
           validationSchema: RequestSchema,
         }}
       />
-      {isFetchingRequest ? (
-        <LinearProgress color="primary" />
-      ) : (
-        <>
-          <SearchBar label="Search requested by" onChange={handleSearch} />
-          <CustomTable
-            tableHeader="List of requests"
-            dataSource={dataSource}
-            columns={columnSchema}
-            cellActions={tableCellActions}
-            headerActions={tableHeaderActions}
-          />
-        </>
-      )}
+      <SearchBar label="Search requested by" onChange={handleSearch} />
+      <CustomTable
+        tableHeader="List of requests"
+        dataSource={dataSource}
+        columns={columnSchema}
+        cellActions={user?.role === "ADMIN" ? tableCellActions : undefined}
+        headerActions={tableHeaderActions}
+      />
+
+      {isFetchingRequest && <LinearLoader height={4} />}
     </>
   );
 };

@@ -26,6 +26,9 @@ const config: ConfigFile = {
     "./src/store/api/gen/event.ts": {
       filterEndpoints: [/eventsController/],
     },
+    "./src/store/api/gen/notification.ts": {
+      filterEndpoints: [/notificationController/],
+    },
   },
 };
 

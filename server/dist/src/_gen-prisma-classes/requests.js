@@ -29,7 +29,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Requests.prototype, "residentId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: client_1.REQUEST_TYPE, enumName: 'REQUEST_TYPE' }),
+    (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
 ], Requests.prototype, "requestType", void 0);
 __decorate([

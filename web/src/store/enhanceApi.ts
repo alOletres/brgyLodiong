@@ -4,6 +4,7 @@ import { enhancedApi as projectsApi } from "@/store/api/gen/projects";
 import { enhancedApi as residentsApi } from "@/store/api/gen/residents";
 import { enhancedApi as requestApi } from "@/store/api/gen/request";
 import { enhancedApi as eventApi } from "@/store/api/gen/event";
+import { enhancedApi as notificationApi } from "@/store/api/gen/notification";
 
 const enhancedAuthApi = authApi.enhanceEndpoints({
   addTagTypes: ["auth"],
@@ -85,6 +86,15 @@ const enhanceEventsApi = eventApi.enhanceEndpoints({
   },
 });
 
+const enhanceNotificationApi = notificationApi.enhanceEndpoints({
+  addTagTypes: ["notification"],
+  endpoints: {
+    notificationControllerFetch: {
+      providesTags: ["notification"],
+    },
+  },
+});
+
 export {
   enhancedAuthApi as authApi,
   enhanceOfficialsApi as officialsApi,
@@ -92,4 +102,5 @@ export {
   enhanceResidentsApi as residentsApi,
   enhanceRequestApi as requestApi,
   enhanceEventsApi as eventApi,
+  enhanceNotificationApi as notificationApi,
 };

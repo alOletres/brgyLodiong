@@ -1,10 +1,10 @@
 import { Residents } from './residents';
 import { Notifications } from './notifications';
-import { REQUEST_TYPE, REQUEST_STATUS, REQUEST_MODE } from '@prisma/client';
+import { REQUEST_STATUS, REQUEST_MODE } from '@prisma/client';
 export declare class Requests {
     id: number;
     residentId: number;
-    requestType: REQUEST_TYPE;
+    requestType: string;
     status: REQUEST_STATUS;
     purpose: string;
     dateRequested: Date;

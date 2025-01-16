@@ -72,6 +72,7 @@ let ResidentsService = class ResidentsService {
                     id: true,
                     firstname: true,
                     lastname: true,
+                    civilStatus: true,
                     email: true,
                     address: true,
                     contact: true,

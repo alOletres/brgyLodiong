@@ -2,6 +2,7 @@ import { Auth } from './auth';
 import { Requests } from './requests';
 import { Notifications } from './notifications';
 import { EventNotifications } from './event_notifications';
+import { CIVIL_STATUS } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Residents {
@@ -10,6 +11,9 @@ export class Residents {
 
   @ApiProperty({ type: String })
   firstname: string;
+
+  @ApiProperty({ enum: CIVIL_STATUS, enumName: 'CIVIL_STATUS' })
+  civilStatus: CIVIL_STATUS = CIVIL_STATUS.SINGLE;
 
   @ApiProperty({ type: String })
   lastname: string;

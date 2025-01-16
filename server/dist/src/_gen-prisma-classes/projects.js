@@ -11,13 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Projects = void 0;
 const officials_1 = require("./officials");
+const client_1 = require("@prisma/client");
 const swagger_1 = require("@nestjs/swagger");
 class Projects {
+    constructor() {
+        this.status = client_1.PROJECT_STATUS.PENDING;
+    }
 }
 __decorate([
     (0, swagger_1.ApiProperty)({ type: Number }),
     __metadata("design:type", Number)
 ], Projects.prototype, "id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String }),
+    __metadata("design:type", String)
+], Projects.prototype, "members", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
@@ -42,5 +50,9 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: () => officials_1.Officials }),
     __metadata("design:type", officials_1.Officials)
 ], Projects.prototype, "official", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.PROJECT_STATUS, enumName: 'PROJECT_STATUS' }),
+    __metadata("design:type", String)
+], Projects.prototype, "status", void 0);
 exports.Projects = Projects;
 //# sourceMappingURL=projects.js.map

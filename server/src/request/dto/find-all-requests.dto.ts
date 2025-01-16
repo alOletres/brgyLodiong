@@ -1,5 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Requests as RequestEntity } from './../../_gen-prisma-classes/requests';
+import { CIVIL_STATUS } from '@prisma/client';
 
 export class FindAllRequestsDto extends PickType(RequestEntity, [
   'id',
@@ -11,6 +12,11 @@ export class FindAllRequestsDto extends PickType(RequestEntity, [
   'requestMode',
   'residentId',
 ]) {
+  @ApiProperty({ type: Number })
+  requestedId: number;
+  @ApiProperty({ enum: CIVIL_STATUS, enumName: 'CIVIL_STATUS' })
+  civilStatus: CIVIL_STATUS = CIVIL_STATUS.SINGLE;
+
   @ApiProperty({ type: String })
   contact: string;
 

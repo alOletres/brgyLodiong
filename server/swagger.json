@@ -411,6 +411,27 @@
           }
         }
       }
+    },
+    "/api/notification": {
+      "get": {
+        "operationId": "NotificationController_fetch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllNotificationsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -427,9 +448,19 @@
         "type": "object",
         "properties": {}
       },
+      "CIVIL_STATUS": {
+        "type": "string",
+        "enum": [
+          "SINGLE",
+          "MARRIED"
+        ]
+      },
       "CreateResidentsDto": {
         "type": "object",
         "properties": {
+          "civilStatus": {
+            "$ref": "#/components/schemas/CIVIL_STATUS"
+          },
           "firstname": {
             "type": "string"
           },
@@ -457,6 +488,7 @@
           }
         },
         "required": [
+          "civilStatus",
           "firstname",
           "lastname",
           "email",
@@ -489,6 +521,9 @@
           "firstname": {
             "type": "string"
           },
+          "civilStatus": {
+            "$ref": "#/components/schemas/CIVIL_STATUS"
+          },
           "lastname": {
             "type": "string"
           },
@@ -511,6 +546,7 @@
         "required": [
           "id",
           "firstname",
+          "civilStatus",
           "lastname",
           "email",
           "contact",
@@ -564,11 +600,21 @@
           "Projects"
         ]
       },
+      "PROJECT_STATUS": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "SUCCEED"
+        ]
+      },
       "Projects": {
         "type": "object",
         "properties": {
           "id": {
             "type": "number"
+          },
+          "members": {
+            "type": "string"
           },
           "projectName": {
             "type": "string"
@@ -589,14 +635,19 @@
           },
           "official": {
             "$ref": "#/components/schemas/Officials"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PROJECT_STATUS"
           }
         },
         "required": [
           "id",
+          "members",
           "projectName",
           "description",
           "startDate",
-          "officialId"
+          "officialId",
+          "status"
         ]
       },
       "CreateOfficialsDto": {
@@ -682,14 +733,6 @@
           "Projects"
         ]
       },
-      "REQUEST_TYPE": {
-        "type": "string",
-        "enum": [
-          "CLEARANCE",
-          "CERTIFICATE",
-          "PERMIT"
-        ]
-      },
       "REQUEST_STATUS": {
         "type": "string",
         "enum": [
@@ -715,7 +758,7 @@
             "type": "number"
           },
           "requestType": {
-            "$ref": "#/components/schemas/REQUEST_TYPE"
+            "type": "string"
           },
           "status": {
             "$ref": "#/components/schemas/REQUEST_STATUS"
@@ -745,7 +788,7 @@
             "type": "number"
           },
           "requestType": {
-            "$ref": "#/components/schemas/REQUEST_TYPE"
+            "type": "string"
           },
           "status": {
             "$ref": "#/components/schemas/REQUEST_STATUS"
@@ -763,6 +806,12 @@
           },
           "requestMode": {
             "$ref": "#/components/schemas/REQUEST_MODE"
+          },
+          "requestedId": {
+            "type": "number"
+          },
+          "civilStatus": {
+            "$ref": "#/components/schemas/CIVIL_STATUS"
           },
           "contact": {
             "type": "string"
@@ -785,6 +834,8 @@
           "purpose",
           "dateRequested",
           "requestMode",
+          "requestedId",
+          "civilStatus",
           "contact",
           "email",
           "address",
@@ -797,6 +848,9 @@
           "projectName": {
             "type": "string"
           },
+          "members": {
+            "type": "string"
+          },
           "description": {
             "type": "string"
           },
@@ -814,6 +868,7 @@
         },
         "required": [
           "projectName",
+          "members",
           "description",
           "startDate",
           "officialId"
@@ -824,6 +879,9 @@
         "properties": {
           "id": {
             "type": "number"
+          },
+          "members": {
+            "type": "string"
           },
           "projectName": {
             "type": "string"
@@ -842,16 +900,21 @@
           "officialId": {
             "type": "number"
           },
+          "status": {
+            "$ref": "#/components/schemas/PROJECT_STATUS"
+          },
           "officialName": {
             "type": "string"
           }
         },
         "required": [
           "id",
+          "members",
           "projectName",
           "description",
           "startDate",
           "officialId",
+          "status",
           "officialName"
         ]
       },
@@ -910,6 +973,69 @@
           "eventDate",
           "location",
           "createdAt"
+        ]
+      },
+      "NOTIFICATION_TYPE": {
+        "type": "string",
+        "enum": [
+          "SMS",
+          "EMAIL"
+        ]
+      },
+      "FindAllNotificationsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "notificationType": {
+            "$ref": "#/components/schemas/NOTIFICATION_TYPE"
+          },
+          "message": {
+            "type": "string"
+          },
+          "sentAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "requestMode": {
+            "$ref": "#/components/schemas/REQUEST_MODE"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "requestType": {
+            "type": "string"
+          },
+          "residentId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "firstname",
+          "lastname",
+          "email",
+          "contact",
+          "notificationType",
+          "message",
+          "sentAt",
+          "requestMode",
+          "purpose",
+          "requestType",
+          "residentId"
         ]
       }
     }

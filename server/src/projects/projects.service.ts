@@ -9,6 +9,8 @@ export class ProjectsService {
 
   async create(payload: CreateProjectsDto) {
     try {
+      console.log('payload', payload);
+
       await this.prisma.projects.create({ data: { ...payload } });
     } catch (err) {
       throw err;
@@ -30,6 +32,7 @@ export class ProjectsService {
     const projects = await this.prisma.projects.findMany({
       select: {
         id: true,
+        members: true,
         projectName: true,
         description: true,
         startDate: true,
@@ -42,6 +45,7 @@ export class ProjectsService {
             position: true,
           },
         },
+        status: true,
       },
     });
 

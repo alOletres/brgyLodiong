@@ -17,7 +17,6 @@ import { useSnackbar } from "@/components/hooks/useSnackbar";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const initialValues: CreateEventsDto | any = {
-  eventImage: null,
   eventName: "",
   description: "",
   location: "",

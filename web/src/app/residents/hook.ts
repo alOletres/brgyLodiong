@@ -8,6 +8,7 @@ import {
 } from "@/components/Table";
 import { CustomInputProps } from "@/components/TextFieldInput";
 import {
+  CivilStatus,
   CreateResidentsDto,
   FindAllResidentsDto,
 } from "@/store/api/gen/residents";
@@ -17,6 +18,7 @@ import { useCallback, useEffect, useState } from "react";
 import { IHandleSubmitType } from "../officials/hook";
 import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
+import { OptionSelect, SelectFieldProps } from "@/components/Select";
 
 export const residentInitialValues: CreateResidentsDto = {
   firstname: "",
@@ -26,97 +28,116 @@ export const residentInitialValues: CreateResidentsDto = {
   address: "",
   role: "RESIDENT",
   password: "",
+  civilStatus: "SINGLE",
 };
+
+const civilStatusArray: CivilStatus[] = ["SINGLE", "MARRIED"];
 
 const columnSchema: ColumnSchema<
   FindAllResidentsDto & { password: string } & TableActions
 >[] = [
   { key: "firstname", label: "firstname" },
   { key: "lastname", label: "lastname" },
+  { key: "civilStatus", label: "civil status" },
   { key: "email", label: "email" },
   { key: "contact", label: "contact" },
   { key: "address", label: "address" },
   { key: "cellActions", label: "action" },
 ];
 
-export const residentFields: Field<CustomInputProps | TextareaAutosizeProps>[] =
-  [
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "firstname",
-        name: "firstname",
-        label: "Firstname",
-        type: "text",
-        margin: "dense",
-      },
+export const residentFields: Field<
+  SelectFieldProps | CustomInputProps | TextareaAutosizeProps
+>[] = [
+  {
+    fieldType: "text",
+    fieldProps: {
+      id: "firstname",
+      name: "firstname",
+      label: "Firstname",
+      type: "text",
+      margin: "dense",
     },
+  },
 
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "lastname",
-        name: "lastname",
-        label: "Lastname",
-        type: "text",
-        margin: "dense",
-      },
+  {
+    fieldType: "text",
+    fieldProps: {
+      id: "lastname",
+      name: "lastname",
+      label: "Lastname",
+      type: "text",
+      margin: "dense",
     },
+  },
 
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "email",
-        name: "email",
-        label: "Email",
-        type: "text",
-        margin: "dense",
-      },
+  {
+    fieldType: "select",
+    fieldProps: <SelectFieldProps>{
+      id: "civilStatus",
+      label: "Select status",
+      name: "civilStatus",
+      inputLabelId: "civilStatus",
+      labelId: "civilStatus",
+      options: civilStatusArray.map((value): OptionSelect => {
+        return { key: value, value };
+      }),
     },
-    {
-      fieldType: "text",
-      fieldProps: <CustomInputProps>{
-        id: "contact",
-        name: "contact",
-        label: "Contact",
-        type: "text",
-        margin: "dense",
-      },
-    },
-    {
-      fieldType: "textarea",
-      fieldProps: {
-        label: "Address",
-        name: "address",
-        id: "address",
-        type: "textarea",
-        margin: "dense",
-        placeholder: "Home Address",
-      },
-    },
+  },
 
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "password",
-        name: "password",
-        label: "Password",
-        type: "password",
-        margin: "dense",
-      },
+  {
+    fieldType: "text",
+    fieldProps: {
+      id: "email",
+      name: "email",
+      label: "Email",
+      type: "text",
+      margin: "dense",
     },
+  },
+  {
+    fieldType: "text",
+    fieldProps: <CustomInputProps>{
+      id: "contact",
+      name: "contact",
+      label: "Contact",
+      type: "text",
+      margin: "dense",
+    },
+  },
+  {
+    fieldType: "textarea",
+    fieldProps: {
+      label: "Address",
+      name: "address",
+      id: "address",
+      type: "textarea",
+      margin: "dense",
+      placeholder: "Home Address",
+    },
+  },
 
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "confirmPassword",
-        name: "confirmPassword",
-        label: "confirmPassword",
-        type: "password",
-        margin: "dense",
-      },
+  {
+    fieldType: "text",
+    fieldProps: {
+      id: "password",
+      name: "password",
+      label: "Password",
+      type: "password",
+      margin: "dense",
     },
-  ];
+  },
+
+  {
+    fieldType: "text",
+    fieldProps: {
+      id: "confirmPassword",
+      name: "confirmPassword",
+      label: "confirmPassword",
+      type: "password",
+      margin: "dense",
+    },
+  },
+];
 
 export const useHooks = () => {
   const {
@@ -139,8 +160,15 @@ export const useHooks = () => {
     values?: FindAllResidentsDto & { password: string }
   ) => {
     if (values && Object.keys(values).length) {
+      const mobileNumber = values.contact ? values.contact.slice(3) : "";
+
+      setFormValues({
+        ...values,
+        password: values.password,
+        contact: mobileNumber,
+      });
+
       setBtnName("Save Changes");
-      setFormValues({ ...values, password: values.password });
     } else {
       setBtnName("Submit");
       setFormValues(residentInitialValues);

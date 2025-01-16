@@ -29,6 +29,7 @@ let ProjectsService = class ProjectsService {
     }
     async create(payload) {
         try {
+            console.log('payload', payload);
             await this.prisma.projects.create({ data: Object.assign({}, payload) });
         }
         catch (err) {
@@ -50,6 +51,7 @@ let ProjectsService = class ProjectsService {
         const projects = await this.prisma.projects.findMany({
             select: {
                 id: true,
+                members: true,
                 projectName: true,
                 description: true,
                 startDate: true,
@@ -62,6 +64,7 @@ let ProjectsService = class ProjectsService {
                         position: true,
                     },
                 },
+                status: true,
             },
         });
         return projects.map((value) => {

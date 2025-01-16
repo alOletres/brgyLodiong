@@ -1,10 +1,10 @@
 "use client";
 import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
-import { LinearProgress } from "@mui/material";
 import Modal from "@/components/Modal";
 import { ProjectsSchema } from "@/schema";
 import SearchBar from "@/components/SearchBar";
+import LinearLoader from "@/components/LinearLoader";
 
 const ProjectsPage = () => {
   const {
@@ -37,20 +37,15 @@ const ProjectsPage = () => {
         btnName={btnName}
         width={500}
       />
-      {isFetchingProjects ? (
-        <LinearProgress color="primary" />
-      ) : (
-        <>
-          <SearchBar label="Search project" onChange={handleSearch} />
-          <CustomTable
-            tableHeader="Projects list"
-            dataSource={dataSource}
-            columns={columnSchema}
-            headerActions={headerActions}
-            cellActions={tableCellActions}
-          />
-        </>
-      )}
+      <SearchBar label="Search project" onChange={handleSearch} />
+      <CustomTable
+        tableHeader="Projects list"
+        dataSource={dataSource}
+        columns={columnSchema}
+        headerActions={headerActions}
+        cellActions={tableCellActions}
+      />
+      {isFetchingProjects && <LinearLoader height={4} />}
     </>
   );
 };

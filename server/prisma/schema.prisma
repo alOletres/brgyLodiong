@@ -34,6 +34,7 @@ model Auth {
 model Residents {
   id            Int             @id @default(autoincrement())
   firstname     String          @db.VarChar(50)
+  civilStatus   CIVIL_STATUS    @default(SINGLE)
   lastname      String          @db.VarChar(50)
   email         String          @unique @db.VarChar(100)
   contact       String          @db.VarChar(25)
@@ -50,7 +51,7 @@ model Residents {
 model Requests {
   id            Int             @id @default(autoincrement())
   residentId    Int
-  requestType   REQUEST_TYPE
+  requestType   String          @db.VarChar(150)
   status        REQUEST_STATUS  @default(PENDING)
   purpose       String          @db.VarChar(255)
   dateRequested DateTime        @default(now()) @db.Timestamp(0)
@@ -73,13 +74,15 @@ model Officials {
 }
 
 model Projects {
-  id          Int        @id @default(autoincrement())
-  projectName String     @db.VarChar(255)
-  description String     @db.Text
+  id          Int            @id @default(autoincrement())
+  members     String         @db.Text
+  projectName String         @db.VarChar(255)
+  description String         @db.Text
   startDate   DateTime
   endDate     DateTime?
   officialId  Int
-  official    Officials? @relation(fields: [officialId], references: [id])
+  official    Officials?     @relation(fields: [officialId], references: [id])
+  status      PROJECT_STATUS @default(PENDING)
 }
 
 model Notifications {
@@ -126,11 +129,7 @@ enum ACCOUNT_STATUS {
   INACTIVE
 }
 
-enum REQUEST_TYPE {
-  CLEARANCE
-  CERTIFICATE
-  PERMIT
-}
+
 
 enum REQUEST_STATUS {
   PENDING
@@ -154,4 +153,14 @@ enum NOTIFICATION_STATUS {
 enum REQUEST_MODE {
   WALKIN
   ONLINE
+}
+
+enum PROJECT_STATUS {
+  PENDING
+  SUCCEED
+}
+
+enum CIVIL_STATUS {
+  SINGLE
+  MARRIED
 }

@@ -26,7 +26,7 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateRequestDto.prototype, "residentId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: client_1.REQUEST_TYPE, enumName: 'REQUEST_TYPE' }),
+    (0, swagger_1.ApiProperty)({ type: String }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)

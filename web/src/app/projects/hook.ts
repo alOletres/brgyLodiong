@@ -23,8 +23,10 @@ import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { isValidDate } from "@/utils/error";
 
 export const useHooks = () => {
-  const initialFormValues: CreateProjectsDto = {
+  const initialFormValues: any = {
     officialId: 0,
+    position: "",
+    members: [],
     projectName: "",
     description: "",
     startDate: "",
@@ -44,9 +46,11 @@ export const useHooks = () => {
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
   const [formValues, setFormValues] =
     useState<CreateProjectsDto>(initialFormValues);
+  const [members, setMembers] = useState<OptionSelect[]>([]);
 
   const columnSchema: ColumnSchema<FindAllProjectsDto & TableActions>[] = [
     { key: "officialName", label: "Official" },
+    { key: "members", label: "members" },
     { key: "projectName", label: "project" },
     { key: "description", label: "description" },
     {
@@ -60,6 +64,10 @@ export const useHooks = () => {
       format: (value) => moment(value).format("MM/DD/YYYY"),
     },
     {
+      key: "status",
+      label: "status",
+    },
+    {
       key: "cellActions",
       label: "actions",
     },
@@ -70,7 +78,29 @@ export const useHooks = () => {
       const { endDate } = values;
 
       const isDate = isValidDate(endDate?.toString() as string);
-      setFormValues({ ...values, endDate: isDate ? endDate : undefined });
+
+      if (officials?.length) {
+        setMembers(
+          officials
+            .filter((value) => value.id !== values.officialId)
+            .map((value) => {
+              return {
+                key: value.id,
+                value: `${value.firstname} ${value.lastname}`,
+              };
+            })
+        );
+
+        const findOfficial = officials.find(
+          (value) => value.id === values.officialId
+        );
+
+        setFormValues({
+          ...values,
+          position: findOfficial?.position,
+          endDate: isDate ? endDate : undefined,
+        } as any);
+      }
 
       setBtnName("Save Changes");
     } else {
@@ -85,7 +115,7 @@ export const useHooks = () => {
     {
       actionType: "button",
       actionProps: {
-        name: "add project",
+        name: "Add Project",
         variant: "contained",
         handleClick: handleToggleModal,
       },
@@ -116,17 +146,69 @@ export const useHooks = () => {
       fieldProps: <SelectFieldProps>{
         id: "officialId",
         name: "officialId",
-        label: "Select Official",
+        label: "Select project leader",
         inputLabelId: "officialId",
         labelId: "officialId",
         options: optionsOfficials,
         margin: "dense",
+        handleSelectChange: (id) => {
+          if (officials?.length) {
+            // Get the members if not selected as a project leader official
+
+            const filteredOfficials = officials
+              .filter((value) => value.id !== id)
+              .map((value) => {
+                return {
+                  key: value.id,
+                  value: `${value.firstname} ${value.lastname}`,
+                };
+              });
+
+            setMembers(filteredOfficials);
+
+            //
+            const findOfficial = officials.find((value) => value.id === id);
+
+            if (findOfficial) {
+              const { position } = findOfficial;
+
+              return {
+                propertyName: "position",
+                value: position,
+              };
+            }
+          }
+        },
+      },
+    },
+    {
+      fieldType: "textarea",
+      fieldProps: <InputFieldProps>{
+        label: "Position",
+        name: "position",
+        id: "position",
+        type: "text",
+        margin: "dense",
+        disabled: true,
+      },
+    },
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "members",
+        name: "members",
+        label: "Select members",
+        inputLabelId: "members",
+        labelId: "members",
+        options: members,
+        margin: "dense",
+        multiple: true,
       },
     },
     {
       fieldType: "text",
       fieldProps: <InputFieldProps>{
-        label: "Project name",
+        label: "Project title",
         name: "projectName",
         id: "projectName",
         type: "text",
@@ -160,12 +242,16 @@ export const useHooks = () => {
   ];
 
   const handleCreate = async (
-    { endDate, ...values }: CreateProjectsDto,
+    { endDate, members, ...values }: CreateProjectsDto,
     { setSubmitting }: FormikHelpers<CreateProjectsDto>
   ) => {
     try {
       const isDate = isValidDate(endDate?.toString() as string);
-      await create({ ...values, endDate: isDate ? endDate : undefined });
+      await create({
+        ...values,
+        endDate: isDate ? endDate : undefined,
+        members: JSON.stringify(members),
+      });
 
       setSubmitting(false);
       setBtnName("Submit");
@@ -176,17 +262,27 @@ export const useHooks = () => {
         severity: "success",
       });
     } catch (err: any) {
+      console.log("err", err);
+
       setSnackbarProps({ message: err?.message, severity: "error" });
     }
   };
 
   const handleUpdate = async (
-    { id, endDate, ...values }: FindAllProjectsDto,
+    { id, endDate, members, ...values }: FindAllProjectsDto,
     { setSubmitting }: FormikHelpers<FindAllProjectsDto>
   ) => {
     try {
       const isDate = isValidDate(endDate?.toString() as string);
-      await update(id, { ...values, endDate: isDate ? endDate : undefined });
+
+      const filteredMembers = (members as unknown as OptionSelect[]).filter(
+        (value) => value
+      );
+      await update(id, {
+        ...values,
+        endDate: isDate ? endDate : undefined,
+        members: JSON.stringify(filteredMembers),
+      });
       setSubmitting(false);
       setBtnName("Submit");
       setOpenModal(false);
@@ -216,7 +312,18 @@ export const useHooks = () => {
   );
 
   useEffect(() => {
-    setDataSource(projects as FindAllProjectsDto[]);
+    const data = projects as FindAllProjectsDto[];
+
+    if (data?.length) {
+      const sanitizeData = structuredClone(data).map((value) => {
+        if (typeof value.members === "string") {
+          value.members = JSON.parse(value.members);
+        }
+        return value;
+      });
+
+      setDataSource(sanitizeData);
+    }
   }, [projects]);
 
   const handleSearch = (

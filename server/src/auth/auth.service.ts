@@ -46,6 +46,7 @@ export class AuthService {
         lastLoggedIn: true,
         resident: {
           select: {
+            id: true,
             firstname: true,
             lastname: true,
             contact: true,

@@ -10,13 +10,13 @@ import { useResidentsApi } from "@/store/api/hooks/residents";
 import { CreateResidentsDto } from "@/store/api/gen/residents";
 
 interface ILoginPayload {
-  email: string;
+  username: string;
   password: string;
 }
 
 export const useHooks = () => {
   const [initialValues] = useState<ILoginPayload>({
-    email: "",
+    username: "",
     password: "",
   });
   const { setSnackbarProps } = useSnackbar();

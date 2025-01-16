@@ -6,7 +6,6 @@ import { useResidentsApi } from "@/store/api/hooks/residents";
 import { TextareaAutosizeProps } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  RequestType,
   RequestStatus,
   FindAllRequestsDto,
   CreateRequestDto,
@@ -22,8 +21,15 @@ import moment from "moment";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { FormikHelpers } from "formik";
 import { IHandleSubmitType } from "../officials/hook";
+import { ECERTIFICATES } from "@/constants/certificates.enum";
+import { exportToPdf, IParagraph } from "@/lib/pdfMake";
+import { decodeToken } from "@/lib/tokenStorage";
+import { FindAllResidentsDto, UserRole } from "@/store/api/gen/residents";
+import { DecodedTokenValues } from "@/components/hooks/useDrawer";
 
-const RequestTypeArray: RequestType[] = ["CERTIFICATE", "CLEARANCE", "PERMIT"];
+const RequestTypeArray: string[] = Object.values(ECERTIFICATES).sort((a, b) =>
+  a > b ? 1 : -1
+);
 const RequestStatusArray: RequestStatus[] = [
   "PENDING",
   "APPROVED",
@@ -36,31 +42,10 @@ const RequestStatusArray: RequestStatus[] = [
 const initialValues: CreateRequestDto = {
   residentId: 0,
   requestMode: "WALKIN",
-  requestType: "CERTIFICATE",
+  requestType: "",
   purpose: "",
   status: "PENDING",
 };
-
-const columnSchema: ColumnSchema<FindAllRequestsDto & TableActions>[] = [
-  { key: "requestedBy", label: "requested by" },
-  { key: "contact", label: "contact" },
-  { key: "requestType", label: "request type" },
-  { key: "purpose", label: "purpose" },
-  { key: "requestMode", label: "request mode" },
-  {
-    key: "dateRequested",
-    label: "date requested",
-    format: (value) => moment(value).format("MM/DD/YYYY"),
-  },
-  {
-    key: "dateCompleted",
-    label: "date completed",
-    format: (value) => moment(value).format("MM/DD/YYYY"),
-  },
-
-  { key: "status", label: "status" },
-  { key: "cellActions", label: "action" },
-];
 
 export const useHooks = () => {
   const { residents } = useResidentsApi();
@@ -75,6 +60,9 @@ export const useHooks = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { setSnackbarProps } = useSnackbar();
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
+  const [user, setUser] = useState<DecodedTokenValues>(
+    {} as DecodedTokenValues
+  );
 
   const residentOptions = useMemo(
     () =>
@@ -89,6 +77,37 @@ export const useHooks = () => {
     [residents]
   );
 
+  useEffect(() => {
+    const decoded = decodeToken() as DecodedTokenValues;
+
+    if (decoded) {
+      setUser(decoded);
+    }
+  }, []);
+
+  const tableColumnSchema: ColumnSchema<FindAllRequestsDto>[] = [
+    { key: "requestedBy", label: "requested by" },
+    { key: "contact", label: "contact" },
+    { key: "requestType", label: "request type" },
+    { key: "purpose", label: "purpose" },
+    { key: "requestMode", label: "request mode" },
+    {
+      key: "dateRequested",
+      label: "date requested",
+      format: (value) => moment(value).format("MM/DD/YYYY"),
+    },
+    {
+      key: "dateCompleted",
+      label: "date completed",
+      format: (value) => moment(value).format("MM/DD/YYYY"),
+    },
+
+    { key: "status", label: "status" },
+  ];
+  const columnSchema: ColumnSchema<FindAllRequestsDto & TableActions>[] =
+    user?.role === "ADMIN"
+      ? [...tableColumnSchema, { key: "cellActions", label: "action" }]
+      : [...tableColumnSchema];
   const fields: Field<SelectFieldProps | TextareaAutosizeProps>[] = [
     {
       fieldType: "select",
@@ -130,13 +149,14 @@ export const useHooks = () => {
       fieldType: "select",
       fieldProps: {
         id: "status",
-        label: "Select status",
+        label: "",
         name: "status",
         inputLabelId: "status",
         labelId: "status",
         options: RequestStatusArray.map((value): OptionSelect => {
           return { key: value, value };
         }),
+        hidden: user?.role === "RESIDENT",
       },
     },
   ];
@@ -153,11 +173,28 @@ export const useHooks = () => {
     setOpenModal((state) => !state);
   };
 
+  const handlePrintCertificate = (values?: FindAllRequestsDto) => {
+    if (values) {
+      exportToPdf({
+        pfdFor: "paragraph",
+        data: {
+          type: values.requestType,
+          pageContent: values,
+        } as IParagraph,
+      });
+    }
+  };
+
   const tableCellActions: ActionButtonProps<FindAllRequestsDto>[] = [
     {
       name: "Edit",
       variant: "contained",
       handleClick: handleToggleModal,
+    },
+    {
+      name: "Print Certificate",
+      variant: "outlined",
+      handleClick: handlePrintCertificate,
     },
   ];
 
@@ -172,7 +209,17 @@ export const useHooks = () => {
   ];
 
   useEffect(() => {
-    setDataSource(requests as FindAllRequestsDto[]);
+    const data = requests as FindAllRequestsDto[];
+    if (data?.length) {
+      if (user?.role === "RESIDENT") {
+        setDataSource(
+          data.filter((request) => request.requestedId === user.resident.id)
+        );
+      } else {
+        setDataSource(data);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requests]);
 
   const handleSearch = (
@@ -270,5 +317,6 @@ export const useHooks = () => {
     handleSearch,
     btnName,
     handleSubmit,
+    user,
   };
 };

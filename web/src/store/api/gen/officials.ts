@@ -54,14 +54,17 @@ export type Officials = {
   Projects: Projects[];
   projectsId?: number;
 };
+export type ProjectStatus = "PENDING" | "SUCCEED";
 export type Projects = {
   id: number;
+  members: string;
   projectName: string;
   description: string;
   startDate: string;
   endDate?: string;
   officialId: number;
   official?: Officials;
+  status: ProjectStatus;
 };
 export type CreateOfficialsDto = {
   firstname: string;

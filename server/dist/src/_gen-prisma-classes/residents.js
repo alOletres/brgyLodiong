@@ -14,8 +14,12 @@ const auth_1 = require("./auth");
 const requests_1 = require("./requests");
 const notifications_1 = require("./notifications");
 const event_notifications_1 = require("./event_notifications");
+const client_1 = require("@prisma/client");
 const swagger_1 = require("@nestjs/swagger");
 class Residents {
+    constructor() {
+        this.civilStatus = client_1.CIVIL_STATUS.SINGLE;
+    }
 }
 __decorate([
     (0, swagger_1.ApiProperty)({ type: Number }),
@@ -25,6 +29,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
 ], Residents.prototype, "firstname", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.CIVIL_STATUS, enumName: 'CIVIL_STATUS' }),
+    __metadata("design:type", String)
+], Residents.prototype, "civilStatus", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)

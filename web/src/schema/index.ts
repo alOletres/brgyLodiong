@@ -16,6 +16,11 @@ export const OfficialSchema = yup.object().shape({
 
 export const ProjectsSchema = yup.object().shape({
   officialId: yup.number().min(1).required("This field is required"),
+  position: yup.string().optional(),
+  members: yup
+    .array()
+    // .length(2, "Please select atleast two members") // Ensures the array has exactly two items
+    .required("This field is required"),
   projectName: yup.string().required("This field is required"),
   description: yup.string().required("This field is required"),
   startDate: yup.date().required("This field is required").nullable(),
@@ -25,6 +30,7 @@ export const ProjectsSchema = yup.object().shape({
 export const ResidentSchema = yup.object().shape({
   firstname: yup.string().required("This field is required"),
   lastname: yup.string().required("This field is required"),
+  civilStatus: yup.string().required("This field is required"),
   email: yup
     .string()
     .email("Invalid email format")
@@ -48,22 +54,22 @@ export const RequestSchema = yup.object().shape({
   residentId: yup.number().min(1).required("This field is required"),
   requestType: yup.string().required("This field is required"),
   purpose: yup.string().required("This field is required"),
-  status: yup.string().required("This field is required"),
+  status: yup.string().optional(),
 });
 
 export const EventSchema = yup.object().shape({
-  eventImage: yup
-    .mixed<File>()
-    .nullable()
-    .required("This field is required")
-    .test("fileSize", "File size must be less than 2MB", (value) => {
-      if (!value) return true; // Skip validation if no file is selected
-      return value.size <= 2 * 1024 * 1024; // Check if file is less than 2MB
-    })
-    .test("fileType", "Only JPG and PNG formats are allowed", (value) => {
-      if (!value) return true; // Skip validation if no file is provided
-      return ["image/jpeg", "image/png"].includes(value.type); // Check file type
-    }),
+  // eventImage: yup
+  //   .mixed<File>()
+  //   .nullable()
+  //   .required("This field is required")
+  //   .test("fileSize", "File size must be less than 2MB", (value) => {
+  //     if (!value) return true; // Skip validation if no file is selected
+  //     return value.size <= 2 * 1024 * 1024; // Check if file is less than 2MB
+  //   })
+  //   .test("fileType", "Only JPG and PNG formats are allowed", (value) => {
+  //     if (!value) return true; // Skip validation if no file is provided
+  //     return ["image/jpeg", "image/png"].includes(value.type); // Check file type
+  //   }),
   eventName: yup.string().required("This field is required"),
   description: yup.string().required("This field is required"),
   eventDate: yup.date().required("This field is required"),

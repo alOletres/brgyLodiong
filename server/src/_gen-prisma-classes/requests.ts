@@ -1,6 +1,6 @@
 import { Residents } from './residents';
 import { Notifications } from './notifications';
-import { REQUEST_TYPE, REQUEST_STATUS, REQUEST_MODE } from '@prisma/client';
+import { REQUEST_STATUS, REQUEST_MODE } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Requests {
@@ -10,8 +10,8 @@ export class Requests {
   @ApiProperty({ type: Number })
   residentId: number;
 
-  @ApiProperty({ enum: REQUEST_TYPE, enumName: 'REQUEST_TYPE' })
-  requestType: REQUEST_TYPE;
+  @ApiProperty({ type: String })
+  requestType: string;
 
   @ApiProperty({ enum: REQUEST_STATUS, enumName: 'REQUEST_STATUS' })
   status: REQUEST_STATUS = REQUEST_STATUS.PENDING;

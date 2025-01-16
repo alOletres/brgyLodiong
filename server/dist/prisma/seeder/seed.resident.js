@@ -16,6 +16,7 @@ const seedResidents = async ({ app, email }) => {
         lastname: en_1.faker.person.lastName(),
         address: en_1.faker.location.streetAddress(),
         contact: en_1.faker.phone.number(),
+        civilStatus: 'SINGLE',
     });
     console.log('Successfully seeded...');
 };

@@ -22,6 +22,7 @@ export const seedResidents = async ({ app, email }: ISeedResidentsPayload) => {
     lastname: faker.person.lastName(),
     address: faker.location.streetAddress(),
     contact: faker.phone.number(),
+    civilStatus: 'SINGLE',
   });
 
   console.log('Successfully seeded...');

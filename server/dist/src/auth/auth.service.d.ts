@@ -11,6 +11,7 @@ export declare class AuthService {
         id: number;
         status: import(".prisma/client").$Enums.ACCOUNT_STATUS;
         resident: {
+            id: number;
             firstname: string;
             lastname: string;
             contact: string;
@@ -27,6 +28,7 @@ export declare class AuthService {
         id: number;
         status: import(".prisma/client").$Enums.ACCOUNT_STATUS;
         resident: {
+            id: number;
             firstname: string;
             lastname: string;
             contact: string;

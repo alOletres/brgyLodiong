@@ -20,11 +20,13 @@ export class RequestService {
     residentId: true,
     resident: {
       select: {
+        id: true,
         firstname: true,
         lastname: true,
         address: true,
         email: true,
         contact: true,
+        civilStatus: true,
       },
     },
   };
@@ -86,6 +88,8 @@ export class RequestService {
         },
       });
     } catch (err) {
+      console.log('error', err);
+
       throw err;
     }
   }
@@ -95,6 +99,7 @@ export class RequestService {
       select: {
         ...this.selectRequestProperties,
       },
+      orderBy: { dateRequested: Prisma.SortOrder.desc },
     });
 
     return requests.map((value) => {
@@ -102,10 +107,12 @@ export class RequestService {
 
       return {
         ...data,
+        requestedId: resident.id,
         requestedBy: `${resident.firstname} ${resident.lastname}`,
         address: resident.address,
         contact: resident.contact,
         email: resident.email,
+        civilStatus: resident.civilStatus,
       };
     });
   }
@@ -123,10 +130,12 @@ export class RequestService {
 
         return {
           ...data,
+          requestedId: resident.id,
           requestedBy: `${resident.firstname} ${resident.lastname}`,
           address: resident.address,
           contact: resident.contact,
           email: resident.email,
+          civilStatus: resident.civilStatus,
         };
       });
     } catch (err) {

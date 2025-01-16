@@ -14,7 +14,16 @@ const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 class CreateResidentsDto {
+    constructor() {
+        this.civilStatus = client_1.CIVIL_STATUS.SINGLE;
+    }
 }
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.CIVIL_STATUS, enumName: 'CIVIL_STATUS' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateResidentsDto.prototype, "civilStatus", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     (0, class_validator_1.IsNotEmpty)(),

@@ -16,6 +16,11 @@ export class CreateProjectsDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
+  members: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   description: string;
 
   @ApiProperty({ type: Date })

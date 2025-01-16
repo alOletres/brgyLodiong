@@ -53,7 +53,6 @@ export type RequestControllerFindByResidentResponse = unknown;
 export type RequestControllerFindByResidentArgs = {
   id: number;
 };
-export type RequestType = "CLEARANCE" | "CERTIFICATE" | "PERMIT";
 export type RequestStatus =
   | "PENDING"
   | "APPROVED"
@@ -64,20 +63,23 @@ export type RequestStatus =
 export type RequestMode = "WALKIN" | "ONLINE";
 export type CreateRequestDto = {
   residentId: number;
-  requestType: RequestType;
+  requestType: string;
   status: RequestStatus;
   purpose: string;
   requestMode: RequestMode;
 };
+export type CivilStatus = "SINGLE" | "MARRIED";
 export type FindAllRequestsDto = {
   id: number;
   residentId: number;
-  requestType: RequestType;
+  requestType: string;
   status: RequestStatus;
   purpose: string;
   dateRequested: string;
   dateCompleted?: string;
   requestMode: RequestMode;
+  requestedId: number;
+  civilStatus: CivilStatus;
   contact: string;
   email: string;
   address: string;

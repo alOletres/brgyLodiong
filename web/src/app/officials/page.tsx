@@ -4,7 +4,7 @@ import { useHooks } from "./hook";
 import Modal from "@/components/Modal";
 import { OfficialSchema } from "@/schema";
 import SearchBar from "@/components/SearchBar";
-import { LinearProgress } from "@mui/material";
+import LinearLoader from "@/components/LinearLoader";
 
 const OfficialPage = () => {
   const {
@@ -38,18 +38,15 @@ const OfficialPage = () => {
         width={500}
       />
       <SearchBar label="Search firstname" onChange={handleSearch} />
+      <CustomTable
+        tableHeader="Officials list"
+        columns={columnSchema}
+        dataSource={dataSource}
+        headerActions={tableHeaderActions}
+        cellActions={tableCellActions}
+      />
 
-      {isFetchingOfficials ? (
-        <LinearProgress color="primary" />
-      ) : (
-        <CustomTable
-          tableHeader="Officials list"
-          columns={columnSchema}
-          dataSource={dataSource}
-          headerActions={tableHeaderActions}
-          cellActions={tableCellActions}
-        />
-      )}
+      {isFetchingOfficials && <LinearLoader height={4} />}
     </>
   );
 };
