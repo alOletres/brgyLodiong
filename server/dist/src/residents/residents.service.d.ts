@@ -8,14 +8,14 @@ export declare class ResidentsService {
     update(id: number, { password, role, ...payload }: CreateResidentsDto): Promise<void>;
     fetch(): Promise<FindAllResidentsDto[]>;
     findOne(id: number): Promise<{
-        id: number;
-        createdAt: Date;
-        firstname: string;
         civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
+        firstname: string;
         lastname: string;
         email: string;
         contact: string;
         address: string;
+        id: number;
+        createdAt: Date;
         requestsId: number;
     }>;
 }

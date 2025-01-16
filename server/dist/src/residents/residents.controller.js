@@ -34,13 +34,14 @@ let ResidentsController = class ResidentsController {
     }
 };
 __decorate([
-    (0, common_1.Post)('/'),
+    (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_residents_dto_1.CreateResidentsDto]),
     __metadata("design:returntype", Promise)
 ], ResidentsController.prototype, "create", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Put)('/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
@@ -49,7 +50,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ResidentsController.prototype, "update", null);
 __decorate([
-    (0, common_1.Get)('/'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)(),
     (0, swagger_1.ApiExtraModels)(find_all_residents_dto_1.FindAllResidentsDto),
     (0, swagger_1.ApiResponse)({ type: find_all_residents_dto_1.FindAllResidentsDto, isArray: true, status: 200 }),
     __metadata("design:type", Function),
@@ -57,7 +59,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ResidentsController.prototype, "fetch", null);
 ResidentsController = __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('residents'),
     __metadata("design:paramtypes", [residents_service_1.ResidentsService])
 ], ResidentsController);

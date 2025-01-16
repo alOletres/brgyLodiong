@@ -28,6 +28,8 @@ export class ResidentsService {
         },
       });
     } catch (err) {
+      console.log('err', err);
+
       throw err;
     }
   }

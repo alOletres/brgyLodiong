@@ -6,8 +6,8 @@ export declare class RequestController {
     constructor(requestService: RequestService);
     create(payload: CreateRequestDto): Promise<{
         id: number;
-        residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        residentId: number;
         requestType: string;
         purpose: string;
         dateRequested: Date;
@@ -16,8 +16,8 @@ export declare class RequestController {
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
-        residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        residentId: number;
         requestType: string;
         purpose: string;
         dateRequested: Date;

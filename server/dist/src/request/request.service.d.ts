@@ -13,8 +13,8 @@ export declare class RequestService {
     constructor(prisma: PrismaService, twilioService: TwilioService, residentService: ResidentsService, notificationService: NotificationService);
     create(payload: CreateRequestDto): Promise<{
         id: number;
-        residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        residentId: number;
         requestType: string;
         purpose: string;
         dateRequested: Date;
@@ -23,8 +23,8 @@ export declare class RequestService {
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
-        residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        residentId: number;
         requestType: string;
         purpose: string;
         dateRequested: Date;
