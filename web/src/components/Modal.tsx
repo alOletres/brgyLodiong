@@ -24,6 +24,9 @@ import {
 } from "./hooks/useModal";
 import { memo } from "react";
 import DatePicker, { CustomDatePickerProps } from "./DatePicker";
+import CustomDateTimePicker, {
+  CustomDateTimePickerProps,
+} from "./DateTimePicker";
 
 const contentWrapperStyle: SxProps<Theme> = {
   position: "absolute",
@@ -52,7 +55,7 @@ const saveButtonWrapper: SxProps<Theme> = {
  * @handleSubmit method that will be triggered when the form is submitted
  * @fields Array of {@link Field} prop
  */
-interface ModalFormProps<T extends Maybe<AnyObject>> {
+export interface ModalFormProps<T extends Maybe<AnyObject>> {
   initialValues: T;
   validationSchema?: ObjectSchema<T>;
   handleSubmit: (values: T, helpers: FormikHelpers<T>) => void;
@@ -61,6 +64,7 @@ interface ModalFormProps<T extends Maybe<AnyObject>> {
     | SelectFieldProps
     | TextareaAutosizeProps
     | CustomDatePickerProps
+    | CustomDateTimePickerProps
   >[];
 }
 
@@ -97,8 +101,13 @@ const CustomModal = ({
   width,
   ...props
 }: Props<any>) => {
-  const { isInputField, isSelectField, isTextAreaField, isDateField } =
-    useModalHook();
+  const {
+    isInputField,
+    isSelectField,
+    isTextAreaField,
+    isDateField,
+    isDateTimeField,
+  } = useModalHook();
 
   return (
     <Modal keepMounted open={open} onClose={handleClose} {...props}>
@@ -191,6 +200,20 @@ const CustomModal = ({
                       if (isDateField(field)) {
                         return (
                           <DatePicker
+                            {...field.fieldProps}
+                            key={index}
+                            onChange={(e) => {
+                              if (field.fieldProps.name) {
+                                setFieldValue(field.fieldProps.name, e);
+                              }
+                            }}
+                          />
+                        );
+                      }
+
+                      if (isDateTimeField(field)) {
+                        return (
+                          <CustomDateTimePicker
                             {...field.fieldProps}
                             key={index}
                             onChange={(e) => {

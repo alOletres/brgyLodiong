@@ -57,6 +57,10 @@ export const RequestSchema = yup.object().shape({
   status: yup.string().optional(),
 });
 
+export const RejectionSchema = yup.object().shape({
+  rejectionReason: yup.string().required("This field is required"),
+});
+
 export const EventSchema = yup.object().shape({
   // eventImage: yup
   //   .mixed<File>()

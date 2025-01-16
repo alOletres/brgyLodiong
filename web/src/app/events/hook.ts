@@ -14,6 +14,7 @@ import { TextareaAutosizeProps } from "@mui/material";
 import { CustomDatePickerProps } from "@/components/DatePicker";
 import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
+import { CustomDateTimePickerProps } from "@/components/DateTimePicker";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const initialValues: CreateEventsDto | any = {
@@ -29,7 +30,7 @@ const columns: ColumnSchema<FindAllEventsDto & TableActions>[] = [
   {
     key: "eventDate",
     label: "event date",
-    format: (value) => moment(value).format("MM/DD/YYYY"),
+    format: (value) => moment(value).format("lll"),
   },
   { key: "location", label: "location" },
   {
@@ -41,7 +42,10 @@ const columns: ColumnSchema<FindAllEventsDto & TableActions>[] = [
 ];
 
 const modalFields: Field<
-  InputFieldProps | TextareaAutosizeProps | CustomDatePickerProps
+  | InputFieldProps
+  | TextareaAutosizeProps
+  | CustomDatePickerProps
+  | CustomDateTimePickerProps
 >[] = [
   {
     fieldType: "text",
@@ -63,9 +67,9 @@ const modalFields: Field<
     },
   },
   {
-    fieldType: "date",
-    fieldProps: {
-      label: "Event date",
+    fieldType: "dateTime",
+    fieldProps: <CustomDateTimePickerProps>{
+      label: "Select event date and time",
       name: "eventDate",
       id: "eventDate",
       margin: "dense",
@@ -107,6 +111,7 @@ export const useHooks = () => {
 
       setSubmitting(false);
       setOpenModal(false);
+      setOpenModal((state) => !state);
       setSnackbarProps({
         message: "Events Successfully created!",
         severity: "success",
@@ -129,6 +134,8 @@ export const useHooks = () => {
 
       setSubmitting(false);
       setBtnName("Submit");
+
+      setOpenModal((state) => !state);
 
       setSnackbarProps({
         message: "Events successfully updated!",

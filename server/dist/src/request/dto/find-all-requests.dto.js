@@ -22,6 +22,7 @@ class FindAllRequestsDto extends (0, swagger_1.PickType)(requests_1.Requests, [
     'dateCompleted',
     'requestMode',
     'residentId',
+    'rejectionReason',
 ]) {
     constructor() {
         super(...arguments);

@@ -53,6 +53,7 @@ model Requests {
   residentId    Int
   requestType   String          @db.VarChar(150)
   status        REQUEST_STATUS  @default(PENDING)
+  rejectionReason String?       @db.VarChar(255)
   purpose       String          @db.VarChar(255)
   dateRequested DateTime        @default(now()) @db.Timestamp(0)
   dateCompleted DateTime?

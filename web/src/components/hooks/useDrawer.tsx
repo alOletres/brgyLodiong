@@ -1,11 +1,11 @@
 import {
   Person2Rounded,
   FolderCopyOutlined,
-  RequestPageRounded,
   Person2TwoTone,
   NotificationAddOutlined,
   EventAvailableOutlined,
   DashboardOutlined,
+  ListAltOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
@@ -46,7 +46,7 @@ export const useHooks = () => {
     { icon: <Person2Rounded />, link: OFFICIALS }, // Properly invoke the component using <>
     { icon: <FolderCopyOutlined />, link: PROJECTS },
     { icon: <Person2TwoTone />, link: RESIDENTS },
-    { icon: <RequestPageRounded />, link: REQUEST },
+    { icon: <ListAltOutlined />, link: REQUEST },
     { icon: <EventAvailableOutlined />, link: EVENTS },
     { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },
   ]);
@@ -59,8 +59,7 @@ export const useHooks = () => {
 
     if (decoded?.role === "RESIDENT") {
       setList([
-        { icon: <DashboardOutlined />, link: DASHBOARD },
-        { icon: <RequestPageRounded />, link: REQUEST },
+        { icon: <ListAltOutlined />, link: REQUEST },
         { icon: <EventAvailableOutlined />, link: EVENTS },
         { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },
       ]);

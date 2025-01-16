@@ -81,6 +81,8 @@ export const residentFields: Field<
       options: civilStatusArray.map((value): OptionSelect => {
         return { key: value, value };
       }),
+
+      margin: "dense",
     },
   },
 

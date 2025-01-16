@@ -2,6 +2,8 @@
 
 import { ECERTIFICATES } from "@/constants/certificates.enum";
 import { EMAGE } from "@/constants/logoBase64";
+import { EPOSITION } from "@/constants/posistion.enum";
+import { FindAllOfficialsDto } from "@/store/api/gen/officials";
 import { FindAllRequestsDto } from "@/store/api/gen/request";
 import moment from "moment";
 import * as pdfMake from "pdfmake/build/pdfmake";
@@ -76,6 +78,7 @@ export interface IParagraph {
 }
 export interface PdfProps<T extends ITable | IParagraph> {
   pfdFor: "table" | "paragraph";
+  officials?: FindAllOfficialsDto[];
   data: T;
 }
 
@@ -270,11 +273,17 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
       },
     ];
 
+    // Find Barangay Captain;
+
+    const official = props.officials?.find(
+      (official) => official.position === EPOSITION.PUNONG_BARANGAY
+    );
+
     const honorableSignature: Content[] = [
       {
         text: [
           {
-            text: "HON. ROGELIO D. IGTOS\n",
+            text: `HON. ${official?.firstname ?? ""} ${official?.lastname}\n`,
             decoration: "underline",
             bold: true,
           },

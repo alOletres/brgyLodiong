@@ -3,8 +3,9 @@ import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
 import SearchBar from "@/components/SearchBar";
 import Modal from "@/components/Modal";
-import { RequestSchema } from "@/schema";
+import { RejectionSchema, RequestSchema } from "@/schema";
 import LinearLoader from "@/components/LinearLoader";
+import DialogBox from "@/components/Dialog";
 const RequestPage = () => {
   const {
     dataSource,
@@ -20,6 +21,14 @@ const RequestPage = () => {
     fields,
     initialValues,
     user,
+    isShowDialog,
+    handleToggleDialog,
+    handleConfirmDialog,
+    rejectionOpenModal,
+    handleSubmitRejectionReason,
+    initialRejectionValues,
+    rejectionField,
+    handleToggleRejectionModal,
   } = useHooks();
 
   return (
@@ -37,6 +46,27 @@ const RequestPage = () => {
           validationSchema: RequestSchema,
         }}
       />
+
+      <Modal
+        title="Rejection reason (!)"
+        open={rejectionOpenModal}
+        btnName="Submit"
+        width={500}
+        handleClose={handleToggleRejectionModal}
+        formProps={{
+          fields: rejectionField,
+          initialValues: initialRejectionValues,
+          handleSubmit: handleSubmitRejectionReason,
+          validationSchema: RejectionSchema,
+        }}
+      />
+      <DialogBox
+        open={isShowDialog}
+        contentText="Are you sure? You want to reject the request?"
+        toggleDialog={handleToggleDialog}
+        title="Warning"
+        handleSubmit={handleConfirmDialog}
+      />
       <SearchBar label="Search requested by" onChange={handleSearch} />
       <CustomTable
         tableHeader="List of requests"
@@ -45,7 +75,6 @@ const RequestPage = () => {
         cellActions={user?.role === "ADMIN" ? tableCellActions : undefined}
         headerActions={tableHeaderActions}
       />
-
       {isFetchingRequest && <LinearLoader height={4} />}
     </>
   );

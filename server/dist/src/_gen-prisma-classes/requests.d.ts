@@ -6,6 +6,7 @@ export declare class Requests {
     residentId: number;
     requestType: string;
     status: REQUEST_STATUS;
+    rejectionReason?: string;
     purpose: string;
     dateRequested: Date;
     dateCompleted?: Date;

@@ -16,6 +16,9 @@ export class Requests {
   @ApiProperty({ enum: REQUEST_STATUS, enumName: 'REQUEST_STATUS' })
   status: REQUEST_STATUS = REQUEST_STATUS.PENDING;
 
+  @ApiPropertyOptional({ type: String })
+  rejectionReason?: string;
+
   @ApiProperty({ type: String })
   purpose: string;
 

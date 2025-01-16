@@ -763,6 +763,9 @@
           "status": {
             "$ref": "#/components/schemas/REQUEST_STATUS"
           },
+          "rejectionReason": {
+            "type": "string"
+          },
           "purpose": {
             "type": "string"
           },
@@ -792,6 +795,9 @@
           },
           "status": {
             "$ref": "#/components/schemas/REQUEST_STATUS"
+          },
+          "rejectionReason": {
+            "type": "string"
           },
           "purpose": {
             "type": "string"

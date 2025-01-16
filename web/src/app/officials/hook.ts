@@ -17,6 +17,8 @@ import { isValidDate } from "@/utils/error";
 import { FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { EPOSITION } from "@/constants/posistion.enum";
+import { OptionSelect, SelectFieldProps } from "@/components/Select";
 
 export type IHandleSubmitType = "Submit" | "Save Changes";
 
@@ -41,7 +43,13 @@ export const useHooks = () => {
 
   const [dataSource, setDataSource] = useState<FindAllOfficialsDto[]>([]);
 
-  const modalFields: Field<InputFieldProps | CustomDatePickerProps>[] = [
+  const positions: OptionSelect[] = Object.values(EPOSITION).map((position) => {
+    return { key: position, value: position };
+  });
+
+  const modalFields: Field<
+    InputFieldProps | CustomDatePickerProps | SelectFieldProps
+  >[] = [
     {
       fieldType: "text",
       fieldProps: {
@@ -62,13 +70,16 @@ export const useHooks = () => {
         margin: "dense",
       },
     },
+
     {
-      fieldType: "text",
-      fieldProps: {
-        label: "Position",
-        name: "position",
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
         id: "position",
-        type: "text",
+        name: "position",
+        label: "Select position",
+        inputLabelId: "position",
+        labelId: "position",
+        options: positions,
         margin: "dense",
       },
     },

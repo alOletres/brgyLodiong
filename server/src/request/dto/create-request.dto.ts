@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { REQUEST_MODE, REQUEST_STATUS } from '@prisma/client';
 
@@ -17,6 +17,11 @@ export class CreateRequestDto {
   @IsOptional()
   @IsString()
   status: REQUEST_STATUS = REQUEST_STATUS.PENDING;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  rejectionReason?: string;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()

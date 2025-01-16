@@ -65,6 +65,7 @@ export type CreateRequestDto = {
   residentId: number;
   requestType: string;
   status: RequestStatus;
+  rejectionReason?: string;
   purpose: string;
   requestMode: RequestMode;
 };
@@ -74,6 +75,7 @@ export type FindAllRequestsDto = {
   residentId: number;
   requestType: string;
   status: RequestStatus;
+  rejectionReason?: string;
   purpose: string;
   dateRequested: string;
   dateCompleted?: string;

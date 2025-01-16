@@ -6,23 +6,25 @@ export declare class RequestController {
     constructor(requestService: RequestService);
     create(payload: CreateRequestDto): Promise<{
         id: number;
-        residentId: number;
         requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
+        residentId: number;
+        rejectionReason: string;
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
-        residentId: number;
         requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
+        residentId: number;
+        rejectionReason: string;
     }>;
     fetch(): Promise<FindAllRequestsDto[]>;
     findByResident(id: number): Promise<FindAllRequestsDto[]>;

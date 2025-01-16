@@ -39,7 +39,6 @@ export const useHooks = () => {
   );
 
   const columnSchema: ColumnSchema<FindAllNotificationsDto>[] = [
-    { key: "requestMode", label: "type" },
     { key: "requestType", label: "request type" },
     { key: "purpose", label: "purpose" },
     { key: "notificationType", label: "notification type" },

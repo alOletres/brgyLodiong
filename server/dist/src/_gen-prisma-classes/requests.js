@@ -37,6 +37,10 @@ __decorate([
     __metadata("design:type", String)
 ], Requests.prototype, "status", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    __metadata("design:type", String)
+], Requests.prototype, "rejectionReason", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
 ], Requests.prototype, "purpose", void 0);

@@ -42,6 +42,7 @@ let RequestService = class RequestService {
             purpose: true,
             requestMode: true,
             residentId: true,
+            rejectionReason: true,
             resident: {
                 select: {
                     id: true,
@@ -73,7 +74,6 @@ let RequestService = class RequestService {
                 const { firstname, lastname, contact } = await this.residentService.findOne(payload.residentId);
                 const completeName = `${firstname} ${lastname}`;
                 const body = this.twilioService.notifyResident(completeName, payload.requestType, payload.status);
-                await this.twilioService.sendSms(contact, body);
                 await this.notificationService.create({
                     message: body,
                     notificationType: 'SMS',

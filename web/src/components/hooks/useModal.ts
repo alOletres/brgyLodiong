@@ -1,8 +1,9 @@
 import { InputProps, TextareaAutosizeProps } from "@mui/material";
 import { SelectFieldProps } from "@/components/Select";
 import { CustomDatePickerProps } from "../DatePicker";
+import { CustomDateTimePickerProps } from "../DateTimePicker";
 
-type FieldType = "text" | "select" | "textarea" | "date";
+type FieldType = "text" | "select" | "textarea" | "date" | "dateTime";
 
 /**
  * Props for `input` field, this is extending the {@link InputProps} from `@mui/material`
@@ -25,6 +26,7 @@ export interface Field<
     | SelectFieldProps
     | TextareaAutosizeProps
     | CustomDatePickerProps
+    | CustomDateTimePickerProps
 > {
   fieldType: FieldType;
   fieldProps: T;
@@ -37,6 +39,7 @@ export const useHook = () => {
       | SelectFieldProps
       | TextareaAutosizeProps
       | CustomDatePickerProps
+      | CustomDateTimePickerProps
     >
   ): data is Field<InputFieldProps> => data.fieldType === "text";
 
@@ -46,6 +49,7 @@ export const useHook = () => {
       | SelectFieldProps
       | TextareaAutosizeProps
       | CustomDatePickerProps
+      | CustomDateTimePickerProps
     >
   ): data is Field<SelectFieldProps> => data.fieldType === "select";
 
@@ -55,6 +59,7 @@ export const useHook = () => {
       | SelectFieldProps
       | TextareaAutosizeProps
       | CustomDatePickerProps
+      | CustomDateTimePickerProps
     >
   ): data is Field<TextareaAutosizeProps> => data.fieldType === "textarea";
 
@@ -64,13 +69,25 @@ export const useHook = () => {
       | SelectFieldProps
       | TextareaAutosizeProps
       | CustomDatePickerProps
+      | CustomDateTimePickerProps
     >
   ): data is Field<CustomDatePickerProps> => data.fieldType === "date";
+
+  const isDateTimeField = (
+    data: Field<
+      | InputFieldProps
+      | SelectFieldProps
+      | TextareaAutosizeProps
+      | CustomDatePickerProps
+      | CustomDateTimePickerProps
+    >
+  ): data is Field<CustomDateTimePickerProps> => data.fieldType === "dateTime";
 
   return {
     isInputField,
     isSelectField,
     isTextAreaField,
     isDateField,
+    isDateTimeField,
   };
 };

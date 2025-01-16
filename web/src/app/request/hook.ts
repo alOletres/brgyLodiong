@@ -24,8 +24,10 @@ import { IHandleSubmitType } from "../officials/hook";
 import { ECERTIFICATES } from "@/constants/certificates.enum";
 import { exportToPdf, IParagraph } from "@/lib/pdfMake";
 import { decodeToken } from "@/lib/tokenStorage";
-import { FindAllResidentsDto, UserRole } from "@/store/api/gen/residents";
 import { DecodedTokenValues } from "@/components/hooks/useDrawer";
+import { useOfficialsApi } from "@/store/api/hooks/officials";
+import { FindAllOfficialsDto } from "@/store/api/gen/officials";
+import { CustomInputProps } from "@/components/TextFieldInput";
 
 const RequestTypeArray: string[] = Object.values(ECERTIFICATES).sort((a, b) =>
   a > b ? 1 : -1
@@ -47,6 +49,8 @@ const initialValues: CreateRequestDto = {
   status: "PENDING",
 };
 
+const initialRejectionValues = { rejectionReason: "" };
+
 export const useHooks = () => {
   const { residents } = useResidentsApi();
   const {
@@ -55,13 +59,26 @@ export const useHooks = () => {
     handleCreate: create,
     handleUpdate: edit,
   } = useRequestApi();
+  const { officials } = useOfficialsApi();
+
   const [dataSource, setDataSource] = useState<FindAllRequestsDto[]>([]);
   const [formValues, setFormValues] = useState<CreateRequestDto>(initialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [rejectionOpenModal, setRejectionOpenModal] = useState<boolean>(false);
   const { setSnackbarProps } = useSnackbar();
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
+
+  const [requestUpdate, setRequestUpdate] = useState<
+    CreateRequestDto & { id: number }
+  >();
   const [user, setUser] = useState<DecodedTokenValues>(
     {} as DecodedTokenValues
+  );
+  const [isShowDialog, setShowDialog] = useState<boolean>(false);
+
+  const dataOfficials = useMemo(
+    (): FindAllOfficialsDto[] => (officials?.length ? officials : []),
+    [officials]
   );
 
   const residentOptions = useMemo(
@@ -103,11 +120,27 @@ export const useHooks = () => {
     },
 
     { key: "status", label: "status" },
+
+    { key: "rejectionReason", label: "rejection reason" },
   ];
   const columnSchema: ColumnSchema<FindAllRequestsDto & TableActions>[] =
     user?.role === "ADMIN"
       ? [...tableColumnSchema, { key: "cellActions", label: "action" }]
       : [...tableColumnSchema];
+
+  const rejectionField: Field<CustomInputProps>[] = [
+    {
+      fieldType: "text",
+      fieldProps: {
+        label: "Enter your reason here",
+        name: "rejectionReason",
+        id: "rejectionReason",
+        type: "text",
+        margin: "dense",
+      },
+    },
+  ];
+
   const fields: Field<SelectFieldProps | TextareaAutosizeProps>[] = [
     {
       fieldType: "select",
@@ -149,7 +182,7 @@ export const useHooks = () => {
       fieldType: "select",
       fieldProps: {
         id: "status",
-        label: "",
+        label: user?.role === "RESIDENT" ? "" : "Select status",
         name: "status",
         inputLabelId: "status",
         labelId: "status",
@@ -177,6 +210,7 @@ export const useHooks = () => {
     if (values) {
       exportToPdf({
         pfdFor: "paragraph",
+        officials: dataOfficials,
         data: {
           type: values.requestType,
           pageContent: values,
@@ -239,6 +273,11 @@ export const useHooks = () => {
     }
   };
 
+  const handleToggleDialog = () => setShowDialog((state) => !state);
+
+  const handleToggleRejectionModal = () =>
+    setRejectionOpenModal((state) => !state);
+
   const handleEdit = async (
     {
       id,
@@ -253,9 +292,41 @@ export const useHooks = () => {
     }: FindAllRequestsDto,
     { setSubmitting }: FormikHelpers<FindAllRequestsDto>
   ) => {
-    try {
-      await edit(id, values);
+    if (values.status === "REJECTED") {
+      setRequestUpdate({ ...values, id });
+
+      handleToggleDialog();
+    } else {
+      await handleUpdateRequest(id, values);
       setSubmitting(false);
+    }
+  };
+
+  const handleSubmitRejectionReason = async (
+    { rejectionReason }: { rejectionReason: string },
+    { setSubmitting }: FormikHelpers<FindAllRequestsDto>
+  ) => {
+    const { id, ...payload } = {
+      ...requestUpdate,
+      rejectionReason,
+    } as CreateRequestDto & { id: number };
+
+    await handleUpdateRequest(id, payload);
+    handleToggleRejectionModal();
+    setSubmitting(false);
+  };
+
+  const handleConfirmDialog = () => {
+    handleToggleDialog(); // dialog close
+    setOpenModal(false); // First modal close
+
+    handleToggleRejectionModal(); // open rejection dialog
+  };
+
+  const handleUpdateRequest = async (id: number, payload: CreateRequestDto) => {
+    try {
+      await edit(id, payload);
+
       setBtnName("Submit");
       setOpenModal(false);
       setSnackbarProps({
@@ -318,5 +389,13 @@ export const useHooks = () => {
     btnName,
     handleSubmit,
     user,
+    isShowDialog,
+    handleToggleDialog,
+    handleConfirmDialog,
+    rejectionField,
+    handleToggleRejectionModal,
+    initialRejectionValues,
+    rejectionOpenModal,
+    handleSubmitRejectionReason,
   };
 };

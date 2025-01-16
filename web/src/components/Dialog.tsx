@@ -56,8 +56,8 @@ const DialogBox = ({
           <DialogContentText>{contentText}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          {showCloseBtn && <Button onClick={toggleDialog}>Cancel</Button>}
-          <Button onClick={handleSubmit}>OK</Button>
+          {showCloseBtn && <Button onClick={toggleDialog}>CANCEL</Button>}
+          <Button onClick={handleSubmit}>YES</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
