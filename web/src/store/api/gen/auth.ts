@@ -28,7 +28,11 @@ export type AppControllerChangePasswordArgs = {
   email: string;
   changePasswordDto: ChangePasswordDto;
 };
-export type ChangePasswordDto = {};
+export type ChangePasswordDto = {
+  currentPassword: string;
+  confirmPassword: string;
+  newPassword: string;
+};
 export const {
   useAppControllerLoginMutation,
   useAppControllerChangePasswordMutation,
