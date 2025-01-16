@@ -39,7 +39,7 @@ const {
 
 export const useHooks = () => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const [list, setList] = useState<IDrawerListProps[]>([
     { icon: <DashboardOutlined />, link: DASHBOARD },
