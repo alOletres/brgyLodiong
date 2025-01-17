@@ -107,11 +107,11 @@ export const useHooks = () => {
     { setSubmitting }: FormikHelpers<CreateEventsDto>
   ) => {
     try {
+      setOpenModal(false);
       await create(values);
 
       setSubmitting(false);
       setOpenModal(false);
-      setOpenModal((state) => !state);
       setSnackbarProps({
         message: "Events Successfully created!",
         severity: "success",
@@ -133,10 +133,8 @@ export const useHooks = () => {
       await update(id, values);
 
       setSubmitting(false);
+      setOpenModal(false);
       setBtnName("Submit");
-
-      setOpenModal((state) => !state);
-
       setSnackbarProps({
         message: "Events successfully updated!",
         severity: "success",

@@ -13,25 +13,25 @@ export declare class RequestService {
     constructor(prisma: PrismaService, twilioService: TwilioService, residentService: ResidentsService, notificationService: NotificationService);
     create(payload: CreateRequestDto): Promise<{
         id: number;
-        requestType: string;
+        residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
+        rejectionReason: string;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
-        residentId: number;
-        rejectionReason: string;
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
-        requestType: string;
+        residentId: number;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
+        rejectionReason: string;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
-        residentId: number;
-        rejectionReason: string;
     }>;
     fetch(): Promise<FindAllRequestsDto[]>;
     findByResident(id: number): Promise<FindAllRequestsDto[]>;

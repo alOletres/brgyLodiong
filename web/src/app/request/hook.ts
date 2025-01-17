@@ -63,6 +63,10 @@ export const useHooks = () => {
 
   const [dataSource, setDataSource] = useState<FindAllRequestsDto[]>([]);
   const [formValues, setFormValues] = useState<CreateRequestDto>(initialValues);
+  const [initialResidentRequestForm, setInitialResidentRequestForm] = useState<
+    Pick<CreateRequestDto, "requestType" | "purpose">
+  >({ requestType: "", purpose: "" });
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [rejectionOpenModal, setRejectionOpenModal] = useState<boolean>(false);
   const { setSnackbarProps } = useSnackbar();
@@ -98,6 +102,8 @@ export const useHooks = () => {
     const decoded = decodeToken() as DecodedTokenValues;
 
     if (decoded) {
+      // Set user here!
+
       setUser(decoded);
     }
   }, []);
@@ -141,58 +147,84 @@ export const useHooks = () => {
     },
   ];
 
-  const fields: Field<SelectFieldProps | TextareaAutosizeProps>[] = [
-    {
-      fieldType: "select",
-      fieldProps: {
-        id: "residentId",
-        label: "Select Resident",
-        name: "residentId",
-        inputLabelId: "residentId",
-        labelId: "residentId",
-        options: residentOptions,
-        margin: "dense",
-      },
-    },
-    {
-      fieldType: "select",
-      fieldProps: {
-        id: "requestType",
-        label: "Select Request type",
-        name: "requestType",
-        inputLabelId: "requestType",
-        labelId: "requestType",
-        options: RequestTypeArray.map((value): OptionSelect => {
-          return { key: value, value };
-        }),
-        margin: "dense",
-      },
-    },
-    {
-      fieldType: "textarea",
-      fieldProps: <TextareaAutosizeProps>{
-        id: "purpose",
-        label: "purpose",
-        name: "purpose",
-        placeholder: "Enter your purpose",
-      },
-    },
+  const fields: Field<SelectFieldProps | TextareaAutosizeProps>[] =
+    user?.role === "RESIDENT"
+      ? [
+          {
+            fieldType: "select",
+            fieldProps: {
+              id: "requestType",
+              label: "Select Request type",
+              name: "requestType",
+              inputLabelId: "requestType",
+              labelId: "requestType",
+              options: RequestTypeArray.map((value): OptionSelect => {
+                return { key: value, value };
+              }),
+              margin: "dense",
+            },
+          },
+          {
+            fieldType: "textarea",
+            fieldProps: <TextareaAutosizeProps>{
+              id: "purpose",
+              label: "purpose",
+              name: "purpose",
+              placeholder: "Enter your purpose",
+            },
+          },
+        ]
+      : [
+          {
+            fieldType: "select",
+            fieldProps: {
+              id: "residentId",
+              label: "Select Resident",
+              name: "residentId",
+              inputLabelId: "residentId",
+              labelId: "residentId",
+              options: residentOptions,
+              margin: "dense",
+            },
+          },
+          {
+            fieldType: "select",
+            fieldProps: {
+              id: "requestType",
+              label: "Select Request type",
+              name: "requestType",
+              inputLabelId: "requestType",
+              labelId: "requestType",
+              options: RequestTypeArray.map((value): OptionSelect => {
+                return { key: value, value };
+              }),
+              margin: "dense",
+            },
+          },
+          {
+            fieldType: "textarea",
+            fieldProps: <TextareaAutosizeProps>{
+              id: "purpose",
+              label: "purpose",
+              name: "purpose",
+              placeholder: "Enter your purpose",
+            },
+          },
 
-    {
-      fieldType: "select",
-      fieldProps: {
-        id: "status",
-        label: user?.role === "RESIDENT" ? "" : "Select status",
-        name: "status",
-        inputLabelId: "status",
-        labelId: "status",
-        options: RequestStatusArray.map((value): OptionSelect => {
-          return { key: value, value };
-        }),
-        hidden: user?.role === "RESIDENT",
-      },
-    },
-  ];
+          {
+            fieldType: "select",
+            fieldProps: {
+              id: "status",
+              label: "Select status",
+              name: "status",
+              inputLabelId: "status",
+              labelId: "status",
+              options: RequestStatusArray.map((value): OptionSelect => {
+                return { key: value, value };
+              }),
+            },
+          },
+        ];
 
   const handleToggleModal = (values?: FindAllRequestsDto) => {
     if (values && Object.keys(values).length) {
@@ -292,12 +324,22 @@ export const useHooks = () => {
     }: FindAllRequestsDto,
     { setSubmitting }: FormikHelpers<FindAllRequestsDto>
   ) => {
-    if (values.status === "REJECTED") {
-      setRequestUpdate({ ...values, id });
+    const user = decodeToken() as DecodedTokenValues;
+    if (user.role === "ADMIN") {
+      if (values.status === "REJECTED") {
+        setRequestUpdate({ ...values, id });
 
-      handleToggleDialog();
-    } else {
-      await handleUpdateRequest(id, values);
+        handleToggleDialog();
+      } else {
+        await handleUpdateRequest(id, values);
+        setSubmitting(false);
+      }
+    }
+
+    if (user.role === "RESIDENT") {
+      const residentId = user.resident.id;
+
+      await handleUpdateRequest(id, { ...values, residentId });
       setSubmitting(false);
     }
   };
@@ -344,7 +386,20 @@ export const useHooks = () => {
     { setSubmitting }: FormikHelpers<CreateRequestDto>
   ) => {
     try {
-      await create({ ...values });
+      const user = decodeToken() as DecodedTokenValues;
+
+      if (user.role === "RESIDENT") {
+        const residentId = user.resident.id;
+
+        const payload = { ...values, residentId };
+
+        console.log("payload", payload);
+
+        await create({ ...values, residentId });
+      } else {
+        await create({ ...values });
+      }
+
       setSubmitting(false);
       setOpenModal(false);
       setSnackbarProps({
@@ -379,7 +434,8 @@ export const useHooks = () => {
     fields,
     isFetchingRequest,
     dataSource,
-    initialValues: formValues,
+    initialValues:
+      user.role === "RESIDENT" ? initialResidentRequestForm : formValues,
     openModal,
     handleToggleModal,
     columnSchema,

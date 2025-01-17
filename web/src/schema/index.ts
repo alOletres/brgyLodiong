@@ -57,6 +57,12 @@ export const RequestSchema = yup.object().shape({
   status: yup.string().optional(),
 });
 
+export const RequestResidentSchema = yup.object().shape({
+  requestType: yup.string().required("This field is required"),
+  purpose: yup.string().required("This field is required"),
+  status: yup.string().optional(),
+});
+
 export const RejectionSchema = yup.object().shape({
   rejectionReason: yup.string().required("This field is required"),
 });

@@ -3,7 +3,11 @@ import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
 import SearchBar from "@/components/SearchBar";
 import Modal from "@/components/Modal";
-import { RejectionSchema, RequestSchema } from "@/schema";
+import {
+  RejectionSchema,
+  RequestResidentSchema,
+  RequestSchema,
+} from "@/schema";
 import LinearLoader from "@/components/LinearLoader";
 import DialogBox from "@/components/Dialog";
 const RequestPage = () => {
@@ -43,7 +47,8 @@ const RequestPage = () => {
           fields,
           initialValues,
           handleSubmit,
-          validationSchema: RequestSchema,
+          validationSchema:
+            user.role === "RESIDENT" ? RequestResidentSchema : RequestSchema,
         }}
       />
 

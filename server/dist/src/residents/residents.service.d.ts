@@ -9,13 +9,13 @@ export declare class ResidentsService {
     fetch(): Promise<FindAllResidentsDto[]>;
     findOne(id: number): Promise<{
         id: number;
-        civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
-        contact: string;
-        email: string;
-        address: string;
-        firstname: string;
-        lastname: string;
         createdAt: Date;
+        firstname: string;
+        civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
+        lastname: string;
+        email: string;
+        contact: string;
+        address: string;
         requestsId: number;
     }>;
 }

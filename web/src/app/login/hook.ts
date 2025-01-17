@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { EROUTE_PROTECTED } from "@/constants/route.enum";
 import { useResidentsApi } from "@/store/api/hooks/residents";
 import { CreateResidentsDto } from "@/store/api/gen/residents";
+import { jwtDecode } from "jwt-decode";
+import { UserRole } from "../../store/api/gen/residents";
 
 interface ILoginPayload {
   username: string;
@@ -44,8 +46,14 @@ export const useHooks = () => {
       setSubmitting(true);
       resetForm();
       setSnackbarProps({ message: "User successfully login.." });
-
-      push(EROUTE_PROTECTED.DASHBOARD);
+      const decodedToken = jwtDecode(response.data.access_token) as {
+        role: UserRole;
+      };
+      if (decodedToken?.role === "RESIDENT") {
+        push(EROUTE_PROTECTED.REQUEST);
+      } else {
+        push(EROUTE_PROTECTED.DASHBOARD);
+      }
     } catch (err) {
       setLoader(false);
 
