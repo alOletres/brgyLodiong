@@ -15,6 +15,8 @@ import { CustomDatePickerProps } from "@/components/DatePicker";
 import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { CustomDateTimePickerProps } from "@/components/DateTimePicker";
+import { decodeToken } from "@/lib/tokenStorage";
+import { DecodedTokenValues } from "@/components/hooks/useDrawer";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const initialValues: CreateEventsDto | any = {
@@ -23,69 +25,6 @@ const initialValues: CreateEventsDto | any = {
   location: "",
   eventDate: "",
 };
-
-const columns: ColumnSchema<FindAllEventsDto & TableActions>[] = [
-  { key: "eventName", label: "event" },
-  { key: "description", label: "description" },
-  {
-    key: "eventDate",
-    label: "event date",
-    format: (value) => moment(value).format("lll"),
-  },
-  { key: "location", label: "location" },
-  {
-    key: "createdAt",
-    label: "created at",
-    format: (value) => moment(value).format("MM/DD/YYYY"),
-  },
-  { key: "cellActions", label: "action" },
-];
-
-const modalFields: Field<
-  | InputFieldProps
-  | TextareaAutosizeProps
-  | CustomDatePickerProps
-  | CustomDateTimePickerProps
->[] = [
-  {
-    fieldType: "text",
-    fieldProps: {
-      label: "Event name",
-      name: "eventName",
-      id: "eventName",
-      type: "text",
-      margin: "dense",
-    },
-  },
-  {
-    fieldType: "textarea",
-    fieldProps: <TextareaAutosizeProps>{
-      id: "description",
-      label: "description",
-      name: "description",
-      placeholder: "Enter your description",
-    },
-  },
-  {
-    fieldType: "dateTime",
-    fieldProps: <CustomDateTimePickerProps>{
-      label: "Select event date and time",
-      name: "eventDate",
-      id: "eventDate",
-      margin: "dense",
-    },
-  },
-  {
-    fieldType: "text",
-    fieldProps: {
-      label: "location",
-      name: "location",
-      id: "location",
-      type: "text",
-      margin: "dense",
-    },
-  },
-];
 
 export const useHooks = () => {
   const {
@@ -101,6 +40,83 @@ export const useHooks = () => {
 
   const [dataSource, setDataSource] = useState<FindAllEventsDto[]>([]);
   const [formValues, setFormValues] = useState<CreateEventsDto>(initialValues);
+  const [user, setUser] = useState<DecodedTokenValues>(
+    {} as DecodedTokenValues
+  );
+  useEffect(() => {
+    const decoded = decodeToken() as DecodedTokenValues;
+
+    if (decoded) {
+      setUser(decoded);
+    }
+  }, []);
+
+  const eventColumnSchema: ColumnSchema<FindAllEventsDto>[] = [
+    { key: "eventName", label: "event" },
+    { key: "description", label: "description" },
+    {
+      key: "eventDate",
+      label: "event date",
+      format: (value) => moment(value).format("lll"),
+    },
+    { key: "location", label: "location" },
+    {
+      key: "createdAt",
+      label: "created at",
+      format: (value) => moment(value).format("MM/DD/YYYY"),
+    },
+  ];
+
+  const columns: ColumnSchema<FindAllEventsDto & TableActions>[] =
+    user?.role === "RESIDENT"
+      ? [...eventColumnSchema]
+      : [...eventColumnSchema, { key: "cellActions", label: "action" }];
+
+  const modalFields: Field<
+    | InputFieldProps
+    | TextareaAutosizeProps
+    | CustomDatePickerProps
+    | CustomDateTimePickerProps
+  >[] = [
+    {
+      fieldType: "text",
+      fieldProps: {
+        label: "Event name",
+        name: "eventName",
+        id: "eventName",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "textarea",
+      fieldProps: <TextareaAutosizeProps>{
+        id: "description",
+        label: "description",
+        name: "description",
+        placeholder: "Enter your description",
+      },
+    },
+    {
+      fieldType: "dateTime",
+      fieldProps: <CustomDateTimePickerProps>{
+        label: "Select event date and time",
+        name: "eventDate",
+        id: "eventDate",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "text",
+      fieldProps: {
+        label: "location",
+        name: "location",
+        id: "location",
+        type: "text",
+        margin: "dense",
+      },
+    },
+  ];
 
   const handleCreate = async (
     values: CreateEventsDto,
@@ -206,7 +222,7 @@ export const useHooks = () => {
     columns,
     isFetchingEvents,
     dataSource,
-    tableHeaderActions,
+    tableHeaderActions: user?.role === "ADMIN" ? tableHeaderActions : undefined,
     initialValues: formValues,
     handleSubmit,
     fields: modalFields,

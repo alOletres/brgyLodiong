@@ -25,6 +25,13 @@ export const ProjectsSchema = yup.object().shape({
   description: yup.string().required("This field is required"),
   startDate: yup.date().required("This field is required").nullable(),
   endDate: yup.date().optional(),
+  status: yup.string().required("This field is required"),
+});
+
+export const requestReportSchema = yup.object().shape({
+  startDate: yup.date().optional(),
+  endDate: yup.date().optional(),
+  requestType: yup.string().optional(),
 });
 
 export const ResidentSchema = yup.object().shape({

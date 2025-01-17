@@ -3,6 +3,7 @@ import { ColumnSchema } from "@/components/Table";
 import { decodeToken } from "@/lib/tokenStorage";
 import { FindAllNotificationsDto } from "@/store/api/gen/notification";
 import { useNotificationApi } from "@/store/api/hooks/notification";
+import moment from "moment";
 import { useEffect, useState } from "react";
 
 export const useHooks = () => {
@@ -41,9 +42,13 @@ export const useHooks = () => {
   const columnSchema: ColumnSchema<FindAllNotificationsDto>[] = [
     { key: "requestType", label: "request type" },
     { key: "purpose", label: "purpose" },
-    { key: "notificationType", label: "notification type" },
+    { key: "contact", label: "contact" },
     { key: "message", label: "message" },
-    { key: "sentAt", label: "sent at" },
+    {
+      key: "sentAt",
+      label: "sent at",
+      format: (value) => moment(value).format("MM/DD/YYYY LT"),
+    },
   ];
 
   return { isFetchingNotification, dataSource, columnSchema };

@@ -6,10 +6,11 @@ import {
   EventAvailableOutlined,
   DashboardOutlined,
   ListAltOutlined,
+  CircleRounded,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
-import { EROUTE_PROTECTED } from "@/constants/route.enum";
+import { EREPORT, EROUTE_PROTECTED } from "@/constants/route.enum";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
@@ -19,6 +20,8 @@ import { FindAllResidentsDto, UserRole } from "@/store/api/gen/residents";
 interface IDrawerListProps {
   link: string;
   icon: React.ReactNode; // Correct type for a React component in a prop
+
+  label?: string;
 }
 
 export interface DecodedTokenValues {
@@ -51,6 +54,8 @@ export const useHooks = () => {
     { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },
   ]);
 
+  const [reportList, setReportList] = useState<IDrawerListProps[]>([]);
+
   useEffect(() => {
     const decoded = decodeToken() as {
       resident: FindAllResidentsDto;
@@ -62,6 +67,16 @@ export const useHooks = () => {
         { icon: <ListAltOutlined />, link: REQUEST },
         { icon: <EventAvailableOutlined />, link: EVENTS },
         { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },
+      ]);
+    }
+
+    if (decoded?.role === "ADMIN") {
+      setReportList([
+        {
+          icon: <CircleRounded />,
+          link: EREPORT.REQUEST_REPORTS,
+          label: "Request reports",
+        },
       ]);
     }
   }, []);
@@ -85,5 +100,6 @@ export const useHooks = () => {
     handleDrawerOpen,
     theme,
     open,
+    reportList,
   };
 };

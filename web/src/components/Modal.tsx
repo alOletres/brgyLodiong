@@ -41,11 +41,12 @@ const contentWrapperStyle: SxProps<Theme> = {
   overflow: "auto",
 };
 
-const saveButtonWrapper: SxProps<Theme> = {
+export const saveButtonWrapper: SxProps<Theme> = {
   width: "100%",
   display: "flex",
   justifyContent: "end",
   marginTop: 1,
+  gap: 2,
 };
 
 /**

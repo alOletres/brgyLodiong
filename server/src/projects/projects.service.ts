@@ -9,8 +9,6 @@ export class ProjectsService {
 
   async create(payload: CreateProjectsDto) {
     try {
-      console.log('payload', payload);
-
       await this.prisma.projects.create({ data: { ...payload } });
     } catch (err) {
       throw err;

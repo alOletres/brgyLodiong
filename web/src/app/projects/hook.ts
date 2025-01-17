@@ -21,6 +21,7 @@ import { IHandleSubmitType } from "../officials/hook";
 import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { isValidDate } from "@/utils/error";
+import { ProjectStatus } from "@/store/api/gen/officials";
 
 export const useHooks = () => {
   const initialFormValues: any = {
@@ -30,7 +31,10 @@ export const useHooks = () => {
     projectName: "",
     description: "",
     startDate: "",
+    status: "PENDING",
   };
+
+  const projectStatus: ProjectStatus[] = ["PENDING", "SUCCEED"];
 
   const {
     projects,
@@ -237,6 +241,21 @@ export const useHooks = () => {
       fieldProps: <CustomDatePickerProps>{
         label: "Select end date (Optional)",
         name: "endDate",
+      },
+    },
+
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "status",
+        name: "status",
+        label: "Select status",
+        inputLabelId: "status",
+        labelId: "status",
+        options: projectStatus.map((status): OptionSelect => {
+          return { key: status, value: status };
+        }),
+        margin: "dense",
       },
     },
   ];

@@ -1,3 +1,4 @@
+import { PROJECT_STATUS } from '@prisma/client';
 export declare class CreateProjectsDto {
     projectName: string;
     members: string;
@@ -5,4 +6,5 @@ export declare class CreateProjectsDto {
     startDate: Date;
     endDate?: Date;
     officialId: number;
+    status: PROJECT_STATUS;
 }

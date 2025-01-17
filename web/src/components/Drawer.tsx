@@ -21,6 +21,11 @@ import { Typography } from "@mui/material";
 import { useHooks } from "@/components/hooks/useDrawer";
 import Link from "next/link";
 
+import { Collapse } from "@mui/material";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import ViewAgendaOutlined from "@mui/icons-material/ViewAgendaOutlined";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme) => ({
@@ -79,8 +84,21 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
-  const { list, pathname, open, handleDrawerClose, handleDrawerOpen, theme } =
-    useHooks();
+  const {
+    list,
+    pathname,
+    open,
+    handleDrawerClose,
+    handleDrawerOpen,
+    theme,
+    reportList,
+  } = useHooks();
+
+  const [reportsOpen, setReportsOpen] = React.useState(false);
+
+  const handleReportsClick = () => {
+    setReportsOpen((prev) => !prev);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -170,6 +188,84 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
               </Link>
             </ListItem>
           ))}
+
+          {reportList?.length ? (
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton onClick={handleReportsClick}>
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                          pl: 1,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  {/* Replace this with your desired icon */}
+                  <ViewAgendaOutlined />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Reports"
+                  sx={[
+                    { textTransform: "capitalize" },
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+                {reportsOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={reportsOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {reportList.map(({ link, label }) => {
+                    return (
+                      <>
+                        <Link href={link}>
+                          <ListItemButton
+                            sx={[
+                              pathname === link
+                                ? {
+                                    background: "#e7e6e3",
+                                  }
+                                : {},
+                              {
+                                minHeight: 48,
+                                px: 2.5,
+                                pl: 9,
+                              },
+                              open
+                                ? {
+                                    justifyContent: "initial",
+                                  }
+                                : {
+                                    justifyContent: "center",
+                                  },
+                            ]}
+                          >
+                            <ListItemText primary={label} />
+                          </ListItemButton>
+                        </Link>
+                      </>
+                    );
+                  })}
+                </List>
+              </Collapse>
+            </ListItem>
+          ) : (
+            <></>
+          )}
+          {/* Reports Dropdown */}
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

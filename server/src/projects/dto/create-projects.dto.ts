@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { PROJECT_STATUS } from '@prisma/client';
 import {
   IsDate,
   IsNotEmpty,
@@ -37,4 +38,9 @@ export class CreateProjectsDto {
   @IsNotEmpty()
   @IsNumber()
   officialId: number;
+
+  @ApiProperty({ enum: PROJECT_STATUS, enumName: 'PROJECT_STATUS' })
+  @IsNotEmpty()
+  @IsString()
+  status: PROJECT_STATUS = PROJECT_STATUS.PENDING;
 }

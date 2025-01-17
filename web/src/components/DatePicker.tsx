@@ -19,7 +19,7 @@ const CustomDatePicker = ({ ...props }: CustomDatePickerProps) => {
   };
 
   return (
-    <Box sx={{ marginY: 1 }}>
+    <Box sx={{ marginY: 1, width: "100%" }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           {...props}

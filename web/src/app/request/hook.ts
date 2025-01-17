@@ -29,10 +29,10 @@ import { useOfficialsApi } from "@/store/api/hooks/officials";
 import { FindAllOfficialsDto } from "@/store/api/gen/officials";
 import { CustomInputProps } from "@/components/TextFieldInput";
 
-const RequestTypeArray: string[] = Object.values(ECERTIFICATES).sort((a, b) =>
-  a > b ? 1 : -1
+export const RequestTypeArray: string[] = Object.values(ECERTIFICATES).sort(
+  (a, b) => (a > b ? 1 : -1)
 );
-const RequestStatusArray: RequestStatus[] = [
+export const RequestStatusArray: RequestStatus[] = [
   "PENDING",
   "APPROVED",
   "COMPLETED",
@@ -50,6 +50,28 @@ const initialValues: CreateRequestDto = {
 };
 
 const initialRejectionValues = { rejectionReason: "" };
+
+export const requestColumnSchema: ColumnSchema<FindAllRequestsDto>[] = [
+  { key: "requestedBy", label: "requested by" },
+  { key: "contact", label: "contact" },
+  { key: "requestType", label: "request type" },
+  { key: "purpose", label: "purpose" },
+  { key: "requestMode", label: "request mode" },
+  {
+    key: "dateRequested",
+    label: "date requested",
+    format: (value) => moment(value).format("MM/DD/YYYY"),
+  },
+  {
+    key: "dateCompleted",
+    label: "date completed",
+    format: (value) => moment(value).format("MM/DD/YYYY"),
+  },
+
+  { key: "status", label: "status" },
+
+  { key: "rejectionReason", label: "rejection reason" },
+];
 
 export const useHooks = () => {
   const { residents } = useResidentsApi();
@@ -108,31 +130,10 @@ export const useHooks = () => {
     }
   }, []);
 
-  const tableColumnSchema: ColumnSchema<FindAllRequestsDto>[] = [
-    { key: "requestedBy", label: "requested by" },
-    { key: "contact", label: "contact" },
-    { key: "requestType", label: "request type" },
-    { key: "purpose", label: "purpose" },
-    { key: "requestMode", label: "request mode" },
-    {
-      key: "dateRequested",
-      label: "date requested",
-      format: (value) => moment(value).format("MM/DD/YYYY"),
-    },
-    {
-      key: "dateCompleted",
-      label: "date completed",
-      format: (value) => moment(value).format("MM/DD/YYYY"),
-    },
-
-    { key: "status", label: "status" },
-
-    { key: "rejectionReason", label: "rejection reason" },
-  ];
   const columnSchema: ColumnSchema<FindAllRequestsDto & TableActions>[] =
     user?.role === "ADMIN"
-      ? [...tableColumnSchema, { key: "cellActions", label: "action" }]
-      : [...tableColumnSchema];
+      ? [...requestColumnSchema, { key: "cellActions", label: "action" }]
+      : [...requestColumnSchema];
 
   const rejectionField: Field<CustomInputProps>[] = [
     {

@@ -870,6 +870,9 @@
           },
           "officialId": {
             "type": "number"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PROJECT_STATUS"
           }
         },
         "required": [
@@ -877,7 +880,8 @@
           "members",
           "description",
           "startDate",
-          "officialId"
+          "officialId",
+          "status"
         ]
       },
       "FindAllProjectsDto": {

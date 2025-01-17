@@ -18,10 +18,19 @@ import {
 import React, { memo } from "react";
 import { useHook } from "./hooks/useTable";
 import { Typography, SxProps } from "@mui/material";
-import CustomDateRangePicker, { CustomDateRangePickerProps } from "./DateRange";
-import { Formik } from "formik";
+import { CustomDateRangePickerProps } from "./DateRange";
+
 import Avatar from "@mui/material/Avatar";
 import { Person2Rounded } from "@mui/icons-material";
+import DatePicker, { CustomDatePickerProps } from "./DatePicker";
+import { ModalFormProps, saveButtonWrapper } from "./Modal";
+import { useHook as useModal } from "./hooks/useModal";
+import { Form, Formik } from "formik";
+import CustomDateTimePicker from "./DateTimePicker";
+import { CustomInput as Input } from "./TextFieldInput";
+import Select from "./Select";
+import TextArea from "./TextArea";
+
 export interface DateRangeValues {
   startDate: string;
   endDate: string;
@@ -39,10 +48,6 @@ const tableHeaderWrapper: SxProps<Theme> = {
   padding: 1,
 };
 
-const initialValues = {
-  dateRange: "",
-};
-
 /**
  * extends {@link ButtonProps}
  */
@@ -51,9 +56,12 @@ export interface ActionButtonProps<T> extends ButtonProps {
 }
 
 export interface HeaderActions<
-  T extends ActionButtonProps<any> | CustomDateRangePickerProps
+  T extends
+    | ActionButtonProps<any>
+    | CustomDateRangePickerProps
+    | CustomDatePickerProps
 > {
-  actionType: "button" | "dateRange";
+  actionType: "button" | "dateRange" | "date";
   actionProps: T;
 }
 
@@ -89,6 +97,7 @@ export interface CustomTableProps<T = any> extends TableActions {
   tableHeader?: string;
   dataSource: T[];
   columns: ColumnSchema<any>[];
+  formProps?: ModalFormProps<any>;
 }
 
 const CustomTable = ({
@@ -97,6 +106,7 @@ const CustomTable = ({
   columns,
   cellActions,
   headerActions,
+  formProps,
 }: CustomTableProps) => {
   const {
     page,
@@ -104,11 +114,166 @@ const CustomTable = ({
     handleChangePage,
     handleChangeRowsPerPage,
     isButton,
-    isDateRange,
   } = useHook();
+
+  const {
+    isInputField,
+    isSelectField,
+    isTextAreaField,
+    isDateField,
+    isDateTimeField,
+  } = useModal();
 
   return (
     <Paper sx={container}>
+      {/* Form props */}
+      {formProps && Object.keys(formProps).length ? (
+        <Formik
+          initialValues={formProps.initialValues}
+          validationSchema={formProps.validationSchema}
+          onSubmit={formProps.handleSubmit}
+          enableReinitialize
+        >
+          {({ submitForm, isSubmitting, setFieldValue, values }) => {
+            return (
+              <Form>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row", // Ensures all children are in a row
+                    gap: 2, // Adds spacing between children
+                    width: "100%", // Makes sure the container spans the full width
+                  }}
+                >
+                  {formProps.fields.map((field, index) => {
+                    if (isInputField(field)) {
+                      return (
+                        <Input
+                          sx={{ flex: 1 }} // Ensures equal width
+                          {...field.fieldProps}
+                          onChange={(e) => {
+                            if (field.fieldProps.name) {
+                              if (field.fieldProps.type === "file") {
+                                const target = e.target as HTMLInputElement; // Type assertion
+
+                                const file = target.files?.[0];
+
+                                setFieldValue(field.fieldProps.name, file); // Update Formik state with file object
+                              } else {
+                                setFieldValue(
+                                  field.fieldProps.name,
+                                  e.target.value
+                                ); // Handle other input types
+                              }
+                            }
+                          }}
+                          key={index}
+                        />
+                      );
+                    }
+
+                    if (isSelectField(field)) {
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      const { handleSelectChange, onChange, ...props } =
+                        field.fieldProps;
+
+                      return (
+                        <Select
+                          sx={{ flex: 1 }} // Ensures equal width
+                          {...props}
+                          handleChange={(e) => {
+                            if (field.fieldProps.name) {
+                              setFieldValue(field.fieldProps.name, e);
+                            }
+
+                            if (handleSelectChange) {
+                              const { propertyName, value } =
+                                handleSelectChange(e);
+
+                              setFieldValue(propertyName, value);
+                            }
+                          }}
+                          value={values[props.name as string]}
+                          key={index}
+                        />
+                      );
+                    }
+
+                    if (isTextAreaField(field)) {
+                      return (
+                        <TextArea
+                          {...field.fieldProps}
+                          onChange={(e) => {
+                            if (field.fieldProps.name) {
+                              setFieldValue(
+                                field.fieldProps.name,
+                                e.target.value
+                              );
+                            }
+                          }}
+                          key={index}
+                        />
+                      );
+                    }
+
+                    if (isDateField(field)) {
+                      return (
+                        <DatePicker
+                          sx={{ flex: 1 }} // Ensures equal width
+                          {...field.fieldProps}
+                          key={index}
+                          onChange={(e) => {
+                            if (field.fieldProps.name) {
+                              setFieldValue(field.fieldProps.name, e);
+                            }
+                          }}
+                        />
+                      );
+                    }
+
+                    if (isDateTimeField(field)) {
+                      return (
+                        <CustomDateTimePicker
+                          {...field.fieldProps}
+                          key={index}
+                          onChange={(e) => {
+                            if (field.fieldProps.name) {
+                              setFieldValue(field.fieldProps.name, e);
+                            }
+                          }}
+                        />
+                      );
+                    }
+                  })}
+
+                  <Box sx={saveButtonWrapper}>
+                    <Button
+                      sx={{ width: "100%", marginBottom: 0.9 }}
+                      disabled={isSubmitting}
+                      variant="contained"
+                      onClick={submitForm}
+                    >
+                      Search
+                    </Button>
+
+                    <Button
+                      sx={{ width: "100%", marginBottom: 0.9 }}
+                      disabled={isSubmitting}
+                      variant="contained"
+                      onClick={submitForm}
+                    >
+                      Export to Pdf
+                    </Button>
+                  </Box>
+                </Box>
+              </Form>
+            );
+          }}
+        </Formik>
+      ) : (
+        <></>
+      )}
+      {/* Table heae */}
       {!!tableHeader || (headerActions && headerActions.length) ? (
         <Box sx={tableHeaderWrapper}>
           {!!tableHeader && (
@@ -125,32 +290,6 @@ const CustomTable = ({
           {headerActions && headerActions.length && (
             <Box sx={{ gap: 1, display: "flex" }}>
               {headerActions.map((component, key) => {
-                if (isDateRange(component)) {
-                  const { actionProps } = component;
-                  const { onSubmit, ...props } = actionProps;
-                  if (onSubmit) {
-                    return (
-                      <Formik
-                        key={key}
-                        initialValues={initialValues}
-                        onSubmit={onSubmit}
-                      >
-                        {({ submitForm, isSubmitting }) => (
-                          <>
-                            <CustomDateRangePicker {...props} />
-                            <Button
-                              disabled={isSubmitting}
-                              variant="contained"
-                              onClick={submitForm}
-                            >
-                              Filter By Date
-                            </Button>
-                          </>
-                        )}
-                      </Formik>
-                    );
-                  }
-                }
                 if (isButton(component)) {
                   const { actionProps } = component;
                   const {

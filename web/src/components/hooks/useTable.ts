@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ActionButtonProps, HeaderActions } from "../Table";
 import { CustomDateRangePickerProps } from "@/components/DateRange";
+import { CustomDatePickerProps } from "../DatePicker";
 
 export const useHook = () => {
   const [page, setPage] = useState(0);
@@ -18,17 +19,30 @@ export const useHook = () => {
 
   const isButton = (
     component: HeaderActions<
-      ActionButtonProps<any> | CustomDateRangePickerProps
+      | ActionButtonProps<any>
+      | CustomDateRangePickerProps
+      | CustomDatePickerProps
     >
   ): component is HeaderActions<ActionButtonProps<any>> =>
     component.actionType === "button";
 
   const isDateRange = (
     component: HeaderActions<
-      ActionButtonProps<any> | CustomDateRangePickerProps
+      | ActionButtonProps<any>
+      | CustomDateRangePickerProps
+      | CustomDatePickerProps
     >
   ): component is HeaderActions<CustomDateRangePickerProps> =>
     component.actionType === "dateRange";
+
+  const isDatePicker = (
+    component: HeaderActions<
+      | ActionButtonProps<any>
+      | CustomDateRangePickerProps
+      | CustomDatePickerProps
+    >
+  ): component is HeaderActions<CustomDatePickerProps> =>
+    component.actionType === "date";
 
   return {
     page,
@@ -37,5 +51,6 @@ export const useHook = () => {
     handleChangeRowsPerPage,
     isButton,
     isDateRange,
+    isDatePicker,
   };
 };

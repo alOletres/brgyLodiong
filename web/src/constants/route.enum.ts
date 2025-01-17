@@ -11,3 +11,7 @@ export enum EROUTE_PROTECTED {
   NOTIFICATIONS = "notifications",
   EVENTS = "events",
 }
+
+export enum EREPORT {
+  REQUEST_REPORTS = "request-reports",
+}

@@ -29,7 +29,6 @@ let ProjectsService = class ProjectsService {
     }
     async create(payload) {
         try {
-            console.log('payload', payload);
             await this.prisma.projects.create({ data: Object.assign({}, payload) });
         }
         catch (err) {
