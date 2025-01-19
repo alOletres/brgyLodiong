@@ -11,11 +11,22 @@ const common_1 = require("@nestjs/common");
 const events_service_1 = require("./events.service");
 const events_controller_1 = require("./events.controller");
 const prisma_service_1 = require("../prisma/prisma.service");
+const email_service_1 = require("../email/email.service");
+const twilio_service_1 = require("../twilio/twilio.service");
+const residents_service_1 = require("../residents/residents.service");
+const notification_service_1 = require("../notification/notification.service");
 let EventsModule = class EventsModule {
 };
 EventsModule = __decorate([
     (0, common_1.Module)({
-        providers: [events_service_1.EventsService, prisma_service_1.PrismaService],
+        providers: [
+            events_service_1.EventsService,
+            prisma_service_1.PrismaService,
+            residents_service_1.ResidentsService,
+            email_service_1.EmailService,
+            twilio_service_1.TwilioService,
+            notification_service_1.NotificationService,
+        ],
         controllers: [events_controller_1.EventsController],
     })
 ], EventsModule);

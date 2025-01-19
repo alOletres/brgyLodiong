@@ -24,9 +24,31 @@ exports.ResidentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcypt_1 = require("../lib/bcypt");
+const client_1 = require("@prisma/client");
+const twilio_service_1 = require("../twilio/twilio.service");
+const email_service_1 = require("../email/email.service");
+const notification_service_1 = require("../notification/notification.service");
 let ResidentsService = class ResidentsService {
-    constructor(prisma) {
+    constructor(prisma, twilioService, emailService, notificationService) {
         this.prisma = prisma;
+        this.twilioService = twilioService;
+        this.emailService = emailService;
+        this.notificationService = notificationService;
+        this.selectedResidents = {
+            id: true,
+            firstname: true,
+            lastname: true,
+            civilStatus: true,
+            email: true,
+            address: true,
+            contact: true,
+            status: true,
+            createdAt: true,
+            disApprovedReason: true,
+            Auth: {
+                select: { role: true },
+            },
+        };
     }
     async create(_a) {
         var { password, role = 'RESIDENT' } = _a, payload = __rest(_a, ["password", "role"]);
@@ -41,6 +63,9 @@ let ResidentsService = class ResidentsService {
                         },
                     } }),
             });
+            const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
+            await this.twilioService.sendSms(payload.contact, message);
+            await this.emailService.sendMail({ to: payload.email, message });
         }
         catch (err) {
             console.log('err', err);
@@ -61,6 +86,14 @@ let ResidentsService = class ResidentsService {
                         },
                     } }),
             });
+            let message = '';
+            if (payload.status === 'REGISTERED') {
+                message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is successfully registered. Welcome to Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
+            }
+            else if (payload.status === 'DISAPPROVED') {
+                message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account application has been disapproved. Contact Brgy. Lower Lodiong Tambulig, Zamboanga del Sur for more details.`;
+            }
+            await this.emailService.sendMail({ to: payload.email, message });
         }
         catch (err) {
             throw err;
@@ -69,25 +102,16 @@ let ResidentsService = class ResidentsService {
     async fetch() {
         try {
             const residents = await this.prisma.residents.findMany({
-                select: {
-                    id: true,
-                    firstname: true,
-                    lastname: true,
-                    civilStatus: true,
-                    email: true,
-                    address: true,
-                    contact: true,
-                    Auth: {
-                        select: { role: true, status: true },
-                    },
-                },
+                select: Object.assign({}, this.selectedResidents),
+                orderBy: { createdAt: client_1.Prisma.SortOrder.desc },
             });
             return residents.map((value) => {
                 const { Auth } = value, data = __rest(value, ["Auth"]);
-                return Object.assign(Object.assign({}, data), { role: Auth.role, status: Auth.status });
+                return Object.assign(Object.assign({}, data), { role: (Auth === null || Auth === void 0 ? void 0 : Auth.role) || 'RESIDENT' });
             });
         }
         catch (err) {
+            console.log('err', err);
             throw err;
         }
     }
@@ -99,10 +123,29 @@ let ResidentsService = class ResidentsService {
             throw err;
         }
     }
+    async fetchByStatus(status) {
+        try {
+            const result = await this.prisma.residents.findMany({
+                where: { status },
+                select: Object.assign({}, this.selectedResidents),
+                orderBy: { createdAt: client_1.Prisma.SortOrder.desc },
+            });
+            return result.map((value) => {
+                const { Auth } = value, data = __rest(value, ["Auth"]);
+                return Object.assign(Object.assign({}, data), { role: (Auth === null || Auth === void 0 ? void 0 : Auth.role) || 'RESIDENT' });
+            });
+        }
+        catch (err) {
+            throw err;
+        }
+    }
 };
 ResidentsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        twilio_service_1.TwilioService,
+        email_service_1.EmailService,
+        notification_service_1.NotificationService])
 ], ResidentsService);
 exports.ResidentsService = ResidentsService;
 //# sourceMappingURL=residents.service.js.map

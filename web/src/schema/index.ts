@@ -29,12 +29,42 @@ export const ProjectsSchema = yup.object().shape({
 });
 
 export const requestReportSchema = yup.object().shape({
-  startDate: yup.date().optional(),
-  endDate: yup.date().optional(),
+  startDate: yup.date().required("This field is required"),
+  endDate: yup.date().required("This field is required"),
   requestType: yup.string().optional(),
+  requestMode: yup.string().optional(),
+});
+
+export const residentReportSchema = yup.object().shape({
+  startDate: yup.date().required("This field is required"),
+  endDate: yup.date().required("This field is required"),
 });
 
 export const ResidentSchema = yup.object().shape({
+  firstname: yup.string().required("This field is required"),
+  lastname: yup.string().required("This field is required"),
+  civilStatus: yup.string().required("This field is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("This field is required"),
+  contact: yup
+    .string()
+    .matches(/^\d{10,10}$/, "Contact number must be 10 digits")
+    .required("This field is required"),
+  address: yup.string().required("This field is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .required("This field is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("This field is required"),
+  status: yup.string().required("This field is required"),
+});
+
+export const SignUpResidentSchema = yup.object().shape({
   firstname: yup.string().required("This field is required"),
   lastname: yup.string().required("This field is required"),
   civilStatus: yup.string().required("This field is required"),
@@ -72,6 +102,10 @@ export const RequestResidentSchema = yup.object().shape({
 
 export const RejectionSchema = yup.object().shape({
   rejectionReason: yup.string().required("This field is required"),
+});
+
+export const DisApproveSchema = yup.object().shape({
+  disApprovedReason: yup.string().required("This field is required"),
 });
 
 export const EventSchema = yup.object().shape({

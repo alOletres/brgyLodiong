@@ -16,6 +16,7 @@ const client_1 = require("@prisma/client");
 class CreateResidentsDto {
     constructor() {
         this.civilStatus = client_1.CIVIL_STATUS.SINGLE;
+        this.status = client_1.RESIDENT_STATUS.DISAPPROVED;
     }
 }
 __decorate([
@@ -66,5 +67,17 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", Object)
 ], CreateResidentsDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.RESIDENT_STATUS, enumName: 'RESIDENT_STATUS' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateResidentsDto.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateResidentsDto.prototype, "disApprovedReason", void 0);
 exports.CreateResidentsDto = CreateResidentsDto;
 //# sourceMappingURL=create-residents.dto.js.map

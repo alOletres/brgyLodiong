@@ -27,12 +27,14 @@ const client_1 = require("@prisma/client");
 const twilio_service_1 = require("../twilio/twilio.service");
 const residents_service_1 = require("../residents/residents.service");
 const notification_service_1 = require("../notification/notification.service");
+const email_service_1 = require("../email/email.service");
 let RequestService = class RequestService {
-    constructor(prisma, twilioService, residentService, notificationService) {
+    constructor(prisma, twilioService, residentService, notificationService, emailService) {
         this.prisma = prisma;
         this.twilioService = twilioService;
         this.residentService = residentService;
         this.notificationService = notificationService;
+        this.emailService = emailService;
         this.selectRequestProperties = {
             id: true,
             requestType: true,
@@ -71,9 +73,11 @@ let RequestService = class RequestService {
         try {
             const isCompleted = payload.status === client_1.REQUEST_STATUS.COMPLETED;
             if (payload.status !== 'PENDING') {
-                const { firstname, lastname, contact } = await this.residentService.findOne(payload.residentId);
+                const { firstname, lastname, contact, email } = await this.residentService.findOne(payload.residentId);
                 const completeName = `${firstname} ${lastname}`;
                 const body = this.twilioService.notifyResident(completeName, payload.requestType, payload.status);
+                await this.emailService.sendMail({ message: body, to: email });
+                await this.twilioService.sendSms(contact, body);
                 await this.notificationService.create({
                     message: body,
                     notificationType: 'SMS',
@@ -124,7 +128,8 @@ RequestService = __decorate([
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         twilio_service_1.TwilioService,
         residents_service_1.ResidentsService,
-        notification_service_1.NotificationService])
+        notification_service_1.NotificationService,
+        email_service_1.EmailService])
 ], RequestService);
 exports.RequestService = RequestService;
 //# sourceMappingURL=request.service.js.map

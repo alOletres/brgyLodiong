@@ -10,11 +10,27 @@ import { useResidentsApi } from "@/store/api/hooks/residents";
 import { CreateResidentsDto } from "@/store/api/gen/residents";
 import { jwtDecode } from "jwt-decode";
 import { UserRole } from "../../store/api/gen/residents";
+import { handleTryCatchError, isError } from "@/utils/error";
+import { Field } from "@/components/hooks/useModal";
+import { OptionSelect, SelectFieldProps } from "@/components/Select";
+import { CustomInputProps } from "@/components/TextFieldInput";
+import { TextareaAutosizeProps } from "@mui/material";
+import { civilStatusArray } from "../residents/hook";
 
 interface ILoginPayload {
   username: string;
   password: string;
 }
+
+export const residentInitialValues: any = {
+  firstname: "",
+  lastname: "",
+  email: "",
+  contact: "",
+  address: "",
+  password: "",
+  civilStatus: "SINGLE",
+};
 
 export const useHooks = () => {
   const [initialValues] = useState<ILoginPayload>({
@@ -27,6 +43,102 @@ export const useHooks = () => {
   const [loader, setLoader] = useState<boolean>(false);
 
   const { handleCreate: create } = useResidentsApi();
+
+  const fields: Field<
+    SelectFieldProps | CustomInputProps | TextareaAutosizeProps
+  >[] = [
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "firstname",
+        name: "firstname",
+        label: "Firstname",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "lastname",
+        name: "lastname",
+        label: "Lastname",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "civilStatus",
+        label: "Select status",
+        name: "civilStatus",
+        inputLabelId: "civilStatus",
+        labelId: "civilStatus",
+        options: civilStatusArray.map((value): OptionSelect => {
+          return { key: value, value };
+        }),
+
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "email",
+        name: "email",
+        label: "Email",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "text",
+      fieldProps: <CustomInputProps>{
+        id: "contact",
+        name: "contact",
+        label: "Contact",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "textarea",
+      fieldProps: {
+        label: "Address",
+        name: "address",
+        id: "address",
+        type: "textarea",
+        margin: "dense",
+        placeholder: "Home Address",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "password",
+        name: "password",
+        label: "Password",
+        type: "password",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "confirmPassword",
+        name: "confirmPassword",
+        label: "confirmPassword",
+        type: "password",
+        margin: "dense",
+      },
+    },
+  ];
   const handleToggleModal = () => setOpen((state) => !state);
 
   const handleSubmit = async (
@@ -39,6 +151,8 @@ export const useHooks = () => {
         `${process.env.NEXT_PUBLIC_API_ORIGIN}/api/login`,
         values
       );
+
+      if (isError(response)) throw new Error(response.message);
 
       setToken(response.data.access_token);
 
@@ -57,7 +171,9 @@ export const useHooks = () => {
     } catch (err) {
       setLoader(false);
 
-      throw err;
+      const error = handleTryCatchError(err);
+
+      setSnackbarProps({ message: error, severity: "error" });
     }
   };
 
@@ -66,7 +182,13 @@ export const useHooks = () => {
     { resetForm, setSubmitting }: FormikHelpers<CreateResidentsDto>
   ) => {
     try {
-      await create({ ...values, contact: `+63${values.contact}` });
+      const result = await create({
+        ...values,
+        status: "PENDING",
+        contact: `+63${values.contact}`,
+      });
+      console.log("result", result);
+
       setSubmitting(false);
       setOpen(false);
       resetForm();
@@ -74,9 +196,15 @@ export const useHooks = () => {
         message: "Resident successfully created!",
         severity: "success",
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err: any) {
-      console.log("err", err);
-      setSnackbarProps({ message: err?.message, severity: "error" });
+      console.log("errorrs", err);
+
+      setSnackbarProps({
+        message:
+          "Oops! Please check your email and ensure it hasn’t already been registered.",
+        severity: "error",
+      });
     }
   };
 
@@ -86,6 +214,8 @@ export const useHooks = () => {
     handleSignUp,
     initialValues,
     handleToggleModal,
+    residentInitialValues,
     open,
+    fields,
   };
 };

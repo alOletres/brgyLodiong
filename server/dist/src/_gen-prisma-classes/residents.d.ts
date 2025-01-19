@@ -2,7 +2,7 @@ import { Auth } from './auth';
 import { Requests } from './requests';
 import { Notifications } from './notifications';
 import { EventNotifications } from './event_notifications';
-import { CIVIL_STATUS } from '@prisma/client';
+import { CIVIL_STATUS, RESIDENT_STATUS } from '@prisma/client';
 export declare class Residents {
     id: number;
     firstname: string;
@@ -12,6 +12,8 @@ export declare class Residents {
     contact: string;
     address: string;
     createdAt: Date;
+    status: RESIDENT_STATUS;
+    disApprovedReason?: string;
     Auth?: Auth;
     Requests: Requests[];
     requestsId?: number;

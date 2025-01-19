@@ -2,7 +2,7 @@ import { Auth } from './auth';
 import { Requests } from './requests';
 import { Notifications } from './notifications';
 import { EventNotifications } from './event_notifications';
-import { CIVIL_STATUS } from '@prisma/client';
+import { CIVIL_STATUS, RESIDENT_STATUS } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Residents {
@@ -29,6 +29,12 @@ export class Residents {
 
   @ApiProperty({ type: Date })
   createdAt: Date;
+
+  @ApiProperty({ enum: RESIDENT_STATUS, enumName: 'RESIDENT_STATUS' })
+  status: RESIDENT_STATUS = RESIDENT_STATUS.PENDING;
+
+  @ApiPropertyOptional({ type: String })
+  disApprovedReason?: string;
 
   @ApiPropertyOptional({ type: () => Auth })
   Auth?: Auth;

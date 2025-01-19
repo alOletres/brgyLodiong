@@ -23,6 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const client_1 = require("@prisma/client");
 let NotificationService = class NotificationService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -56,6 +57,7 @@ let NotificationService = class NotificationService {
                     message: true,
                     sentAt: true,
                 },
+                orderBy: { sentAt: client_1.Prisma.SortOrder.desc },
             });
             return result.map((value) => {
                 const { residents, requests } = value, data = __rest(value, ["residents", "requests"]);

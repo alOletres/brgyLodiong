@@ -32,34 +32,36 @@ model Auth {
 }
 
 model Residents {
-  id            Int             @id @default(autoincrement())
-  firstname     String          @db.VarChar(50)
-  civilStatus   CIVIL_STATUS    @default(SINGLE)
-  lastname      String          @db.VarChar(50)
-  email         String          @unique @db.VarChar(100)
-  contact       String          @db.VarChar(25)
-  address       String          @db.VarChar(255)
-  createdAt     DateTime        @default(now()) @db.Timestamp(0)
-  Auth          Auth?
-  Requests      Requests[]
-  requestsId    Int?
-  Notifications Notifications[]
+  id                Int             @id @default(autoincrement())
+  firstname         String          @db.VarChar(50)
+  civilStatus       CIVIL_STATUS    @default(SINGLE)
+  lastname          String          @db.VarChar(50)
+  email             String          @unique @db.VarChar(100)
+  contact           String          @db.VarChar(25)
+  address           String          @db.VarChar(255)
+  createdAt         DateTime        @default(now()) @db.Timestamp(0)
+  status            RESIDENT_STATUS @default(PENDING)
+  disApprovedReason String?          @db.VarChar(255)
+  Auth              Auth?
+  Requests          Requests[]
+  requestsId        Int?
+  Notifications     Notifications[]
 
   EventNotifications EventNotifications[]
 }
 
 model Requests {
-  id            Int             @id @default(autoincrement())
-  residentId    Int
-  requestType   String          @db.VarChar(150)
-  status        REQUEST_STATUS  @default(PENDING)
-  rejectionReason String?       @db.VarChar(255)
-  purpose       String          @db.VarChar(255)
-  dateRequested DateTime        @default(now()) @db.Timestamp(0)
-  dateCompleted DateTime?
-  resident      Residents       @relation(fields: [residentId], references: [id])
-  requestMode   REQUEST_MODE    @default(ONLINE)
-  Notifications Notifications[]
+  id              Int             @id @default(autoincrement())
+  residentId      Int
+  requestType     String          @db.VarChar(150)
+  status          REQUEST_STATUS  @default(PENDING)
+  rejectionReason String?         @db.VarChar(255)
+  purpose         String          @db.VarChar(255)
+  dateRequested   DateTime        @default(now()) @db.Timestamp(0)
+  dateCompleted   DateTime?
+  resident        Residents       @relation(fields: [residentId], references: [id])
+  requestMode     REQUEST_MODE    @default(ONLINE)
+  Notifications   Notifications[]
 }
 
 model Officials {
@@ -130,8 +132,6 @@ enum ACCOUNT_STATUS {
   INACTIVE
 }
 
-
-
 enum REQUEST_STATUS {
   PENDING
   APPROVED
@@ -164,4 +164,11 @@ enum PROJECT_STATUS {
 enum CIVIL_STATUS {
   SINGLE
   MARRIED
+  WIDOW
+}
+
+enum RESIDENT_STATUS {
+  PENDING
+  REGISTERED
+  DISAPPROVED
 }

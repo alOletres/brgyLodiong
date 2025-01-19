@@ -13,13 +13,30 @@ exports.EventsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const client_1 = require("@prisma/client");
+const twilio_service_1 = require("../twilio/twilio.service");
+const email_service_1 = require("../email/email.service");
+const residents_service_1 = require("../residents/residents.service");
+const moment = require("moment");
 let EventsService = class EventsService {
-    constructor(prisma) {
+    constructor(prisma, twilioService, emailService, residentService) {
         this.prisma = prisma;
+        this.twilioService = twilioService;
+        this.emailService = emailService;
+        this.residentService = residentService;
+    }
+    async notificationBlasting(payload) {
+        const registeredResidents = await this.residentService.fetchByStatus('REGISTERED');
+        await Promise.all(registeredResidents.map(async (resident) => {
+            const message = `Hi Mr/Mrs. ${resident.firstname} ${resident.lastname} 🎉 Join us at ${payload.location} on ${moment(payload.eventDate).format('MM/DD/YYYY')} at ${moment(payload.eventDate).format('LT')} for ${payload.eventName}. ${payload.description}`;
+            await this.emailService.sendMail({ to: resident.email, message });
+            await this.twilioService.sendSms(resident.contact, message);
+            return resident;
+        }));
     }
     async create(payload) {
         try {
             await this.prisma.events.create({ data: Object.assign({}, payload) });
+            await this.notificationBlasting(payload);
         }
         catch (err) {
             throw err;
@@ -28,6 +45,7 @@ let EventsService = class EventsService {
     async update(id, payload) {
         try {
             await this.prisma.events.update({ where: { id }, data: Object.assign({}, payload) });
+            await this.notificationBlasting(payload);
         }
         catch (err) {
             throw err;
@@ -41,7 +59,10 @@ let EventsService = class EventsService {
 };
 EventsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        twilio_service_1.TwilioService,
+        email_service_1.EmailService,
+        residents_service_1.ResidentsService])
 ], EventsService);
 exports.EventsService = EventsService;
 //# sourceMappingURL=events.service.js.map

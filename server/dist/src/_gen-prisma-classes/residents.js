@@ -19,6 +19,7 @@ const swagger_1 = require("@nestjs/swagger");
 class Residents {
     constructor() {
         this.civilStatus = client_1.CIVIL_STATUS.SINGLE;
+        this.status = client_1.RESIDENT_STATUS.PENDING;
     }
 }
 __decorate([
@@ -53,6 +54,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: Date }),
     __metadata("design:type", Date)
 ], Residents.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.RESIDENT_STATUS, enumName: 'RESIDENT_STATUS' }),
+    __metadata("design:type", String)
+], Residents.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    __metadata("design:type", String)
+], Residents.prototype, "disApprovedReason", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: () => auth_1.Auth }),
     __metadata("design:type", auth_1.Auth)

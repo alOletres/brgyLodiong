@@ -8,8 +8,15 @@ import { requestColumnSchema } from "../request/hook";
 import { requestReportSchema } from "@/schema";
 
 const RequestReportPage = () => {
-  const { handleSubmit, isFetchingRequest, dataSource, initialValues, fields } =
-    useHook();
+  const {
+    btnName,
+    handleSubmit,
+    isFetchingRequest,
+    dataSource,
+    initialValues,
+    fields,
+    handleExportToPdf,
+  } = useHook();
 
   return (
     <>
@@ -17,13 +24,18 @@ const RequestReportPage = () => {
 
       <CustomTable
         dataSource={dataSource}
-        columns={requestColumnSchema}
+        columns={requestColumnSchema.filter(
+          (schema) =>
+            schema.key !== "dateRequested" && schema.key !== "rejectionReason"
+        )}
         formProps={{
           initialValues,
           fields,
           handleSubmit,
           validationSchema: requestReportSchema,
         }}
+        btnName={btnName}
+        handleExportToPdf={handleExportToPdf}
       />
     </>
   );

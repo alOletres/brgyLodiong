@@ -22,6 +22,9 @@ const projects_module_1 = require("./projects/projects.module");
 const events_module_1 = require("./events/events.module");
 const twilio_service_1 = require("./twilio/twilio.service");
 const notification_module_1 = require("./notification/notification.module");
+const mailer_1 = require("@nestjs-modules/mailer");
+const email_service_1 = require("./email/email.service");
+const notification_service_1 = require("./notification/notification.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -30,16 +33,31 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             residents_module_1.ResidentsModule,
             officials_module_1.OfficialsModule,
-            config_1.ConfigModule.forRoot(),
-            schedule_1.ScheduleModule.forRoot(),
-            passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
             request_module_1.RequestModule,
             projects_module_1.ProjectsModule,
             events_module_1.EventsModule,
             notification_module_1.NotificationModule,
+            config_1.ConfigModule.forRoot(),
+            schedule_1.ScheduleModule.forRoot(),
+            passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
+            mailer_1.MailerModule.forRoot({
+                transport: {
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL_USERNAME,
+                        pass: process.env.EMAIL_PASSWORD,
+                    },
+                },
+            }),
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, prisma_service_1.PrismaService, twilio_service_1.TwilioService],
+        providers: [
+            app_service_1.AppService,
+            prisma_service_1.PrismaService,
+            twilio_service_1.TwilioService,
+            email_service_1.EmailService,
+            notification_service_1.NotificationService,
+        ],
     })
 ], AppModule);
 exports.AppModule = AppModule;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CustomDatePickerProps } from "@/components/DatePicker";
 import { CustomDateRangePickerProps } from "@/components/DateRange";
@@ -9,14 +10,30 @@ import { FindAllRequestsDto } from "@/store/api/gen/request";
 import { useRequestApi } from "@/store/api/hooks/request";
 import { FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
-import { RequestStatusArray, RequestTypeArray } from "../request/hook";
+import { requestColumnSchema, RequestTypeArray } from "../request/hook";
+import dayjs from "dayjs";
 
-const initialValues = {
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { exportToPdf } from "@/lib/pdfMake";
+import moment from "moment";
+
+// Extend Day.js
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+
+interface RequestReportsDto extends Pick<FindAllRequestsDto, "requestType"> {
+  startDate: string;
+  endDate: string;
+  requestMode: string;
+}
+
+const initialValues: RequestReportsDto = {
   startDate: "",
   endDate: "",
   requestType: "",
-  requestModeL: "",
-  status: "",
+  requestMode: "",
+  // status: "",
 };
 
 export const useHook = () => {
@@ -24,25 +41,7 @@ export const useHook = () => {
 
   const [dataSource, setDataSource] = useState<FindAllRequestsDto[]>([]);
 
-  const handleFilterDate = (
-    payload: any,
-    { setSubmitting }: FormikHelpers<any>
-  ) => {
-    console.log("payload", payload, setSubmitting);
-  };
-
-  const tableHeaderActions: HeaderActions<
-    ActionButtonProps<any> | CustomDateRangePickerProps
-  >[] = [
-    {
-      actionType: "dateRange",
-      actionProps: <CustomDateRangePickerProps>{
-        localeText: { start: "Start date", end: "End date" },
-        onSubmit: handleFilterDate,
-        name: "dateRange",
-      },
-    },
-  ];
+  const [btnName, setBtnName] = useState<string>("Search");
 
   const fields: Field<
     SelectFieldProps | CustomInputProps | CustomDatePickerProps
@@ -65,7 +64,7 @@ export const useHook = () => {
       fieldType: "select",
       fieldProps: {
         id: "requestType",
-        label: "Select Request type",
+        label: "Select Request type (Optional)",
         name: "requestType",
         inputLabelId: "requestType",
         labelId: "requestType",
@@ -80,7 +79,7 @@ export const useHook = () => {
       fieldType: "select",
       fieldProps: {
         id: "requestMode",
-        label: "Select Request Mode",
+        label: "Select Request Mode (Optional)",
         name: "requestMode",
         inputLabelId: "requestMode",
         labelId: "requestMode",
@@ -90,40 +89,123 @@ export const useHook = () => {
         margin: "dense",
       },
     },
-
-    {
-      fieldType: "select",
-      fieldProps: {
-        id: "status",
-        label: "Select status",
-        name: "status",
-        inputLabelId: "status",
-        labelId: "status",
-        options: RequestStatusArray.map((value): OptionSelect => {
-          return { key: value, value };
-        }),
-        margin: "dense",
-      },
-    },
   ];
-
-  const handleSubmit = (values: any, {}: FormikHelpers<any>) => {
-    console.log("values", values);
-  };
 
   useEffect(() => {
     if (requests?.length) {
-      setDataSource(requests);
+      const data = requests as FindAllRequestsDto[];
+
+      const filteredData = data.filter(
+        (request) => request.status === "COMPLETED"
+      );
+
+      setDataSource(filteredData);
     }
   }, [requests]);
+
+  const filterNonEmptyValues = (
+    obj: Record<string, any>
+  ): Record<string, any> => {
+    return Object.fromEntries(
+      Object.entries(obj).filter(
+        ([_, value]) => value !== undefined && value !== null && value !== ""
+      )
+    );
+  };
+
+  const handleSearch = (
+    values: RequestReportsDto,
+    { setSubmitting, resetForm }: FormikHelpers<RequestReportsDto>
+  ) => {
+    if (btnName === "Search") {
+      // Step 1 handle search for the start date and end date
+      const filteredByDate = dataSource.filter((request) => {
+        // Normalize dates to 'YYYY-MM-DD' to compare only year, month, and day
+        const startDate = dayjs(values.startDate).startOf("day");
+        const endDate = dayjs(values.endDate).startOf("day");
+        const completedDate = dayjs(request.dateCompleted).startOf("day");
+
+        const isDateInRange = request.dateCompleted
+          ? endDate.isSameOrAfter(completedDate) &&
+            startDate.isSameOrBefore(completedDate)
+          : false;
+
+        const {
+          startDate: _,
+          endDate: __,
+          ...searchObject
+        } = values as RequestReportsDto;
+
+        if (Object.keys(searchObject).length) {
+          // Check search object condition
+
+          // Filter the object to remove undefined, null, or empty values
+          const filteredSearchObject = filterNonEmptyValues(searchObject);
+
+          const isMatchingSearchObject = Object.entries(
+            filteredSearchObject
+          ).every(([key, value]) => {
+            const keys = key as keyof Pick<
+              FindAllRequestsDto,
+              "requestMode" | "requestType"
+            >;
+
+            return request[keys] && value && request[keys] === value;
+          });
+
+          return isDateInRange && isMatchingSearchObject;
+        } else {
+          return isDateInRange;
+        }
+      });
+
+      setDataSource(filteredByDate);
+      setBtnName("Clear");
+    } else {
+      // Show all
+      const data = requests as FindAllRequestsDto[];
+
+      const filteredData = data.filter(
+        (request) => request.status === "COMPLETED"
+      );
+
+      resetForm();
+      setDataSource(filteredData);
+      setBtnName("Search");
+    }
+    setSubmitting(false);
+  };
+
+  const handleExportToPdf = () => {
+    exportToPdf({
+      pfdFor: "table",
+      data: {
+        title: "Requests report",
+        dataSource: structuredClone(dataSource).map((value) => {
+          value.dateRequested = moment(
+            new Date(value.dateCompleted as string)
+          ).format("MM/DD/YYYY");
+          value.dateCompleted = moment(
+            new Date(value.dateCompleted as string)
+          ).format("MM/DD/YYYY");
+
+          return value;
+        }),
+        columnSchema: requestColumnSchema.filter(
+          (schema) => schema.key !== "rejectionReason"
+        ),
+      },
+    });
+  };
 
   return {
     initialValues,
     dataSource,
     isFetchingRequest,
     requests,
-    tableHeaderActions,
     fields,
-    handleSubmit,
+    handleSubmit: handleSearch,
+    btnName,
+    handleExportToPdf,
   };
 };

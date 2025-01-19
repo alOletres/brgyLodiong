@@ -1,6 +1,6 @@
 import { Residents as ResidentEntity } from './../../_gen-prisma-classes/residents';
 import { Auth as AuthEntity } from './../../_gen-prisma-classes/auth';
-import { CIVIL_STATUS } from '@prisma/client';
+import { CIVIL_STATUS, RESIDENT_STATUS } from '@prisma/client';
 export declare class CreateResidentsDto {
     civilStatus: CIVIL_STATUS;
     firstname: ResidentEntity['firstname'];
@@ -10,4 +10,6 @@ export declare class CreateResidentsDto {
     address: ResidentEntity['address'];
     role: AuthEntity['role'];
     password: AuthEntity['password'];
+    status: RESIDENT_STATUS;
+    disApprovedReason?: string;
 }

@@ -5,6 +5,11 @@ export const useResidentsApi = () => {
   const { isFetching: isFetchingResidents, data: residents } =
     residentsApi.useResidentsControllerFetchQuery();
 
+  const { data: residentsByStatus, isFetching: isFetchingStatus } =
+    residentsApi.useResidentsControllerFetchByStatusQuery({
+      status: "REGISTERED",
+    });
+
   const [create] = residentsApi.useResidentsControllerCreateMutation();
   const [update] = residentsApi.useResidentsControllerUpdateMutation();
 
@@ -26,5 +31,12 @@ export const useResidentsApi = () => {
       throw err;
     }
   };
-  return { isFetchingResidents, residents, handleCreate, handleEdit };
+  return {
+    isFetchingResidents,
+    residents,
+    handleCreate,
+    handleEdit,
+    residentsByStatus,
+    isFetchingStatus,
+  };
 };

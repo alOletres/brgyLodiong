@@ -10,8 +10,7 @@ class FindAllResidentsDto extends (0, swagger_1.IntersectionType)((0, swagger_1.
     'Notifications',
     'requestsId',
     'Requests',
-    'createdAt',
-]), (0, swagger_1.PickType)(auth_1.Auth, ['role', 'status'])) {
+]), (0, swagger_1.PickType)(auth_1.Auth, ['role'])) {
 }
 exports.FindAllResidentsDto = FindAllResidentsDto;
 //# sourceMappingURL=find-all.residents.dto.js.map

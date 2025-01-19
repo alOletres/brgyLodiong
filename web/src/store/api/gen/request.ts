@@ -69,7 +69,7 @@ export type CreateRequestDto = {
   purpose: string;
   requestMode: RequestMode;
 };
-export type CivilStatus = "SINGLE" | "MARRIED";
+export type CivilStatus = "SINGLE" | "MARRIED" | "WIDOW";
 export type FindAllRequestsDto = {
   id: number;
   residentId: number;

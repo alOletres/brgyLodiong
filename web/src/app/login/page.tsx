@@ -4,10 +4,9 @@ import { styled } from "@mui/system";
 // import { LockOpenOutlined } from "@mui/icons-material";
 import { Form, Formik } from "formik";
 import { Box, Button } from "@mui/material";
-import { LoginSchema, ResidentSchema } from "@/schema";
+import { LoginSchema, SignUpResidentSchema } from "@/schema";
 import { CustomInput } from "@/components/TextFieldInput";
 import { useHooks } from "./hook";
-import { residentFields } from "../residents/hook";
 import Modal from "@/components/Modal";
 import LinearLoader from "@/components/LinearLoader";
 
@@ -61,6 +60,8 @@ const LoginPage = () => {
     handleToggleModal,
     open,
     handleSignUp,
+    fields,
+    residentInitialValues,
   } = useHooks();
 
   return (
@@ -69,9 +70,9 @@ const LoginPage = () => {
       <Modal
         title="Sign Up"
         formProps={{
-          initialValues,
-          validationSchema: ResidentSchema,
-          fields: residentFields,
+          initialValues: residentInitialValues,
+          validationSchema: SignUpResidentSchema,
+          fields,
           handleSubmit: handleSignUp,
         }}
         handleClose={handleToggleModal}

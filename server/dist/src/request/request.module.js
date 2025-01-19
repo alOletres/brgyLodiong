@@ -14,6 +14,7 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const twilio_service_1 = require("../twilio/twilio.service");
 const residents_service_1 = require("../residents/residents.service");
 const notification_service_1 = require("../notification/notification.service");
+const email_service_1 = require("../email/email.service");
 let RequestModule = class RequestModule {
 };
 RequestModule = __decorate([
@@ -24,6 +25,7 @@ RequestModule = __decorate([
             twilio_service_1.TwilioService,
             residents_service_1.ResidentsService,
             notification_service_1.NotificationService,
+            email_service_1.EmailService,
         ],
         controllers: [request_controller_1.RequestController],
     })

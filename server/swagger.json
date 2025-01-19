@@ -112,6 +112,36 @@
         }
       }
     },
+    "/api/residents/{status}": {
+      "get": {
+        "operationId": "ResidentsController_fetchByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindAllResidentsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/officials": {
       "post": {
         "operationId": "OfficialsController_create",
@@ -452,7 +482,16 @@
         "type": "string",
         "enum": [
           "SINGLE",
-          "MARRIED"
+          "MARRIED",
+          "WIDOW"
+        ]
+      },
+      "RESIDENT_STATUS": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "REGISTERED",
+          "DISAPPROVED"
         ]
       },
       "CreateResidentsDto": {
@@ -485,6 +524,12 @@
           },
           "password": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/RESIDENT_STATUS"
+          },
+          "disApprovedReason": {
+            "type": "string"
           }
         },
         "required": [
@@ -495,7 +540,8 @@
           "contact",
           "address",
           "role",
-          "password"
+          "password",
+          "status"
         ]
       },
       "USER_ROLE": {
@@ -503,13 +549,6 @@
         "enum": [
           "ADMIN",
           "RESIDENT"
-        ]
-      },
-      "ACCOUNT_STATUS": {
-        "type": "string",
-        "enum": [
-          "ACTIVE",
-          "INACTIVE"
         ]
       },
       "FindAllResidentsDto": {
@@ -536,11 +575,18 @@
           "address": {
             "type": "string"
           },
-          "role": {
-            "$ref": "#/components/schemas/USER_ROLE"
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/ACCOUNT_STATUS"
+            "$ref": "#/components/schemas/RESIDENT_STATUS"
+          },
+          "disApprovedReason": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/USER_ROLE"
           }
         },
         "required": [
@@ -551,8 +597,9 @@
           "email",
           "contact",
           "address",
-          "role",
-          "status"
+          "createdAt",
+          "status",
+          "role"
         ]
       },
       "Officials": {

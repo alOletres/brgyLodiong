@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { Auth } from 'src/_gen-prisma-classes/auth';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { compareSync } from 'bcrypt';
@@ -16,9 +20,19 @@ export class AuthService {
   async validateUser({ email, password }: Pick<Auth, 'email' | 'password'>) {
     const { password: hashPassword, ...data } = await this.findOneUser(email);
 
+    if (data.resident.status === 'PENDING')
+      throw new ForbiddenException(
+        "You don't have a permission yet, to access the system, contact admistrator",
+      );
+
+    if (data.resident.status === 'DISAPPROVED')
+      throw new ForbiddenException(
+        'Your account has been disapproved. Please contact support for further assistance.',
+      );
+
     const isMatch = compareSync(password, hashPassword);
 
-    if (!isMatch) return null;
+    if (!isMatch) throw new ForbiddenException('Password is incorrect');
 
     return data;
   }
@@ -51,6 +65,7 @@ export class AuthService {
             lastname: true,
             contact: true,
             address: true,
+            status: true,
           },
         },
       },

@@ -27,6 +27,12 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createResidentsDto,
       }),
     }),
+    residentsControllerFetchByStatus: build.query<
+      ResidentsControllerFetchByStatusResponse,
+      ResidentsControllerFetchByStatusArgs
+    >({
+      query: (queryArg) => ({ url: `/api/residents/${queryArg.status}` }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -43,7 +49,13 @@ export type ResidentsControllerUpdateArgs = {
   id: number;
   createResidentsDto: CreateResidentsDto;
 };
-export type CivilStatus = "SINGLE" | "MARRIED";
+export type ResidentsControllerFetchByStatusResponse =
+  /** status 200  */ FindAllResidentsDto[];
+export type ResidentsControllerFetchByStatusArgs = {
+  status: string;
+};
+export type CivilStatus = "SINGLE" | "MARRIED" | "WIDOW";
+export type ResidentStatus = "PENDING" | "REGISTERED" | "DISAPPROVED";
 export type CreateResidentsDto = {
   civilStatus: CivilStatus;
   firstname: string;
@@ -53,9 +65,10 @@ export type CreateResidentsDto = {
   address: string;
   role: "ADMIN" | "RESIDENT";
   password: string;
+  status: ResidentStatus;
+  disApprovedReason?: string;
 };
 export type UserRole = "ADMIN" | "RESIDENT";
-export type AccountStatus = "ACTIVE" | "INACTIVE";
 export type FindAllResidentsDto = {
   id: number;
   firstname: string;
@@ -64,11 +77,14 @@ export type FindAllResidentsDto = {
   email: string;
   contact: string;
   address: string;
+  createdAt: string;
+  status: ResidentStatus;
+  disApprovedReason?: string;
   role: UserRole;
-  status: AccountStatus;
 };
 export const {
   useResidentsControllerCreateMutation,
   useResidentsControllerFetchQuery,
   useResidentsControllerUpdateMutation,
+  useResidentsControllerFetchByStatusQuery,
 } = injectedRtkApi;

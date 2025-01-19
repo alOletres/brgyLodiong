@@ -19,6 +19,7 @@ const create_residents_dto_1 = require("./dto/create-residents.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 const find_all_residents_dto_1 = require("./dto/find-all.residents.dto");
+const client_1 = require("@prisma/client");
 let ResidentsController = class ResidentsController {
     constructor(residentService) {
         this.residentService = residentService;
@@ -31,6 +32,9 @@ let ResidentsController = class ResidentsController {
     }
     async fetch() {
         return this.residentService.fetch();
+    }
+    async fetchByStatus(status) {
+        return this.residentService.fetchByStatus(status);
     }
 };
 __decorate([
@@ -58,6 +62,15 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ResidentsController.prototype, "fetch", null);
+__decorate([
+    (0, common_1.Get)('/:status'),
+    (0, swagger_1.ApiExtraModels)(find_all_residents_dto_1.FindAllResidentsDto),
+    (0, swagger_1.ApiResponse)({ type: find_all_residents_dto_1.FindAllResidentsDto, isArray: true, status: 200 }),
+    __param(0, (0, common_1.Param)('status')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ResidentsController.prototype, "fetchByStatus", null);
 ResidentsController = __decorate([
     (0, common_1.Controller)('residents'),
     __metadata("design:paramtypes", [residents_service_1.ResidentsService])

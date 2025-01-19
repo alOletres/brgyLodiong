@@ -33,9 +33,13 @@ let AuthService = class AuthService {
     }
     async validateUser({ email, password }) {
         const _a = await this.findOneUser(email), { password: hashPassword } = _a, data = __rest(_a, ["password"]);
+        if (data.resident.status === 'PENDING')
+            throw new common_1.ForbiddenException("You don't have a permission yet, to access the system, contact admistrator");
+        if (data.resident.status === 'DISAPPROVED')
+            throw new common_1.ForbiddenException('Your account has been disapproved. Please contact support for further assistance.');
         const isMatch = (0, bcrypt_1.compareSync)(password, hashPassword);
         if (!isMatch)
-            return null;
+            throw new common_1.ForbiddenException('Password is incorrect');
         return data;
     }
     async login(user) {
@@ -64,6 +68,7 @@ let AuthService = class AuthService {
                         lastname: true,
                         contact: true,
                         address: true,
+                        status: true,
                     },
                 },
             },

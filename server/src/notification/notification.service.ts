@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { FindAllNotificationsDto } from './dto/findall-notifications.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class NotificationService {
@@ -36,6 +37,7 @@ export class NotificationService {
           message: true,
           sentAt: true,
         },
+        orderBy: { sentAt: Prisma.SortOrder.desc },
       });
 
       return result.map((value) => {

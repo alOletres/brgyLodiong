@@ -43,6 +43,7 @@ export type ProjectsControllerUpdateArgs = {
   id: number;
   createProjectsDto: CreateProjectsDto;
 };
+export type ProjectStatus = "PENDING" | "SUCCEED";
 export type CreateProjectsDto = {
   projectName: string;
   members: string;
@@ -50,8 +51,8 @@ export type CreateProjectsDto = {
   startDate: string;
   endDate?: string;
   officialId: number;
+  status: ProjectStatus;
 };
-export type ProjectStatus = "PENDING" | "SUCCEED";
 export type FindAllProjectsDto = {
   id: number;
   members: string;

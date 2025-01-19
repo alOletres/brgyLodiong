@@ -10,7 +10,6 @@ export class FindAllResidentsDto extends IntersectionType(
     'Notifications',
     'requestsId',
     'Requests',
-    'createdAt',
   ]),
-  PickType(AuthEntity, ['role', 'status']),
+  PickType(AuthEntity, ['role']),
 ) {}

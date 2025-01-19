@@ -13,6 +13,7 @@ import { CreateResidentsDto } from './dto/create-residents.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiExtraModels, ApiResponse } from '@nestjs/swagger';
 import { FindAllResidentsDto } from './dto/find-all.residents.dto';
+import { RESIDENT_STATUS } from '@prisma/client';
 
 @Controller('residents')
 export class ResidentsController {
@@ -38,5 +39,12 @@ export class ResidentsController {
   @ApiResponse({ type: FindAllResidentsDto, isArray: true, status: 200 })
   async fetch() {
     return this.residentService.fetch();
+  }
+
+  @Get('/:status')
+  @ApiExtraModels(FindAllResidentsDto)
+  @ApiResponse({ type: FindAllResidentsDto, isArray: true, status: 200 })
+  async fetchByStatus(@Param('status') status: RESIDENT_STATUS) {
+    return this.residentService.fetchByStatus(status);
   }
 }

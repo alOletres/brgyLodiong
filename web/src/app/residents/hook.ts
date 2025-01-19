@@ -11,6 +11,7 @@ import {
   CivilStatus,
   CreateResidentsDto,
   FindAllResidentsDto,
+  ResidentStatus,
 } from "@/store/api/gen/residents";
 import { useResidentsApi } from "@/store/api/hooks/residents";
 import { TextareaAutosizeProps } from "@mui/material";
@@ -29,9 +30,12 @@ export const residentInitialValues: CreateResidentsDto = {
   role: "RESIDENT",
   password: "",
   civilStatus: "SINGLE",
+  status: "PENDING",
 };
 
-const civilStatusArray: CivilStatus[] = ["SINGLE", "MARRIED"];
+export const civilStatusArray: CivilStatus[] = ["SINGLE", "MARRIED", "WIDOW"];
+
+const residentStatus: ResidentStatus[] = ["PENDING", "REGISTERED"];
 
 const columnSchema: ColumnSchema<
   FindAllResidentsDto & { password: string } & TableActions
@@ -42,103 +46,9 @@ const columnSchema: ColumnSchema<
   { key: "email", label: "email" },
   { key: "contact", label: "contact" },
   { key: "address", label: "address" },
+  { key: "status", label: "status" },
+  { key: "disApprovedReason", label: "Disapprove reason" },
   { key: "cellActions", label: "action" },
-];
-
-export const residentFields: Field<
-  SelectFieldProps | CustomInputProps | TextareaAutosizeProps
->[] = [
-  {
-    fieldType: "text",
-    fieldProps: {
-      id: "firstname",
-      name: "firstname",
-      label: "Firstname",
-      type: "text",
-      margin: "dense",
-    },
-  },
-
-  {
-    fieldType: "text",
-    fieldProps: {
-      id: "lastname",
-      name: "lastname",
-      label: "Lastname",
-      type: "text",
-      margin: "dense",
-    },
-  },
-
-  {
-    fieldType: "select",
-    fieldProps: <SelectFieldProps>{
-      id: "civilStatus",
-      label: "Select status",
-      name: "civilStatus",
-      inputLabelId: "civilStatus",
-      labelId: "civilStatus",
-      options: civilStatusArray.map((value): OptionSelect => {
-        return { key: value, value };
-      }),
-
-      margin: "dense",
-    },
-  },
-
-  {
-    fieldType: "text",
-    fieldProps: {
-      id: "email",
-      name: "email",
-      label: "Email",
-      type: "text",
-      margin: "dense",
-    },
-  },
-  {
-    fieldType: "text",
-    fieldProps: <CustomInputProps>{
-      id: "contact",
-      name: "contact",
-      label: "Contact",
-      type: "text",
-      margin: "dense",
-    },
-  },
-  {
-    fieldType: "textarea",
-    fieldProps: {
-      label: "Address",
-      name: "address",
-      id: "address",
-      type: "textarea",
-      margin: "dense",
-      placeholder: "Home Address",
-    },
-  },
-
-  {
-    fieldType: "text",
-    fieldProps: {
-      id: "password",
-      name: "password",
-      label: "Password",
-      type: "password",
-      margin: "dense",
-    },
-  },
-
-  {
-    fieldType: "text",
-    fieldProps: {
-      id: "confirmPassword",
-      name: "confirmPassword",
-      label: "confirmPassword",
-      type: "password",
-      margin: "dense",
-    },
-  },
 ];
 
 export const useHooks = () => {
@@ -157,6 +67,146 @@ export const useHooks = () => {
     residentInitialValues
   );
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
+  const [residentUpdateValues, setResidentUpdateValues] = useState<
+    CreateResidentsDto & { id: number }
+  >();
+
+  const [isShowDialog, setShowDialog] = useState<boolean>(false);
+  const [rejectionOpenModal, setRejectionOpenModal] = useState<boolean>(false);
+
+  const residentFields: Field<
+    SelectFieldProps | CustomInputProps | TextareaAutosizeProps
+  >[] = [
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "firstname",
+        name: "firstname",
+        label: "Firstname",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "lastname",
+        name: "lastname",
+        label: "Lastname",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "civilStatus",
+        label: "Select status",
+        name: "civilStatus",
+        inputLabelId: "civilStatus",
+        labelId: "civilStatus",
+        options: civilStatusArray.map((value): OptionSelect => {
+          return { key: value, value };
+        }),
+
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "email",
+        name: "email",
+        label: "Email",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "text",
+      fieldProps: <CustomInputProps>{
+        id: "contact",
+        name: "contact",
+        label: "Contact",
+        type: "text",
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "textarea",
+      fieldProps: {
+        label: "Address",
+        name: "address",
+        id: "address",
+        type: "textarea",
+        margin: "dense",
+        placeholder: "Home Address",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "password",
+        name: "password",
+        label: "Password",
+        type: "password",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "text",
+      fieldProps: {
+        id: "confirmPassword",
+        name: "confirmPassword",
+        label: "confirmPassword",
+        type: "password",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "status",
+        label: "Select status",
+        name: "status",
+        inputLabelId: "status",
+        labelId: "status",
+        options:
+          btnName === "Submit"
+            ? residentStatus.map((value): OptionSelect => {
+                return { key: value, value };
+              })
+            : residentStatus
+                .concat("DISAPPROVED")
+                .map((value): OptionSelect => {
+                  return { key: value, value };
+                }),
+
+        margin: "dense",
+      },
+    },
+  ];
+
+  const initialRejectionValues = { disApprovedReason: "" };
+
+  const rejectionField: Field<CustomInputProps>[] = [
+    {
+      fieldType: "text",
+      fieldProps: {
+        label: "Enter your reason here",
+        name: "disApprovedReason",
+        id: "disApprovedReason",
+        type: "text",
+        margin: "dense",
+      },
+    },
+  ];
 
   const handleToggleModal = (
     values?: FindAllResidentsDto & { password: string }
@@ -178,6 +228,17 @@ export const useHooks = () => {
     setOpen((state) => !state);
   };
 
+  const handleToggleDialog = () => setShowDialog((state) => !state);
+
+  const handleToggleRejectionModal = () =>
+    setRejectionOpenModal((state) => !state);
+
+  const handleConfirmDialog = () => {
+    handleToggleDialog(); // dialog close
+    setOpen(false); // First modal close
+
+    handleToggleRejectionModal(); // open rejection dialog
+  };
   const tableHeaderActions: HeaderActions<ActionButtonProps<any>>[] = [
     {
       actionType: "button",
@@ -217,16 +278,48 @@ export const useHooks = () => {
     }
   };
   const handleUpdate = async (
-    { id, ...values }: FindAllResidentsDto,
-    { resetForm, setSubmitting }: FormikHelpers<FindAllResidentsDto>
+    { id, ...values }: CreateResidentsDto & { id: number },
+    { resetForm, setSubmitting }: FormikHelpers<CreateResidentsDto>
+  ) => {
+    if (values.status === "DISAPPROVED") {
+      handleToggleDialog();
+      setResidentUpdateValues({ ...values, id } as CreateResidentsDto & {
+        id: number;
+      });
+    } else {
+      await handleUpdateResidents(id, values as unknown as CreateResidentsDto);
+    }
+
+    setSubmitting(false);
+    resetForm();
+  };
+
+  const handleSubmitDisApproveReason = async (
+    { disApprovedReason }: Pick<FindAllResidentsDto, "disApprovedReason">,
+    {
+      setSubmitting,
+    }: FormikHelpers<Pick<FindAllResidentsDto, "disApprovedReason">>
+  ) => {
+    const { id, ...payload } = {
+      ...residentUpdateValues,
+      disApprovedReason,
+    } as CreateResidentsDto & { id: number };
+
+    await handleUpdateResidents(id, payload);
+    handleToggleRejectionModal();
+    setSubmitting(false);
+  };
+
+  const handleUpdateResidents = async (
+    id: number,
+    values: CreateResidentsDto
   ) => {
     try {
       await edit(id, {
         ...values,
         contact: `+63${values.contact}`,
       } as unknown as CreateResidentsDto);
-      setSubmitting(false);
-      resetForm();
+
       setOpen(false);
       setSnackbarProps({ message: "Resident successfully updated!" });
     } catch (err: any) {
@@ -247,8 +340,8 @@ export const useHooks = () => {
             formikHelpers as FormikHelpers<CreateResidentsDto>
           )
         : handleUpdate(
-            values as FindAllResidentsDto,
-            formikHelpers as FormikHelpers<FindAllResidentsDto>
+            values as CreateResidentsDto & { id: number },
+            formikHelpers as FormikHelpers<CreateResidentsDto>
           );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -295,5 +388,13 @@ export const useHooks = () => {
     fields: residentFields,
     btnName,
     handleSearch,
+    isShowDialog,
+    handleToggleRejectionModal,
+    rejectionOpenModal,
+    handleToggleDialog,
+    handleConfirmDialog,
+    rejectionField,
+    initialRejectionValues,
+    handleSubmitDisApproveReason,
   };
 };

@@ -1,10 +1,11 @@
 "use client";
 import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
-import { LinearProgress } from "@mui/material";
 import Modal from "@/components/Modal";
-import { ResidentSchema } from "@/schema";
+import { DisApproveSchema, ResidentSchema } from "@/schema";
 import SearchBar from "@/components/SearchBar";
+import LinearLoader from "@/components/LinearLoader";
+import DialogBox from "@/components/Dialog";
 
 const ResidentPage = () => {
   const {
@@ -20,10 +21,19 @@ const ResidentPage = () => {
     open,
     btnName,
     handleSearch,
+    isShowDialog,
+    handleToggleDialog,
+    handleConfirmDialog,
+    rejectionOpenModal,
+    initialRejectionValues,
+    handleToggleRejectionModal,
+    rejectionField,
+    handleSubmitDisApproveReason,
   } = useHooks();
 
   return (
     <>
+      {isFetchingResidents && <LinearLoader height={4} />}
       <Modal
         title="Resident"
         formProps={{
@@ -37,20 +47,36 @@ const ResidentPage = () => {
         width={500}
         btnName={btnName}
       />
-      {isFetchingResidents ? (
-        <LinearProgress color="primary" />
-      ) : (
-        <>
-          <SearchBar label="Search firstname" onChange={handleSearch} />
-          <CustomTable
-            tableHeader="List of Residents"
-            dataSource={dataSource}
-            columns={columnSchema}
-            headerActions={tableHeaderActions}
-            cellActions={tableCellActions}
-          />
-        </>
-      )}
+
+      <DialogBox
+        open={isShowDialog}
+        contentText="Are you sure? You want to disapprove the registration?"
+        toggleDialog={handleToggleDialog}
+        title="Warning"
+        handleSubmit={handleConfirmDialog}
+      />
+
+      <Modal
+        title="Disapprove reason (!)"
+        open={rejectionOpenModal}
+        btnName="Submit"
+        width={500}
+        handleClose={handleToggleRejectionModal}
+        formProps={{
+          fields: rejectionField,
+          initialValues: initialRejectionValues,
+          handleSubmit: handleSubmitDisApproveReason,
+          validationSchema: DisApproveSchema,
+        }}
+      />
+      <SearchBar label="Search firstname" onChange={handleSearch} />
+      <CustomTable
+        tableHeader="List of Residents"
+        dataSource={dataSource}
+        columns={columnSchema}
+        headerActions={tableHeaderActions}
+        cellActions={tableCellActions}
+      />
     </>
   );
 };

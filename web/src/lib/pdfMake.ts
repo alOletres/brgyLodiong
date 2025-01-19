@@ -10,6 +10,7 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import {
   Content,
+  ContentTable,
   Margins,
   PageOrientation,
   PageSize,
@@ -70,6 +71,7 @@ interface IColumnSchema {
 export interface ITable {
   columnSchema: IColumnSchema[];
   dataSource: any;
+  title: string;
 }
 
 export interface IParagraph {
@@ -156,25 +158,64 @@ export const exportToPdf = (props: PdfProps<ITable | IParagraph>) => {
     },
   ];
 
+  const headerTitle = props.data as any;
+
+  const subHeaderText =
+    props.pfdFor === "paragraph"
+      ? `Certificate of ${headerTitle.pageContent.requestType}`
+      : headerTitle.title;
+
+  const subHeader: Content[] = [
+    {
+      text: subHeaderText.toUpperCase().split("").join(" "),
+      color: "red",
+      bold: true,
+      fontSize: 12,
+      alignment: "center",
+      margin: 20,
+    },
+  ];
   if (isTable(props)) {
-    console.log("hello table");
+    const { dataSource, columnSchema } = props.data as ITable;
+
+    // Create table;
+    const contentTable: ContentTable = {
+      style: styles["TABLESTYLE"],
+      table: {
+        widths: columnSchema.map(() => "auto"),
+        body: [
+          [
+            ...columnSchema.map((value) => {
+              return {
+                text: value.label,
+                style: styles["TABLEHEADER"],
+              };
+            }),
+          ], // Data rows
+          ...dataSource.map((row: any) =>
+            columnSchema.map((column) => ({
+              text: row[column.key] || "", // Access dynamic key values from dataSource
+              style: styles["TABLEROW"], // Apply row-specific style if needed
+              noWrap: false, // Enable text wrapping
+            }))
+          ),
+        ],
+      },
+      layout: {
+        paddingLeft: () => 5,
+        paddingRight: () => 5,
+        paddingTop: () => 5,
+        paddingBottom: () => 5,
+      },
+    };
+    // Set content here!
+    content.push([...pageHeader], ...subHeader, { ...contentTable });
   }
 
   if (isParagraph(props)) {
     const { data } = props;
 
     const { type: requestType, pageContent } = data as IParagraph;
-
-    const subHeader: Content[] = [
-      {
-        text: `Certificate of ${requestType}`.toUpperCase().split("").join(" "),
-        color: "red",
-        bold: true,
-        fontSize: 12,
-        alignment: "center",
-        margin: 20,
-      },
-    ];
 
     const paragrapAddress: Content[] = [
       {

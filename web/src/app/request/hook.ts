@@ -36,7 +36,6 @@ export const RequestStatusArray: RequestStatus[] = [
   "PENDING",
   "APPROVED",
   "COMPLETED",
-  "REJECTED",
   "CLAIMED",
   "UNCLAIMED",
 ];
@@ -52,23 +51,24 @@ const initialValues: CreateRequestDto = {
 const initialRejectionValues = { rejectionReason: "" };
 
 export const requestColumnSchema: ColumnSchema<FindAllRequestsDto>[] = [
-  { key: "requestedBy", label: "requested by" },
-  { key: "contact", label: "contact" },
-  { key: "requestType", label: "request type" },
-  { key: "purpose", label: "purpose" },
-  { key: "requestMode", label: "request mode" },
+  { key: "requestedBy", label: "Requested By" },
+  { key: "email", label: "Email" },
+  { key: "contact", label: "Contact" },
+  { key: "requestType", label: "Request Type" },
+  { key: "purpose", label: "Purpose" },
+  { key: "requestMode", label: "Request Mode" },
   {
     key: "dateRequested",
-    label: "date requested",
+    label: "Date Requested",
     format: (value) => moment(value).format("MM/DD/YYYY"),
   },
   {
     key: "dateCompleted",
-    label: "date completed",
+    label: "Date Completed",
     format: (value) => moment(value).format("MM/DD/YYYY"),
   },
 
-  { key: "status", label: "status" },
+  { key: "status", label: "Status" },
 
   { key: "rejectionReason", label: "rejection reason" },
 ];
@@ -110,7 +110,9 @@ export const useHooks = () => {
   const residentOptions = useMemo(
     () =>
       residents
-        ?.filter((value) => value.role === "RESIDENT")
+        ?.filter(
+          (value) => value.role === "RESIDENT" && value.status === "REGISTERED"
+        )
         ?.map((value): OptionSelect => {
           return {
             key: value.id,
@@ -220,9 +222,16 @@ export const useHooks = () => {
               name: "status",
               inputLabelId: "status",
               labelId: "status",
-              options: RequestStatusArray.map((value): OptionSelect => {
-                return { key: value, value };
-              }),
+              options:
+                btnName === "Submit"
+                  ? RequestStatusArray.map((value): OptionSelect => {
+                      return { key: value, value };
+                    })
+                  : RequestStatusArray.concat("REJECTED").map(
+                      (value): OptionSelect => {
+                        return { key: value, value };
+                      }
+                    ),
             },
           },
         ];
@@ -278,7 +287,8 @@ export const useHooks = () => {
   useEffect(() => {
     const data = requests as FindAllRequestsDto[];
     if (data?.length) {
-      if (user?.role === "RESIDENT") {
+      const decoded = decodeToken() as DecodedTokenValues;
+      if (decoded?.role === "RESIDENT") {
         setDataSource(
           data.filter((request) => request.requestedId === user.resident.id)
         );

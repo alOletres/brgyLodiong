@@ -12,6 +12,7 @@ import {
   BarElement,
   PointElement,
   LineElement,
+  PolarAreaController,
   ChartData,
   RadialLinearScale,
   Tooltip,
@@ -32,7 +33,8 @@ Chart.register(
   Legend,
   DoughnutController,
   BarController,
-  LineController
+  LineController,
+  PolarAreaController
 );
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -43,7 +45,7 @@ export interface CustomChartProps extends ChartType, ChartData {
 }
 
 const CustomChart = ({ title, type, labels, datasets }: CustomChartProps) => {
-  const { data, label } = useHook({ datasets, labels } as CustomChartProps);
+  const { data } = useHook({ datasets, labels } as CustomChartProps);
   return (
     <Box sx={{ height: "fit-content", marginX: 2, width: "100%" }}>
       <Card sx={{ width: "100%", padding: 2 }}>
@@ -60,7 +62,7 @@ const CustomChart = ({ title, type, labels, datasets }: CustomChartProps) => {
             },
             plugins: {
               legend: {
-                display: !!label,
+                display: true,
               },
             },
           }}

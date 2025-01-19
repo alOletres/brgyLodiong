@@ -14,4 +14,5 @@ export enum EROUTE_PROTECTED {
 
 export enum EREPORT {
   REQUEST_REPORTS = "request-reports",
+  RESIDENT_REPORTS = "resident-reports",
 }

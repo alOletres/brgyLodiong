@@ -6,7 +6,7 @@ import {
   EventAvailableOutlined,
   DashboardOutlined,
   ListAltOutlined,
-  CircleRounded,
+  ListTwoTone,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
@@ -20,7 +20,6 @@ import { FindAllResidentsDto, UserRole } from "@/store/api/gen/residents";
 interface IDrawerListProps {
   link: string;
   icon: React.ReactNode; // Correct type for a React component in a prop
-
   label?: string;
 }
 
@@ -73,9 +72,14 @@ export const useHooks = () => {
     if (decoded?.role === "ADMIN") {
       setReportList([
         {
-          icon: <CircleRounded />,
+          icon: <ListTwoTone />,
+          link: EREPORT.RESIDENT_REPORTS,
+          label: "Resident report",
+        },
+        {
+          icon: <ListTwoTone />,
           link: EREPORT.REQUEST_REPORTS,
-          label: "Request reports",
+          label: "Request report",
         },
       ]);
     }

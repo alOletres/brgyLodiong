@@ -131,8 +131,8 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
         </DrawerHeader>
         <Divider />
         <List>
-          {list.map((label, index) => (
-            <ListItem key={index} disablePadding sx={{ display: "block" }}>
+          {list.map((label) => (
+            <ListItem key={label.link} disablePadding sx={{ display: "block" }}>
               <Link href={label.link}>
                 <ListItemButton
                   sx={[
@@ -208,7 +208,6 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
                         },
                   ]}
                 >
-                  {/* Replace this with your desired icon */}
                   <ViewAgendaOutlined />
                 </ListItemIcon>
                 <ListItemText
@@ -227,48 +226,75 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
                 {reportsOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse in={reportsOpen} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {reportList.map(({ link, label }) => {
-                    return (
-                      <>
-                        <Link href={link}>
-                          <ListItemButton
+                <List>
+                  {reportList.map(({ link, label, icon }) => (
+                    <ListItem
+                      key={link}
+                      disablePadding
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      <Link href={link}>
+                        <ListItemButton
+                          sx={[
+                            pathname === link
+                              ? {
+                                  background: "#e7e6e3",
+                                }
+                              : {},
+                            {
+                              minHeight: 48,
+                              px: 5,
+                              pl: open ? 5 : 2, // Adjust padding based on sidebar state
+                            },
+                            open
+                              ? {
+                                  justifyContent: "initial",
+                                }
+                              : {
+                                  justifyContent: "center",
+                                },
+                          ]}
+                        >
+                          <ListItemIcon
                             sx={[
-                              pathname === link
-                                ? {
-                                    background: "#e7e6e3",
-                                  }
-                                : {},
                               {
-                                minHeight: 48,
-                                px: 2.5,
-                                pl: 9,
+                                minWidth: 0,
+                                justifyContent: "center",
                               },
                               open
                                 ? {
-                                    justifyContent: "initial",
+                                    mr: 3,
                                   }
                                 : {
-                                    justifyContent: "center",
+                                    mr: "auto",
                                   },
                             ]}
                           >
-                            <ListItemText primary={label} />
-                          </ListItemButton>
-                        </Link>
-                      </>
-                    );
-                  })}
+                            {icon}
+                          </ListItemIcon>
+                          {open && (
+                            <ListItemText
+                              primary={label}
+                              sx={{
+                                textTransform: "capitalize",
+                                opacity: 1,
+                              }}
+                            />
+                          )}
+                        </ListItemButton>
+                      </Link>
+                    </ListItem>
+                  ))}
                 </List>
               </Collapse>
             </ListItem>
-          ) : (
-            <></>
-          )}
-          {/* Reports Dropdown */}
+          ) : null}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, maxWidth: "100%", overflowX: "hidden" }}
+      >
         <DrawerHeader />
         {children}
       </Box>

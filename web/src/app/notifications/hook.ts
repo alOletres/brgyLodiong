@@ -24,7 +24,8 @@ export const useHooks = () => {
       }
 
       if (notifications?.length) {
-        if (user?.role === "RESIDENT") {
+        const decoded = decodeToken() as DecodedTokenValues;
+        if (decoded?.role === "RESIDENT") {
           const filteredData = notifications.filter(
             (notif) => notif.residentId === user.resident.id
           );

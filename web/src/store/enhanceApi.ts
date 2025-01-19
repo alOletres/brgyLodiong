@@ -46,16 +46,19 @@ const enhanceProjectsApi = projectsApi.enhanceEndpoints({
 });
 
 const enhanceResidentsApi = residentsApi.enhanceEndpoints({
-  addTagTypes: ["residents"],
+  addTagTypes: ["residents", "resident-status"],
   endpoints: {
     residentsControllerFetch: {
-      providesTags: ["residents"],
+      providesTags: ["residents", "resident-status"],
     },
     residentsControllerCreate: {
-      invalidatesTags: ["residents"],
+      invalidatesTags: ["residents", "resident-status"],
     },
     residentsControllerUpdate: {
-      invalidatesTags: ["residents"],
+      invalidatesTags: ["residents", "resident-status"],
+    },
+    residentsControllerFetchByStatus: {
+      providesTags: ["resident-status", "residents"],
     },
   },
 });

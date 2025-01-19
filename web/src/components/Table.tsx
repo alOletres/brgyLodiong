@@ -98,6 +98,8 @@ export interface CustomTableProps<T = any> extends TableActions {
   dataSource: T[];
   columns: ColumnSchema<any>[];
   formProps?: ModalFormProps<any>;
+  btnName?: string;
+  handleExportToPdf?: () => void;
 }
 
 const CustomTable = ({
@@ -107,6 +109,8 @@ const CustomTable = ({
   cellActions,
   headerActions,
   formProps,
+  btnName,
+  handleExportToPdf,
 }: CustomTableProps) => {
   const {
     page,
@@ -253,14 +257,13 @@ const CustomTable = ({
                       variant="contained"
                       onClick={submitForm}
                     >
-                      Search
+                      {btnName}
                     </Button>
 
                     <Button
                       sx={{ width: "100%", marginBottom: 0.9 }}
-                      disabled={isSubmitting}
                       variant="contained"
-                      onClick={submitForm}
+                      onClick={handleExportToPdf}
                     >
                       Export to Pdf
                     </Button>

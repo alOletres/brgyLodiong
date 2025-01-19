@@ -6,6 +6,7 @@ import { Prisma, REQUEST_STATUS } from '@prisma/client';
 import { TwilioService } from 'src/twilio/twilio.service';
 import { ResidentsService } from 'src/residents/residents.service';
 import { NotificationService } from 'src/notification/notification.service';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class RequestService {
@@ -36,6 +37,7 @@ export class RequestService {
     private twilioService: TwilioService,
     private residentService: ResidentsService,
     private notificationService: NotificationService,
+    private emailService: EmailService,
   ) {}
 
   async create(payload: CreateRequestDto) {
@@ -59,7 +61,7 @@ export class RequestService {
 
       if (payload.status !== 'PENDING') {
         // Get the resident
-        const { firstname, lastname, contact } =
+        const { firstname, lastname, contact, email } =
           await this.residentService.findOne(payload.residentId);
 
         const completeName = `${firstname} ${lastname}`;
@@ -69,8 +71,12 @@ export class RequestService {
           payload.requestType,
           payload.status,
         );
+
+        // Send email to resident
+        await this.emailService.sendMail({ message: body, to: email });
+
         // Send sms to one resident regarding for his or her request status
-        // await this.twilioService.sendSms(contact, body);
+        await this.twilioService.sendSms(contact, body);
         // Create the notification send to the resident as a history
         await this.notificationService.create({
           message: body,

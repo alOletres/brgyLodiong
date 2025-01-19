@@ -37,6 +37,7 @@ const RequestPage = () => {
 
   return (
     <>
+      {isFetchingRequest && <LinearLoader height={4} />}
       <Modal
         title="Request"
         open={openModal}
@@ -80,7 +81,6 @@ const RequestPage = () => {
         cellActions={user?.role === "ADMIN" ? tableCellActions : undefined}
         headerActions={tableHeaderActions}
       />
-      {isFetchingRequest && <LinearLoader height={4} />}
     </>
   );
 };
