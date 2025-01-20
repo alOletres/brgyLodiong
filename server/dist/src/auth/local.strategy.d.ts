@@ -5,11 +5,8 @@ export declare class LocalStrategy extends LocalStrategy_base {
     private readonly authService;
     constructor(authService: AuthService);
     validate(email: string, password: string): Promise<{
-        email: string;
         id: number;
-        role: import(".prisma/client").$Enums.USER_ROLE;
         status: import(".prisma/client").$Enums.ACCOUNT_STATUS;
-        lastLoggedIn: Date;
         resident: {
             id: number;
             status: import(".prisma/client").$Enums.RESIDENT_STATUS;
@@ -18,6 +15,9 @@ export declare class LocalStrategy extends LocalStrategy_base {
             contact: string;
             address: string;
         };
+        email: string;
+        role: import(".prisma/client").$Enums.USER_ROLE;
+        lastLoggedIn: Date;
     }>;
 }
 export {};

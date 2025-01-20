@@ -73,10 +73,9 @@ let RequestService = class RequestService {
         try {
             const isCompleted = payload.status === client_1.REQUEST_STATUS.COMPLETED;
             if (payload.status !== 'PENDING') {
-                const { firstname, lastname, contact, email } = await this.residentService.findOne(payload.residentId);
+                const { firstname, lastname, contact } = await this.residentService.findOne(payload.residentId);
                 const completeName = `${firstname} ${lastname}`;
                 const body = this.twilioService.notifyResident(completeName, payload.requestType, payload.status);
-                await this.emailService.sendMail({ message: body, to: email });
                 await this.twilioService.sendSms(contact, body);
                 await this.notificationService.create({
                     message: body,

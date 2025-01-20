@@ -65,7 +65,6 @@ let ResidentsService = class ResidentsService {
             });
             const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
             await this.twilioService.sendSms(payload.contact, message);
-            await this.emailService.sendMail({ to: payload.email, message });
         }
         catch (err) {
             console.log('err', err);
@@ -93,7 +92,7 @@ let ResidentsService = class ResidentsService {
             else if (payload.status === 'DISAPPROVED') {
                 message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account application has been disapproved. Contact Brgy. Lower Lodiong Tambulig, Zamboanga del Sur for more details.`;
             }
-            await this.emailService.sendMail({ to: payload.email, message });
+            await this.twilioService.sendSms(payload.contact, message);
         }
         catch (err) {
             throw err;

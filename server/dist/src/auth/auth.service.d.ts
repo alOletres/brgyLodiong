@@ -8,11 +8,8 @@ export declare class AuthService {
     private jwtService;
     constructor(prismaService: PrismaService, jwtService: JwtService);
     validateUser({ email, password }: Pick<Auth, 'email' | 'password'>): Promise<{
-        email: string;
         id: number;
-        role: import(".prisma/client").$Enums.USER_ROLE;
         status: import(".prisma/client").$Enums.ACCOUNT_STATUS;
-        lastLoggedIn: Date;
         resident: {
             id: number;
             status: import(".prisma/client").$Enums.RESIDENT_STATUS;
@@ -21,17 +18,16 @@ export declare class AuthService {
             contact: string;
             address: string;
         };
+        email: string;
+        role: import(".prisma/client").$Enums.USER_ROLE;
+        lastLoggedIn: Date;
     }>;
     login(user: CreateResidentsDto): Promise<{
         access_token: string;
     }>;
     findOneUser(email: string): Promise<{
-        email: string;
-        password: string;
         id: number;
-        role: import(".prisma/client").$Enums.USER_ROLE;
         status: import(".prisma/client").$Enums.ACCOUNT_STATUS;
-        lastLoggedIn: Date;
         resident: {
             id: number;
             status: import(".prisma/client").$Enums.RESIDENT_STATUS;
@@ -40,6 +36,10 @@ export declare class AuthService {
             contact: string;
             address: string;
         };
+        email: string;
+        password: string;
+        role: import(".prisma/client").$Enums.USER_ROLE;
+        lastLoggedIn: Date;
     }>;
     changePassword(email: string, { currentPassword, newPassword }: ChangePasswordDto): Promise<void>;
 }

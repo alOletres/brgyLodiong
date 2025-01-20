@@ -61,7 +61,7 @@ export class RequestService {
 
       if (payload.status !== 'PENDING') {
         // Get the resident
-        const { firstname, lastname, contact, email } =
+        const { firstname, lastname, contact } =
           await this.residentService.findOne(payload.residentId);
 
         const completeName = `${firstname} ${lastname}`;
@@ -73,7 +73,7 @@ export class RequestService {
         );
 
         // Send email to resident
-        await this.emailService.sendMail({ message: body, to: email });
+        // await this.emailService.sendMail({ message: body, to: email });
 
         // Send sms to one resident regarding for his or her request status
         await this.twilioService.sendSms(contact, body);

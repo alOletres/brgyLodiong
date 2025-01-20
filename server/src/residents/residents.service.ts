@@ -57,7 +57,7 @@ export class ResidentsService {
       await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
-      await this.emailService.sendMail({ to: payload.email, message });
+      // await this.emailService.sendMail({ to: payload.email, message });
     } catch (err) {
       console.log('err', err);
 
@@ -91,10 +91,10 @@ export class ResidentsService {
       }
 
       // Send to resident mobile number
-      // await this.twilioService.sendSms(payload.contact, message);
+      await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
-      await this.emailService.sendMail({ to: payload.email, message });
+      // await this.emailService.sendMail({ to: payload.email, message });
     } catch (err) {
       throw err;
     }

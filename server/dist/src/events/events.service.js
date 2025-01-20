@@ -28,7 +28,6 @@ let EventsService = class EventsService {
         const registeredResidents = await this.residentService.fetchByStatus('REGISTERED');
         await Promise.all(registeredResidents.map(async (resident) => {
             const message = `Hi Mr/Mrs. ${resident.firstname} ${resident.lastname} 🎉 Join us at ${payload.location} on ${moment(payload.eventDate).format('MM/DD/YYYY')} at ${moment(payload.eventDate).format('LT')} for ${payload.eventName}. ${payload.description}`;
-            await this.emailService.sendMail({ to: resident.email, message });
             await this.twilioService.sendSms(resident.contact, message);
             return resident;
         }));
