@@ -92,6 +92,9 @@ let ResidentsService = class ResidentsService {
             else if (payload.status === 'DISAPPROVED') {
                 message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account application has been disapproved. Contact Brgy. Lower Lodiong Tambulig, Zamboanga del Sur for more details.`;
             }
+            else {
+                message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
+            }
             await this.twilioService.sendSms(payload.contact, message);
         }
         catch (err) {
