@@ -47,7 +47,9 @@ export type Officials = {
   id: number;
   firstname: string;
   lastname: string;
+  suffix?: string;
   position: string;
+  committee?: string;
   startTerm: string;
   endTerm?: string;
   achievements?: string;
@@ -73,6 +75,8 @@ export type CreateOfficialsDto = {
   startTerm: string;
   endTerm?: string;
   achievements: string;
+  suffix?: string;
+  committee?: string;
   Projects?: Projects;
   projectsId?: number;
 };
@@ -80,7 +84,9 @@ export type FindAllOfficialsDto = {
   id: number;
   firstname: string;
   lastname: string;
+  suffix?: string;
   position: string;
+  committee?: string;
   startTerm: string;
   endTerm?: string;
   achievements?: string;

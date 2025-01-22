@@ -40,8 +40,8 @@ export class CreateResidentsDto {
   @IsString()
   role: AuthEntity['role'];
 
-  @ApiProperty({ type: String })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
   @IsString()
   password: AuthEntity['password'];
 

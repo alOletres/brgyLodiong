@@ -8,7 +8,9 @@ export const LoginSchema = yup.object().shape({
 export const OfficialSchema = yup.object().shape({
   firstname: yup.string().required("This field is required"),
   lastname: yup.string().required("This field is required"),
+  suffix: yup.string().optional().max(5, "Suffix must be of 5 letters only"),
   position: yup.string().required("This field is required"),
+  committee: yup.string().optional(),
   achievements: yup.string().required("This field is required"),
   startTerm: yup.date().required("This field is required").nullable(),
   endTerm: yup.date().optional(),
@@ -61,6 +63,23 @@ export const ResidentSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
     .required("This field is required"),
+  status: yup.string().required("This field is required"),
+});
+
+export const residentUpdateSchema = yup.object().shape({
+  firstname: yup.string().required("This field is required"),
+  lastname: yup.string().required("This field is required"),
+  civilStatus: yup.string().required("This field is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("This field is required"),
+  contact: yup
+    .string()
+    .matches(/^\d{10,10}$/, "Contact number must be 10 digits")
+    .required("This field is required"),
+  address: yup.string().required("This field is required"),
+
   status: yup.string().required("This field is required"),
 });
 

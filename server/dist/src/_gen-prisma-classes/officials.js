@@ -27,9 +27,17 @@ __decorate([
     __metadata("design:type", String)
 ], Officials.prototype, "lastname", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    __metadata("design:type", String)
+], Officials.prototype, "suffix", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
 ], Officials.prototype, "position", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    __metadata("design:type", String)
+], Officials.prototype, "committee", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: Date }),
     __metadata("design:type", Date)

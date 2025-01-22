@@ -53,6 +53,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Requests.prototype, "dateCompleted", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: Date }),
+    __metadata("design:type", Date)
+], Requests.prototype, "dateClaimed", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ type: () => residents_1.Residents }),
     __metadata("design:type", residents_1.Residents)
 ], Requests.prototype, "resident", void 0);

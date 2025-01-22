@@ -9,7 +9,9 @@ export declare class OfficialsService {
         id: number;
         firstname: string;
         lastname: string;
+        suffix: string;
         position: string;
+        committee: string;
         startTerm: Date;
         endTerm: Date;
         achievements: string;

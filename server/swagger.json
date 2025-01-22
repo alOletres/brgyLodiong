@@ -540,7 +540,6 @@
           "contact",
           "address",
           "role",
-          "password",
           "status"
         ]
       },
@@ -614,7 +613,13 @@
           "lastname": {
             "type": "string"
           },
+          "suffix": {
+            "type": "string"
+          },
           "position": {
+            "type": "string"
+          },
+          "committee": {
             "type": "string"
           },
           "startTerm": {
@@ -720,6 +725,12 @@
           "achievements": {
             "type": "string"
           },
+          "suffix": {
+            "type": "string"
+          },
+          "committee": {
+            "type": "string"
+          },
           "Projects": {
             "$ref": "#/components/schemas/Projects"
           },
@@ -747,7 +758,13 @@
           "lastname": {
             "type": "string"
           },
+          "suffix": {
+            "type": "string"
+          },
           "position": {
+            "type": "string"
+          },
+          "committee": {
             "type": "string"
           },
           "startTerm": {
@@ -854,6 +871,10 @@
             "type": "string"
           },
           "dateCompleted": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dateClaimed": {
             "format": "date-time",
             "type": "string"
           },

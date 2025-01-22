@@ -9,7 +9,9 @@ export declare class OfficialsController {
         id: number;
         firstname: string;
         lastname: string;
+        suffix: string;
         position: string;
+        committee: string;
         startTerm: Date;
         endTerm: Date;
         achievements: string;

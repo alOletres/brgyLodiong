@@ -41,7 +41,7 @@ model Residents {
   address           String          @db.VarChar(255)
   createdAt         DateTime        @default(now()) @db.Timestamp(0)
   status            RESIDENT_STATUS @default(PENDING)
-  disApprovedReason String?          @db.VarChar(255)
+  disApprovedReason String?         @db.VarChar(255)
   Auth              Auth?
   Requests          Requests[]
   requestsId        Int?
@@ -59,6 +59,7 @@ model Requests {
   purpose         String          @db.VarChar(255)
   dateRequested   DateTime        @default(now()) @db.Timestamp(0)
   dateCompleted   DateTime?
+  dateClaimed     DateTime?
   resident        Residents       @relation(fields: [residentId], references: [id])
   requestMode     REQUEST_MODE    @default(ONLINE)
   Notifications   Notifications[]
@@ -68,7 +69,9 @@ model Officials {
   id           Int        @id @default(autoincrement())
   firstname    String     @db.VarChar(50)
   lastname     String     @db.VarChar(50)
+  suffix       String?    @db.VarChar(5)
   position     String     @db.VarChar(50)
+  committee    String?    @db.VarChar(150)
   startTerm    DateTime
   endTerm      DateTime?
   achievements String?    @db.Text

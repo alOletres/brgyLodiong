@@ -33,6 +33,16 @@ export class CreateOfficialsDto {
   @IsString()
   achievements?: string;
 
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  suffix?: string;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  committee?: string;
+
   @ApiPropertyOptional({ type: () => Projects })
   Projects?: Projects;
 

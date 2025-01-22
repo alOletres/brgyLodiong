@@ -68,6 +68,12 @@ export const requestColumnSchema: ColumnSchema<FindAllRequestsDto>[] = [
     format: (value) => moment(value).format("MM/DD/YYYY"),
   },
 
+  {
+    key: "dateClaimed",
+    label: "Date Claimed",
+    format: (value) => moment(value).format("MM/DD/YYYY"),
+  },
+
   { key: "status", label: "Status" },
 
   { key: "rejectionReason", label: "rejection reason" },

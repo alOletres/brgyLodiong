@@ -19,17 +19,24 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { EPOSITION } from "@/constants/posistion.enum";
 import { OptionSelect, SelectFieldProps } from "@/components/Select";
+import { ECOMMITEE } from "@/constants/committee.enum";
+import { decodeToken } from "@/lib/tokenStorage";
+import { DecodedTokenValues } from "@/components/hooks/useDrawer";
 
 export type IHandleSubmitType = "Submit" | "Save Changes";
 
 const initialValues: CreateOfficialsDto = {
   firstname: "",
   lastname: "",
+  suffix: "",
   achievements: "",
   position: "",
+  committee: "",
   startTerm: "",
   endTerm: "",
 };
+
+// Set user here!
 
 export const useHooks = () => {
   const { officials, handleCreate, handleUpdate, isFetchingOfficials } =
@@ -37,6 +44,10 @@ export const useHooks = () => {
   const { setSnackbarProps } = useSnackbar();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
+
+  const [user, setUser] = useState<DecodedTokenValues>(
+    {} as DecodedTokenValues
+  );
 
   const [initialFormValues, setInitialFormValues] =
     useState<CreateOfficialsDto>(initialValues);
@@ -46,6 +57,52 @@ export const useHooks = () => {
   const positions: OptionSelect[] = Object.values(EPOSITION).map((position) => {
     return { key: position, value: position };
   });
+
+  const committees = Object.values(ECOMMITEE).map((committee): OptionSelect => {
+    return {
+      key: committee,
+      value: committee,
+    };
+  });
+
+  useEffect(() => {
+    const decoded = decodeToken() as DecodedTokenValues;
+
+    if (decoded) {
+      setUser(decoded);
+    }
+  }, []);
+
+  const officialColumnSchema: ColumnSchema<
+    FindAllOfficialsDto & TableActions
+  >[] = [
+    { key: "committee", label: "Committee" },
+    { key: "position", label: "position" },
+    { key: "firstname", label: "firstname" },
+    { key: "lastname", label: "lastname" },
+    { key: "suffix", label: "Suffix" },
+    { key: "achievements", label: "achievements" },
+  ];
+
+  const columnSchema: ColumnSchema<FindAllOfficialsDto & TableActions>[] =
+    user.role === "ADMIN"
+      ? officialColumnSchema.concat([
+          {
+            key: "startTerm",
+            label: "start term",
+            format: (value) => moment(value).format("MM/DD/YYYY"),
+          },
+          {
+            key: "endTerm",
+            label: "end term",
+            format: (value) => moment(value).format("MM/DD/YYYY"),
+          },
+          {
+            key: "cellActions",
+            label: "actions",
+          },
+        ])
+      : officialColumnSchema;
 
   const modalFields: Field<
     InputFieldProps | CustomDatePickerProps | SelectFieldProps
@@ -72,6 +129,17 @@ export const useHooks = () => {
     },
 
     {
+      fieldType: "text",
+      fieldProps: {
+        label: "Suffix (Optional)",
+        name: "suffix",
+        id: "suffix",
+        type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
       fieldType: "select",
       fieldProps: <SelectFieldProps>{
         id: "position",
@@ -80,6 +148,18 @@ export const useHooks = () => {
         inputLabelId: "position",
         labelId: "position",
         options: positions,
+        margin: "dense",
+      },
+    },
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "committee",
+        name: "committee",
+        label: "Select committee",
+        inputLabelId: "committee",
+        labelId: "committee",
+        options: committees,
         margin: "dense",
       },
     },
@@ -132,6 +212,8 @@ export const useHooks = () => {
           id: number;
         };
 
+        console.log("values", id);
+
         await handleUpdate(id, {
           ...payload,
           endTerm: isDate ? endTerm : undefined,
@@ -178,27 +260,29 @@ export const useHooks = () => {
     setOpenModal((state) => !state);
   };
 
-  const columnSchema: ColumnSchema<FindAllOfficialsDto & TableActions>[] = [
-    { key: "firstname", label: "firstname" },
-    { key: "lastname", label: "lastname" },
-    { key: "position", label: "position" },
-    { key: "achievements", label: "achievements" },
-    {
-      key: "startTerm",
-      label: "start term",
-      format: (value) => moment(value).format("MM/DD/YYYY"),
-    },
-    {
-      key: "endTerm",
-      label: "end term",
-      format: (value) => moment(value).format("MM/DD/YYYY"),
-    },
+  // const columnSchema: ColumnSchema<FindAllOfficialsDto & TableActions>[] = [
+  //   { key: "committee", label: "Committee" },
+  //   { key: "position", label: "position" },
+  //   { key: "firstname", label: "firstname" },
+  //   { key: "lastname", label: "lastname" },
+  //   { key: "suffix", label: "Suffix" },
+  //   { key: "achievements", label: "achievements" },
+  //   {
+  //     key: "startTerm",
+  //     label: "start term",
+  //     format: (value) => moment(value).format("MM/DD/YYYY"),
+  //   },
+  //   {
+  //     key: "endTerm",
+  //     label: "end term",
+  //     format: (value) => moment(value).format("MM/DD/YYYY"),
+  //   },
 
-    {
-      key: "cellActions",
-      label: "actions",
-    },
-  ];
+  //   {
+  //     key: "cellActions",
+  //     label: "actions",
+  //   },
+  // ];
 
   const tableHeaderActions: HeaderActions<ActionButtonProps<any>>[] = [
     {
@@ -243,7 +327,7 @@ export const useHooks = () => {
   return {
     columnSchema,
     dataSource,
-    tableHeaderActions,
+    tableHeaderActions: user?.role === "ADMIN" ? tableHeaderActions : undefined,
     handleToggleModal,
     openModal,
     modalFields,

@@ -63,6 +63,7 @@ export const useHooks = () => {
 
     if (decoded?.role === "RESIDENT") {
       setList([
+        { icon: <Person2Rounded />, link: OFFICIALS },
         { icon: <ListAltOutlined />, link: REQUEST },
         { icon: <EventAvailableOutlined />, link: EVENTS },
         { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },

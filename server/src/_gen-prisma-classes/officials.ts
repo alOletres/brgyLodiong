@@ -11,8 +11,14 @@ export class Officials {
   @ApiProperty({ type: String })
   lastname: string;
 
+  @ApiPropertyOptional({ type: String })
+  suffix?: string;
+
   @ApiProperty({ type: String })
   position: string;
+
+  @ApiPropertyOptional({ type: String })
+  committee?: string;
 
   @ApiProperty({ type: Date })
   startTerm: Date;

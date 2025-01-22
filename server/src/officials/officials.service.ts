@@ -15,6 +15,8 @@ export class OfficialsService {
           position: payload.position,
           startTerm: payload.startTerm,
           achievements: payload.achievements,
+          committee: payload.committee,
+          suffix: payload.suffix,
           endTerm,
         },
       });
@@ -34,6 +36,8 @@ export class OfficialsService {
           startTerm: payload.startTerm,
           endTerm: payload.endTerm,
           achievements: payload.achievements,
+          committee: payload.committee,
+          suffix: payload.suffix,
         },
       });
     } catch (err) {
@@ -52,7 +56,8 @@ export class OfficialsService {
           startTerm: true,
           endTerm: true,
           position: true,
-
+          committee: true,
+          suffix: true,
           Projects: {
             select: {
               projectName: true,

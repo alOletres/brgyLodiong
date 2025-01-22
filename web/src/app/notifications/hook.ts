@@ -9,25 +9,15 @@ import { useEffect, useState } from "react";
 export const useHooks = () => {
   const { isFetchingNotification, notifications } = useNotificationApi();
 
-  const [user, setUser] = useState<DecodedTokenValues>(
-    {} as DecodedTokenValues
-  );
-
   const [dataSource, setDataSource] = useState<FindAllNotificationsDto[]>([]);
 
   useEffect(
     () => {
-      const decoded = decodeToken() as DecodedTokenValues;
-
-      if (decoded) {
-        setUser(decoded);
-      }
-
       if (notifications?.length) {
         const decoded = decodeToken() as DecodedTokenValues;
         if (decoded?.role === "RESIDENT") {
           const filteredData = notifications.filter(
-            (notif) => notif.residentId === user.resident.id
+            (notif) => notif.residentId === decoded.resident.id
           );
 
           setDataSource(filteredData);

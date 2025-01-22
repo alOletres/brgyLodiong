@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Field } from "@/components/hooks/useModal";
 import {
@@ -74,7 +75,7 @@ export const useHooks = () => {
   const [isShowDialog, setShowDialog] = useState<boolean>(false);
   const [rejectionOpenModal, setRejectionOpenModal] = useState<boolean>(false);
 
-  const residentFields: Field<
+  const fields: Field<
     SelectFieldProps | CustomInputProps | TextareaAutosizeProps
   >[] = [
     {
@@ -146,52 +147,58 @@ export const useHooks = () => {
         placeholder: "Home Address",
       },
     },
-
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "password",
-        name: "password",
-        label: "Password",
-        type: "password",
-        margin: "dense",
-      },
-    },
-
-    {
-      fieldType: "text",
-      fieldProps: {
-        id: "confirmPassword",
-        name: "confirmPassword",
-        label: "confirmPassword",
-        type: "password",
-        margin: "dense",
-      },
-    },
-
-    {
-      fieldType: "select",
-      fieldProps: <SelectFieldProps>{
-        id: "status",
-        label: "Select status",
-        name: "status",
-        inputLabelId: "status",
-        labelId: "status",
-        options:
-          btnName === "Submit"
-            ? residentStatus.map((value): OptionSelect => {
-                return { key: value, value };
-              })
-            : residentStatus
-                .concat("DISAPPROVED")
-                .map((value): OptionSelect => {
-                  return { key: value, value };
-                }),
-
-        margin: "dense",
-      },
-    },
   ];
+
+  const [residentFields, setResidentFields] = useState<
+    Field<SelectFieldProps | CustomInputProps | TextareaAutosizeProps>[]
+  >(
+    [...fields].concat([
+      {
+        fieldType: "text",
+        fieldProps: {
+          id: "password",
+          name: "password",
+          label: "Password",
+          type: "password",
+          margin: "dense",
+        },
+      },
+
+      {
+        fieldType: "text",
+        fieldProps: {
+          id: "confirmPassword",
+          name: "confirmPassword",
+          label: "confirmPassword",
+          type: "password",
+          margin: "dense",
+        },
+      },
+
+      {
+        fieldType: "select",
+        fieldProps: <SelectFieldProps>{
+          id: "status",
+          label: "Select status",
+          name: "status",
+          inputLabelId: "status",
+          labelId: "status",
+          options:
+            btnName === "Submit"
+              ? residentStatus.map((value): OptionSelect => {
+                  return { key: value, value };
+                })
+              : residentStatus
+                  .concat("DISAPPROVED")
+                  .map((value): OptionSelect => {
+                    return { key: value, value };
+                  }),
+
+          margin: "dense",
+        },
+      },
+    ])
+  );
 
   const initialRejectionValues = { disApprovedReason: "" };
 
@@ -214,11 +221,35 @@ export const useHooks = () => {
     if (values && Object.keys(values).length) {
       const mobileNumber = values.contact ? values.contact.slice(3) : "";
 
-      setFormValues({
-        ...values,
-        password: values.password,
-        contact: mobileNumber,
-      });
+      //
+      setResidentFields(
+        [...fields].concat({
+          fieldType: "select",
+          fieldProps: <SelectFieldProps>{
+            id: "status",
+            label: "Select status",
+            name: "status",
+            inputLabelId: "status",
+            labelId: "status",
+            options:
+              btnName === "Submit"
+                ? residentStatus.map((value): OptionSelect => {
+                    return { key: value, value };
+                  })
+                : residentStatus
+                    .concat("DISAPPROVED")
+                    .map((value): OptionSelect => {
+                      return { key: value, value };
+                    }),
+
+            margin: "dense",
+          },
+        })
+      );
+
+      const { password: _, ...intialValues } = values;
+
+      setFormValues({ ...intialValues, contact: mobileNumber } as any);
 
       setBtnName("Save Changes");
     } else {
@@ -319,6 +350,56 @@ export const useHooks = () => {
         ...values,
         contact: `+63${values.contact}`,
       } as unknown as CreateResidentsDto);
+
+      // Set fields
+      setResidentFields(
+        [...fields].concat([
+          {
+            fieldType: "text",
+            fieldProps: {
+              id: "password",
+              name: "password",
+              label: "Password",
+              type: "password",
+              margin: "dense",
+            },
+          },
+
+          {
+            fieldType: "text",
+            fieldProps: {
+              id: "confirmPassword",
+              name: "confirmPassword",
+              label: "confirmPassword",
+              type: "password",
+              margin: "dense",
+            },
+          },
+
+          {
+            fieldType: "select",
+            fieldProps: <SelectFieldProps>{
+              id: "status",
+              label: "Select status",
+              name: "status",
+              inputLabelId: "status",
+              labelId: "status",
+              options:
+                btnName === "Submit"
+                  ? residentStatus.map((value): OptionSelect => {
+                      return { key: value, value };
+                    })
+                  : residentStatus
+                      .concat("DISAPPROVED")
+                      .map((value): OptionSelect => {
+                        return { key: value, value };
+                      }),
+
+              margin: "dense",
+            },
+          },
+        ])
+      );
 
       setOpen(false);
       setSnackbarProps({ message: "Resident successfully updated!" });

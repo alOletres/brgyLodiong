@@ -20,6 +20,7 @@ export class RequestService {
     requestMode: true,
     residentId: true,
     rejectionReason: true,
+    dateClaimed: true,
     resident: {
       select: {
         id: true,
@@ -43,11 +44,13 @@ export class RequestService {
   async create(payload: CreateRequestDto) {
     try {
       const isCompleted = payload.status === REQUEST_STATUS.COMPLETED;
+      const isClaimed = payload.status === REQUEST_STATUS.CLAIMED;
 
       return await this.prisma.requests.create({
         data: {
           ...payload,
           dateCompleted: isCompleted ? new Date().toISOString() : undefined,
+          dateClaimed: isClaimed ? new Date().toISOString() : undefined,
         },
       });
     } catch (err) {
@@ -58,6 +61,7 @@ export class RequestService {
   async update(id: number, payload: CreateRequestDto) {
     try {
       const isCompleted = payload.status === REQUEST_STATUS.COMPLETED;
+      const isClaimed = payload.status === REQUEST_STATUS.CLAIMED;
 
       if (payload.status !== 'PENDING') {
         // Get the resident
@@ -92,6 +96,7 @@ export class RequestService {
         data: {
           ...payload,
           dateCompleted: isCompleted ? new Date().toISOString() : undefined,
+          dateClaimed: isClaimed ? new Date().toISOString() : undefined,
         },
       });
     } catch (err) {

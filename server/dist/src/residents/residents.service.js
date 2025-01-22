@@ -72,15 +72,13 @@ let ResidentsService = class ResidentsService {
         }
     }
     async update(id, _a) {
-        var { password, role } = _a, payload = __rest(_a, ["password", "role"]);
+        var { password: _, role } = _a, payload = __rest(_a, ["password", "role"]);
         try {
-            const hash = (0, bcypt_1.hashPassword)(password);
             await this.prisma.residents.update({
                 where: { id },
                 data: Object.assign(Object.assign({}, payload), { Auth: {
                         update: {
                             email: payload.email,
-                            password: hash,
                             role: role,
                         },
                     } }),

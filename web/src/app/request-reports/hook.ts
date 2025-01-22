@@ -96,7 +96,7 @@ export const useHook = () => {
       const data = requests as FindAllRequestsDto[];
 
       const filteredData = data.filter(
-        (request) => request.status === "COMPLETED"
+        (request) => request.status === "CLAIMED"
       );
 
       setDataSource(filteredData);
@@ -166,7 +166,7 @@ export const useHook = () => {
       const data = requests as FindAllRequestsDto[];
 
       const filteredData = data.filter(
-        (request) => request.status === "COMPLETED"
+        (request) => request.status === "CLAIMED"
       );
 
       resetForm();
@@ -183,16 +183,20 @@ export const useHook = () => {
         title: "Requests report",
         dataSource: structuredClone(dataSource).map((value) => {
           value.dateRequested = moment(
-            new Date(value.dateCompleted as string)
+            new Date(value.dateRequested as string)
           ).format("MM/DD/YYYY");
           value.dateCompleted = moment(
             new Date(value.dateCompleted as string)
           ).format("MM/DD/YYYY");
 
+          value.dateClaimed = moment(
+            new Date(value.dateClaimed as string)
+          ).format("MM/DD/YYYY");
+
           return value;
         }),
         columnSchema: requestColumnSchema.filter(
-          (schema) => schema.key !== "rejectionReason"
+          (schema) => schema.key !== "rejectionReason" && schema.key !== "email"
         ),
       },
     });

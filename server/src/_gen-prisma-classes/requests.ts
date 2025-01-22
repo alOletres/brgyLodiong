@@ -28,6 +28,9 @@ export class Requests {
   @ApiPropertyOptional({ type: Date })
   dateCompleted?: Date;
 
+  @ApiPropertyOptional({ type: Date })
+  dateClaimed?: Date;
+
   @ApiProperty({ type: () => Residents })
   resident: Residents;
 

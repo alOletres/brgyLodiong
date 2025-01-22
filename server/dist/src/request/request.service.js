@@ -45,6 +45,7 @@ let RequestService = class RequestService {
             requestMode: true,
             residentId: true,
             rejectionReason: true,
+            dateClaimed: true,
             resident: {
                 select: {
                     id: true,
@@ -61,8 +62,9 @@ let RequestService = class RequestService {
     async create(payload) {
         try {
             const isCompleted = payload.status === client_1.REQUEST_STATUS.COMPLETED;
+            const isClaimed = payload.status === client_1.REQUEST_STATUS.CLAIMED;
             return await this.prisma.requests.create({
-                data: Object.assign(Object.assign({}, payload), { dateCompleted: isCompleted ? new Date().toISOString() : undefined }),
+                data: Object.assign(Object.assign({}, payload), { dateCompleted: isCompleted ? new Date().toISOString() : undefined, dateClaimed: isClaimed ? new Date().toISOString() : undefined }),
             });
         }
         catch (err) {
@@ -72,6 +74,7 @@ let RequestService = class RequestService {
     async update(id, payload) {
         try {
             const isCompleted = payload.status === client_1.REQUEST_STATUS.COMPLETED;
+            const isClaimed = payload.status === client_1.REQUEST_STATUS.CLAIMED;
             if (payload.status !== 'PENDING') {
                 const { firstname, lastname, contact } = await this.residentService.findOne(payload.residentId);
                 const completeName = `${firstname} ${lastname}`;
@@ -87,7 +90,7 @@ let RequestService = class RequestService {
             }
             return await this.prisma.requests.update({
                 where: { id },
-                data: Object.assign(Object.assign({}, payload), { dateCompleted: isCompleted ? new Date().toISOString() : undefined }),
+                data: Object.assign(Object.assign({}, payload), { dateCompleted: isCompleted ? new Date().toISOString() : undefined, dateClaimed: isClaimed ? new Date().toISOString() : undefined }),
             });
         }
         catch (err) {

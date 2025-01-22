@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-qb-extension-installed="true" data-qb-installed="true">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

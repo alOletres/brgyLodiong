@@ -37,6 +37,8 @@ let OfficialsService = class OfficialsService {
                     position: payload.position,
                     startTerm: payload.startTerm,
                     achievements: payload.achievements,
+                    committee: payload.committee,
+                    suffix: payload.suffix,
                     endTerm,
                 },
             });
@@ -56,6 +58,8 @@ let OfficialsService = class OfficialsService {
                     startTerm: payload.startTerm,
                     endTerm: payload.endTerm,
                     achievements: payload.achievements,
+                    committee: payload.committee,
+                    suffix: payload.suffix,
                 },
             });
         }
@@ -74,6 +78,8 @@ let OfficialsService = class OfficialsService {
                     startTerm: true,
                     endTerm: true,
                     position: true,
+                    committee: true,
+                    suffix: true,
                     Projects: {
                         select: {
                             projectName: true,

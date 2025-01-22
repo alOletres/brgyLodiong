@@ -10,6 +10,7 @@ export declare class Requests {
     purpose: string;
     dateRequested: Date;
     dateCompleted?: Date;
+    dateClaimed?: Date;
     resident: Residents;
     requestMode: REQUEST_MODE;
     Notifications: Notifications[];

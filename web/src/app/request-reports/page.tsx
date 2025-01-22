@@ -26,7 +26,9 @@ const RequestReportPage = () => {
         dataSource={dataSource}
         columns={requestColumnSchema.filter(
           (schema) =>
-            schema.key !== "dateRequested" && schema.key !== "rejectionReason"
+            schema.key !== "dateRequested" &&
+            schema.key !== "rejectionReason" &&
+            schema.key !== "dateCompleted"
         )}
         formProps={{
           initialValues,

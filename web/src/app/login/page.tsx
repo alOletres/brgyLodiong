@@ -35,8 +35,8 @@ const Header = styled("div")({
 });
 
 const Logo = styled("img")({
-  width: "100px",
-  height: "100px",
+  width: "120px",
+  height: "120px",
   marginBottom: "10px",
 });
 
@@ -90,7 +90,16 @@ const LoginPage = () => {
             <Form>
               <FormContainer>
                 <Header>
-                  <Logo src="/logo.png" alt="Barangay Logo" />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <Logo src="/logo.png" alt="Barangay Logo" />
+                    <Logo src="/brgy.jpg" alt="Barangay Logo" />
+                  </Box>
                   <Title>Barangay Lower Lodiong</Title>
                   <Subtitle>Tambulig, Zamboanga del Sur</Subtitle>
                 </Header>

@@ -52,6 +52,18 @@ __decorate([
     __metadata("design:type", String)
 ], CreateOfficialsDto.prototype, "achievements", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateOfficialsDto.prototype, "suffix", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateOfficialsDto.prototype, "committee", void 0);
+__decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: () => projects_1.Projects }),
     __metadata("design:type", projects_1.Projects)
 ], CreateOfficialsDto.prototype, "Projects", void 0);

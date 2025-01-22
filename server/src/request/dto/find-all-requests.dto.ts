@@ -12,6 +12,7 @@ export class FindAllRequestsDto extends PickType(RequestEntity, [
   'requestMode',
   'residentId',
   'rejectionReason',
+  'dateClaimed',
 ]) {
   @ApiProperty({ type: Number })
   requestedId: number;

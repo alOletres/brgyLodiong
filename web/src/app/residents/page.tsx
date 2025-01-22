@@ -2,7 +2,11 @@
 import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
 import Modal from "@/components/Modal";
-import { DisApproveSchema, ResidentSchema } from "@/schema";
+import {
+  DisApproveSchema,
+  ResidentSchema,
+  residentUpdateSchema,
+} from "@/schema";
 import SearchBar from "@/components/SearchBar";
 import LinearLoader from "@/components/LinearLoader";
 import DialogBox from "@/components/Dialog";
@@ -38,7 +42,8 @@ const ResidentPage = () => {
         title="Resident"
         formProps={{
           initialValues,
-          validationSchema: ResidentSchema,
+          validationSchema:
+            btnName === "Submit" ? ResidentSchema : residentUpdateSchema,
           fields,
           handleSubmit,
         }}

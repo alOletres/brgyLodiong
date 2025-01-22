@@ -6,6 +6,8 @@ export declare class CreateOfficialsDto {
     startTerm: Date;
     endTerm?: Date;
     achievements?: string;
+    suffix?: string;
+    committee?: string;
     Projects?: Projects;
     projectsId?: number;
 }

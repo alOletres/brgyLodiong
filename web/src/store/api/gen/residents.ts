@@ -64,7 +64,7 @@ export type CreateResidentsDto = {
   contact: string;
   address: string;
   role: "ADMIN" | "RESIDENT";
-  password: string;
+  password?: string;
   status: ResidentStatus;
   disApprovedReason?: string;
 };

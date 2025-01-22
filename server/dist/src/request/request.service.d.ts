@@ -16,23 +16,25 @@ export declare class RequestService {
     create(payload: CreateRequestDto): Promise<{
         id: number;
         residentId: number;
-        requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
+        dateClaimed: Date;
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
         residentId: number;
-        requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;
         dateCompleted: Date;
+        dateClaimed: Date;
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
     }>;
     fetch(): Promise<FindAllRequestsDto[]>;

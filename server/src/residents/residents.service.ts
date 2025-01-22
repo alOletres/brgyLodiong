@@ -65,9 +65,12 @@ export class ResidentsService {
     }
   }
 
-  async update(id: number, { password, role, ...payload }: CreateResidentsDto) {
+  async update(
+    id: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    { password: _, role, ...payload }: CreateResidentsDto,
+  ) {
     try {
-      const hash = hashPassword(password);
       await this.prisma.residents.update({
         where: { id },
         data: {
@@ -75,7 +78,6 @@ export class ResidentsService {
           Auth: {
             update: {
               email: payload.email,
-              password: hash,
               role: role,
             },
           },

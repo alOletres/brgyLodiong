@@ -79,6 +79,7 @@ export type FindAllRequestsDto = {
   purpose: string;
   dateRequested: string;
   dateCompleted?: string;
+  dateClaimed?: string;
   requestMode: RequestMode;
   requestedId: number;
   civilStatus: CivilStatus;
