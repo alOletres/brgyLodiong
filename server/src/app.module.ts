@@ -16,6 +16,7 @@ import { NotificationModule } from './notification/notification.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailService } from './email/email.service';
 import { NotificationService } from './notification/notification.service';
+import { MailgunService } from './mailgun/mailgun.service';
 @Module({
   imports: [
     AuthModule,
@@ -45,6 +46,7 @@ import { NotificationService } from './notification/notification.service';
     TwilioService,
     EmailService,
     NotificationService,
+    MailgunService,
   ],
 })
 export class AppModule {}

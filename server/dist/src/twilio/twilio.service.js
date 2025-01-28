@@ -8,11 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TwilioService = void 0;
 const common_1 = require("@nestjs/common");
-const moment = require("moment");
-const twilio = require("twilio");
+const moment_1 = __importDefault(require("moment"));
+const twilio_1 = __importDefault(require("twilio"));
 let TwilioService = class TwilioService {
     constructor() {
         this.config = {
@@ -20,7 +23,7 @@ let TwilioService = class TwilioService {
             authToken: process.env.TWILIO_AUTH_TOKEN,
             twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER,
         };
-        this.twilioClient = twilio(this.config.accountSid, this.config.authToken);
+        this.twilioClient = (0, twilio_1.default)(this.config.accountSid, this.config.authToken);
     }
     async sendSms(to, body) {
         await this.twilioClient.messages.create({
@@ -39,7 +42,7 @@ let TwilioService = class TwilioService {
         Dear ${residentName}, Your request for a Certificate of ${requestType} has been successfully completed. You may now claim it at the barangay office during office hours.`;
             case 'CLAIMED':
                 return `
-        Dear ${residentName}, This is to confirm that your requested Certificate of ${requestType} has been successfully claimed from the barangay office on ${moment(new Date()).format('ll')}`;
+        Dear ${residentName}, This is to confirm that your requested Certificate of ${requestType} has been successfully claimed from the barangay office on ${(0, moment_1.default)(new Date()).format('ll')}`;
             case 'UNCLAIMED':
                 return `
         Dear ${residentName}, We would like to remind you that your requested Certificate of ${requestType} is ready for pickup at the barangay office`;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { REQUEST_STATUS } from '@prisma/client';
-import * as moment from 'moment';
-import * as twilio from 'twilio';
+import moment from 'moment';
+import twilio from 'twilio';
 
 interface TwilioConfig {
   accountSid: string;

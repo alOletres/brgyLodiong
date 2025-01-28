@@ -1,6 +1,6 @@
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
-import * as compression from 'compression';
+import compression from 'compression';
 import { json, raw, text, urlencoded } from 'express';
 import { LoggerErrorInterceptor } from 'nestjs-pino';
 

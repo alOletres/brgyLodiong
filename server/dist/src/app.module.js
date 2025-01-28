@@ -25,6 +25,7 @@ const notification_module_1 = require("./notification/notification.module");
 const mailer_1 = require("@nestjs-modules/mailer");
 const email_service_1 = require("./email/email.service");
 const notification_service_1 = require("./notification/notification.service");
+const mailgun_service_1 = require("./mailgun/mailgun.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -57,6 +58,7 @@ AppModule = __decorate([
             twilio_service_1.TwilioService,
             email_service_1.EmailService,
             notification_service_1.NotificationService,
+            mailgun_service_1.MailgunService,
         ],
     })
 ], AppModule);

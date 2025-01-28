@@ -6,7 +6,7 @@ import { FindAllEventsDto } from './dto/findall-events.dto';
 import { TwilioService } from 'src/twilio/twilio.service';
 import { EmailService } from 'src/email/email.service';
 import { ResidentsService } from 'src/residents/residents.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Injectable()
 export class EventsService {
@@ -25,7 +25,7 @@ export class EventsService {
     await Promise.all(
       registeredResidents.map(async (resident) => {
         // Message
-        const message: string = `Hi Mr/Mrs. ${resident.firstname} ${
+        const message = `Hi Mr/Mrs. ${resident.firstname} ${
           resident.lastname
         } 🎉 Join us at ${payload.location} on ${moment(
           payload.eventDate,

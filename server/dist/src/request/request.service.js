@@ -28,13 +28,15 @@ const twilio_service_1 = require("../twilio/twilio.service");
 const residents_service_1 = require("../residents/residents.service");
 const notification_service_1 = require("../notification/notification.service");
 const email_service_1 = require("../email/email.service");
+const mailgun_service_1 = require("../mailgun/mailgun.service");
 let RequestService = class RequestService {
-    constructor(prisma, twilioService, residentService, notificationService, emailService) {
+    constructor(prisma, twilioService, residentService, notificationService, emailService, mailGunService) {
         this.prisma = prisma;
         this.twilioService = twilioService;
         this.residentService = residentService;
         this.notificationService = notificationService;
         this.emailService = emailService;
+        this.mailGunService = mailGunService;
         this.selectRequestProperties = {
             id: true,
             requestType: true,
@@ -76,10 +78,10 @@ let RequestService = class RequestService {
             const isCompleted = payload.status === client_1.REQUEST_STATUS.COMPLETED;
             const isClaimed = payload.status === client_1.REQUEST_STATUS.CLAIMED;
             if (payload.status !== 'PENDING') {
-                const { firstname, lastname, contact } = await this.residentService.findOne(payload.residentId);
+                const { firstname, lastname, contact, email } = await this.residentService.findOne(payload.residentId);
                 const completeName = `${firstname} ${lastname}`;
                 const body = this.twilioService.notifyResident(completeName, payload.requestType, payload.status);
-                await this.twilioService.sendSms(contact, body);
+                await this.mailGunService.sendMail({ text: body, to: email });
                 await this.notificationService.create({
                     message: body,
                     notificationType: 'SMS',
@@ -131,7 +133,8 @@ RequestService = __decorate([
         twilio_service_1.TwilioService,
         residents_service_1.ResidentsService,
         notification_service_1.NotificationService,
-        email_service_1.EmailService])
+        email_service_1.EmailService,
+        mailgun_service_1.MailgunService])
 ], RequestService);
 exports.RequestService = RequestService;
 //# sourceMappingURL=request.service.js.map

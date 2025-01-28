@@ -1,8 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setGlobalSetting = void 0;
 const common_1 = require("@nestjs/common");
-const compression = require("compression");
+const compression_1 = __importDefault(require("compression"));
 const express_1 = require("express");
 const nestjs_pino_1 = require("nestjs-pino");
 const setGlobalSetting = (app) => {
@@ -24,7 +27,7 @@ const setGlobalSetting = (app) => {
         allowedHeaders: 'Content-Type, Authorization',
         credentials: true,
     });
-    app.use(compression());
+    app.use((0, compression_1.default)());
     return app;
 };
 exports.setGlobalSetting = setGlobalSetting;

@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EventsService = void 0;
 const common_1 = require("@nestjs/common");
@@ -16,7 +19,7 @@ const client_1 = require("@prisma/client");
 const twilio_service_1 = require("../twilio/twilio.service");
 const email_service_1 = require("../email/email.service");
 const residents_service_1 = require("../residents/residents.service");
-const moment = require("moment");
+const moment_1 = __importDefault(require("moment"));
 let EventsService = class EventsService {
     constructor(prisma, twilioService, emailService, residentService) {
         this.prisma = prisma;
@@ -27,7 +30,7 @@ let EventsService = class EventsService {
     async notificationBlasting(payload) {
         const registeredResidents = await this.residentService.fetchByStatus('REGISTERED');
         await Promise.all(registeredResidents.map(async (resident) => {
-            const message = `Hi Mr/Mrs. ${resident.firstname} ${resident.lastname} 🎉 Join us at ${payload.location} on ${moment(payload.eventDate).format('MM/DD/YYYY')} at ${moment(payload.eventDate).format('LT')} for ${payload.eventName}. ${payload.description}`;
+            const message = `Hi Mr/Mrs. ${resident.firstname} ${resident.lastname} 🎉 Join us at ${payload.location} on ${(0, moment_1.default)(payload.eventDate).format('MM/DD/YYYY')} at ${(0, moment_1.default)(payload.eventDate).format('LT')} for ${payload.eventName}. ${payload.description}`;
             await this.twilioService.sendSms(resident.contact, message);
             return resident;
         }));

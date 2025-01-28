@@ -6,6 +6,7 @@ import { TwilioService } from 'src/twilio/twilio.service';
 import { ResidentsService } from 'src/residents/residents.service';
 import { NotificationService } from 'src/notification/notification.service';
 import { EmailService } from 'src/email/email.service';
+import { MailgunService } from 'src/mailgun/mailgun.service';
 
 @Module({
   providers: [
@@ -15,6 +16,7 @@ import { EmailService } from 'src/email/email.service';
     ResidentsService,
     NotificationService,
     EmailService,
+    MailgunService,
   ],
   controllers: [RequestController],
 })
