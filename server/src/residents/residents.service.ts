@@ -98,7 +98,7 @@ export class ResidentsService {
       await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
-      // await this.emailService.sendMail({ to: payload.email, message });
+      await this.emailService.sendMail({ to: payload.email, text: message });
     } catch (err) {
       throw err;
     }

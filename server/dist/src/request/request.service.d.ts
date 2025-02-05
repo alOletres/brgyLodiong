@@ -18,8 +18,8 @@ export declare class RequestService {
     create(payload: CreateRequestDto): Promise<{
         id: number;
         residentId: number;
-        requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;
@@ -30,8 +30,8 @@ export declare class RequestService {
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
         residentId: number;
-        requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;

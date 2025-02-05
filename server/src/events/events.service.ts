@@ -34,7 +34,7 @@ export class EventsService {
         )} for ${payload.eventName}. ${payload.description}`;
 
         // Send event ot every resident email
-        // await this.emailService.sendMail({ to: resident.email, message });
+        await this.emailService.sendMail({ to: resident.email, text: message });
 
         // Send events to every residents mobile number
         await this.twilioService.sendSms(resident.contact, message);

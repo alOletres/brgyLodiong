@@ -79,7 +79,7 @@ export class RequestService {
         );
 
         // Send email to resident
-        await this.mailGunService.sendMail({ text: body, to: email });
+        await this.emailService.sendMail({ text: body, to: email });
 
         // Send sms to one resident regarding for his or her request status
         // await this.twilioService.sendSms(contact, body);

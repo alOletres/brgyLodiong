@@ -7,8 +7,8 @@ export declare class RequestController {
     create(payload: CreateRequestDto): Promise<{
         id: number;
         residentId: number;
-        requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;
@@ -19,8 +19,8 @@ export declare class RequestController {
     update(id: number, payload: CreateRequestDto): Promise<{
         id: number;
         residentId: number;
-        requestType: string;
         status: import(".prisma/client").$Enums.REQUEST_STATUS;
+        requestType: string;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;

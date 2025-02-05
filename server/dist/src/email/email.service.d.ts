@@ -2,8 +2,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 export declare class EmailService {
     private readonly mailService;
     constructor(mailService: MailerService);
-    sendMail({ to, message }: {
+    sendMail(payload: {
         to: string;
-        message: string;
+        text: string;
     }): Promise<void>;
 }
