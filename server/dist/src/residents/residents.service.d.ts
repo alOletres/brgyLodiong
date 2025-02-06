@@ -16,16 +16,16 @@ export declare class ResidentsService {
     update(id: number, { password, role, ...payload }: CreateResidentsDto): Promise<void>;
     fetch(): Promise<FindAllResidentsDto[]>;
     findOne(id: number): Promise<{
-        id: number;
-        status: import(".prisma/client").$Enums.RESIDENT_STATUS;
-        createdAt: Date;
-        firstname: string;
         civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
+        firstname: string;
         lastname: string;
         email: string;
         contact: string;
         address: string;
+        status: import(".prisma/client").$Enums.RESIDENT_STATUS;
         disApprovedReason: string;
+        id: number;
+        createdAt: Date;
         requestsId: number;
     }>;
     fetchByStatus(status: RESIDENT_STATUS): Promise<FindAllResidentsDto[]>;

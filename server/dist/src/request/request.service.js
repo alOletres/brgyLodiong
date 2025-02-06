@@ -82,6 +82,7 @@ let RequestService = class RequestService {
                 const completeName = `${firstname} ${lastname}`;
                 const body = this.twilioService.notifyResident(completeName, payload.requestType, payload.status);
                 await this.emailService.sendMail({ text: body, to: email });
+                await this.twilioService.sendSms(contact, body);
                 await this.notificationService.create({
                     message: body,
                     notificationType: 'SMS',

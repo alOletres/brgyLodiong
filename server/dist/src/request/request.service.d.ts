@@ -16,9 +16,9 @@ export declare class RequestService {
     private selectRequestProperties;
     constructor(prisma: PrismaService, twilioService: TwilioService, residentService: ResidentsService, notificationService: NotificationService, emailService: EmailService, mailGunService: MailgunService);
     create(payload: CreateRequestDto): Promise<{
+        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         id: number;
         residentId: number;
-        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         requestType: string;
         rejectionReason: string;
         purpose: string;
@@ -28,9 +28,9 @@ export declare class RequestService {
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
+        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         id: number;
         residentId: number;
-        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         requestType: string;
         rejectionReason: string;
         purpose: string;
