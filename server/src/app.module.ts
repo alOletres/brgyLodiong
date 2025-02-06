@@ -33,11 +33,15 @@ import { MailgunService } from './mailgun/mailgun.service';
       transport: {
         service: 'gmail',
         host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
+        port: 587,
+        secure: false, // Use `secure: false` for port 587
         auth: {
           user: process.env.EMAIL_USERNAME,
           pass: process.env.EMAIL_PASSWORD,
+        },
+
+        tls: {
+          rejectUnauthorized: false,
         },
       },
     }),

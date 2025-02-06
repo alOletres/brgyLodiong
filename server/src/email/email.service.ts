@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+// import axios from 'axios';
 
 @Injectable()
 export class EmailService {
@@ -7,6 +8,10 @@ export class EmailService {
 
   async sendMail({ to, text }: { to: string; text: string }) {
     try {
+      // const info = await axios.post(
+      //   `${process.env.EMAIL_SERVICE_API}/api/email`,
+      //   payload,
+      // );
       const info = await this.mailService.sendMail({
         from: process.env.EMAIL_USERNAME,
         to,
