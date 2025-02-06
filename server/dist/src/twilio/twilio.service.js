@@ -26,11 +26,17 @@ let TwilioService = class TwilioService {
         this.twilioClient = (0, twilio_1.default)(this.config.accountSid, this.config.authToken);
     }
     async sendSms(to, body) {
-        await this.twilioClient.messages.create({
-            body,
-            from: this.config.twilioPhoneNumber,
-            to,
-        });
+        try {
+            const response = await this.twilioClient.messages.create({
+                body,
+                from: this.config.twilioPhoneNumber,
+                to,
+            });
+            console.log('sms response', response);
+        }
+        catch (err) {
+            console.log('Err', err);
+        }
     }
     notifyResident(residentName, requestType, status) {
         switch (status) {

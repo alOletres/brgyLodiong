@@ -98,6 +98,7 @@ let ResidentsService = class ResidentsService {
             await this.emailService.sendMail({ to: payload.email, text: message });
         }
         catch (err) {
+            console.log('err', err);
             throw err;
         }
     }

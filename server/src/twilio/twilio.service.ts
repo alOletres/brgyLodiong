@@ -24,11 +24,17 @@ export class TwilioService {
   }
 
   async sendSms(to: string, body: string): Promise<void> {
-    await this.twilioClient.messages.create({
-      body,
-      from: this.config.twilioPhoneNumber,
-      to,
-    });
+    try {
+      const response = await this.twilioClient.messages.create({
+        body,
+        from: this.config.twilioPhoneNumber,
+        to,
+      });
+
+      console.log('sms response', response);
+    } catch (err) {
+      console.log('Err', err);
+    }
   }
 
   notifyResident(
