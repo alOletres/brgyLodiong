@@ -35,7 +35,6 @@ export const RequestTypeArray: string[] = Object.values(ECERTIFICATES).sort(
 export const RequestStatusArray: RequestStatus[] = [
   "PENDING",
   "APPROVED",
-  "COMPLETED",
   "CLAIMED",
   "UNCLAIMED",
 ];
