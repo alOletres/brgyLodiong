@@ -87,7 +87,7 @@ interface Props<T extends Maybe<AnyObject>> extends Partial<ModalProps> {
   open: boolean;
   title: string;
   btnName?: string;
-  modalFor?: "form" | "list";
+  modalFor?: "form" | "list" | "stepper";
   width?: number;
 }
 
@@ -110,6 +110,132 @@ const CustomModal = ({
     isDateTimeField,
   } = useModalHook();
 
+  // Custom formFields
+  const FormFields = (formProps: ModalFormProps<any>) => {
+    return (
+      <Box sx={{ width: "100%", alignItems: "center", maxHeight: "80vh" }}>
+        <Formik
+          initialValues={formProps.initialValues}
+          validationSchema={formProps.validationSchema}
+          onSubmit={formProps.handleSubmit}
+          enableReinitialize
+        >
+          {({ submitForm, isSubmitting, setFieldValue, values }) => {
+            return (
+              <Form>
+                {formProps.fields.map((field, index) => {
+                  if (isInputField(field)) {
+                    return (
+                      <Input
+                        {...field.fieldProps}
+                        onChange={(e) => {
+                          if (field.fieldProps.name) {
+                            if (field.fieldProps.type === "file") {
+                              const target = e.target as HTMLInputElement; // Type assertion
+
+                              const file = target.files?.[0];
+
+                              setFieldValue(field.fieldProps.name, file); // Update Formik state with file object
+                            } else {
+                              setFieldValue(
+                                field.fieldProps.name,
+                                e.target.value
+                              ); // Handle other input types
+                            }
+                          }
+                        }}
+                        key={index}
+                      />
+                    );
+                  }
+
+                  if (isSelectField(field)) {
+                    const { handleSelectChange, onChange, ...props } =
+                      field.fieldProps;
+
+                    return (
+                      <Select
+                        {...props}
+                        handleChange={(e) => {
+                          if (field.fieldProps.name) {
+                            setFieldValue(field.fieldProps.name, e);
+                          }
+
+                          if (handleSelectChange) {
+                            const { propertyName, value } =
+                              handleSelectChange(e);
+
+                            setFieldValue(propertyName, value);
+                          }
+                        }}
+                        value={values[props.name as string]}
+                        key={index}
+                      />
+                    );
+                  }
+
+                  if (isTextAreaField(field)) {
+                    return (
+                      <TextArea
+                        {...field.fieldProps}
+                        onChange={(e) => {
+                          if (field.fieldProps.name) {
+                            setFieldValue(
+                              field.fieldProps.name,
+                              e.target.value
+                            );
+                          }
+                        }}
+                        key={index}
+                      />
+                    );
+                  }
+
+                  if (isDateField(field)) {
+                    return (
+                      <DatePicker
+                        {...field.fieldProps}
+                        key={index}
+                        onChange={(e) => {
+                          if (field.fieldProps.name) {
+                            setFieldValue(field.fieldProps.name, e);
+                          }
+                        }}
+                      />
+                    );
+                  }
+
+                  if (isDateTimeField(field)) {
+                    return (
+                      <CustomDateTimePicker
+                        {...field.fieldProps}
+                        key={index}
+                        onChange={(e) => {
+                          if (field.fieldProps.name) {
+                            setFieldValue(field.fieldProps.name, e);
+                          }
+                        }}
+                      />
+                    );
+                  }
+                })}
+                <Box sx={saveButtonWrapper}>
+                  <Button
+                    disabled={isSubmitting}
+                    variant="contained"
+                    onClick={submitForm}
+                  >
+                    {btnName}
+                  </Button>
+                </Box>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Box>
+    );
+  };
+
   return (
     <Modal keepMounted open={open} onClose={handleClose} {...props}>
       <Box
@@ -120,126 +246,7 @@ const CustomModal = ({
       >
         <Typography>{title}</Typography>
         {modalFor === "form" && formProps ? (
-          <Box sx={{ width: "100%", alignItems: "center", maxHeight: "80vh" }}>
-            <Formik
-              initialValues={formProps.initialValues}
-              validationSchema={formProps.validationSchema}
-              onSubmit={formProps.handleSubmit}
-              enableReinitialize
-            >
-              {({ submitForm, isSubmitting, setFieldValue, values }) => {
-                return (
-                  <Form>
-                    {formProps.fields.map((field, index) => {
-                      if (isInputField(field)) {
-                        return (
-                          <Input
-                            {...field.fieldProps}
-                            onChange={(e) => {
-                              if (field.fieldProps.name) {
-                                if (field.fieldProps.type === "file") {
-                                  const target = e.target as HTMLInputElement; // Type assertion
-
-                                  const file = target.files?.[0];
-
-                                  setFieldValue(field.fieldProps.name, file); // Update Formik state with file object
-                                } else {
-                                  setFieldValue(
-                                    field.fieldProps.name,
-                                    e.target.value
-                                  ); // Handle other input types
-                                }
-                              }
-                            }}
-                            key={index}
-                          />
-                        );
-                      }
-
-                      if (isSelectField(field)) {
-                        const { handleSelectChange, onChange, ...props } =
-                          field.fieldProps;
-
-                        return (
-                          <Select
-                            {...props}
-                            handleChange={(e) => {
-                              if (field.fieldProps.name) {
-                                setFieldValue(field.fieldProps.name, e);
-                              }
-
-                              if (handleSelectChange) {
-                                const { propertyName, value } =
-                                  handleSelectChange(e);
-
-                                setFieldValue(propertyName, value);
-                              }
-                            }}
-                            value={values[props.name as string]}
-                            key={index}
-                          />
-                        );
-                      }
-
-                      if (isTextAreaField(field)) {
-                        return (
-                          <TextArea
-                            {...field.fieldProps}
-                            onChange={(e) => {
-                              if (field.fieldProps.name) {
-                                setFieldValue(
-                                  field.fieldProps.name,
-                                  e.target.value
-                                );
-                              }
-                            }}
-                            key={index}
-                          />
-                        );
-                      }
-
-                      if (isDateField(field)) {
-                        return (
-                          <DatePicker
-                            {...field.fieldProps}
-                            key={index}
-                            onChange={(e) => {
-                              if (field.fieldProps.name) {
-                                setFieldValue(field.fieldProps.name, e);
-                              }
-                            }}
-                          />
-                        );
-                      }
-
-                      if (isDateTimeField(field)) {
-                        return (
-                          <CustomDateTimePicker
-                            {...field.fieldProps}
-                            key={index}
-                            onChange={(e) => {
-                              if (field.fieldProps.name) {
-                                setFieldValue(field.fieldProps.name, e);
-                              }
-                            }}
-                          />
-                        );
-                      }
-                    })}
-                    <Box sx={saveButtonWrapper}>
-                      <Button
-                        disabled={isSubmitting}
-                        variant="contained"
-                        onClick={submitForm}
-                      >
-                        {btnName}
-                      </Button>
-                    </Box>
-                  </Form>
-                );
-              }}
-            </Formik>
-          </Box>
+          <FormFields {...formProps} />
         ) : modalFor === "list" && listProps ? (
           <Box sx={{ width: "100%", alignItems: "center" }}>
             <Table

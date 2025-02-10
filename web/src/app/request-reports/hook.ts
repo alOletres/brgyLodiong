@@ -123,11 +123,11 @@ export const useHook = () => {
         // Normalize dates to 'YYYY-MM-DD' to compare only year, month, and day
         const startDate = dayjs(values.startDate).startOf("day");
         const endDate = dayjs(values.endDate).startOf("day");
-        const completedDate = dayjs(request.dateCompleted).startOf("day");
+        const claimedDate = dayjs(request.dateClaimed).startOf("day");
 
-        const isDateInRange = request.dateCompleted
-          ? endDate.isSameOrAfter(completedDate) &&
-            startDate.isSameOrBefore(completedDate)
+        const isDateInRange = request.dateClaimed
+          ? endDate.isSameOrAfter(claimedDate) &&
+            startDate.isSameOrBefore(claimedDate)
           : false;
 
         const {
