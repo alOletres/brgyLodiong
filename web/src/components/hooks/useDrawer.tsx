@@ -66,7 +66,11 @@ export const useHooks = () => {
         { icon: <Person2Rounded />, link: OFFICIALS },
         { icon: <ListAltOutlined />, link: REQUEST },
         { icon: <EventAvailableOutlined />, link: EVENTS },
-        { icon: <NotificationAddOutlined />, link: NOTIFICATIONS },
+        {
+          icon: <NotificationAddOutlined />,
+          link: NOTIFICATIONS,
+          label: "Transaction History",
+        },
       ]);
     }
 

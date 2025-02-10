@@ -20,18 +20,23 @@ const twilio_service_1 = require("../twilio/twilio.service");
 const email_service_1 = require("../email/email.service");
 const residents_service_1 = require("../residents/residents.service");
 const moment_1 = __importDefault(require("moment"));
+const mailgun_service_1 = require("../mailgun/mailgun.service");
 let EventsService = class EventsService {
-    constructor(prisma, twilioService, emailService, residentService) {
+    constructor(prisma, twilioService, emailService, mailgunService, residentService) {
         this.prisma = prisma;
         this.twilioService = twilioService;
         this.emailService = emailService;
+        this.mailgunService = mailgunService;
         this.residentService = residentService;
     }
     async notificationBlasting(payload) {
         const registeredResidents = await this.residentService.fetchByStatus('REGISTERED');
         await Promise.all(registeredResidents.map(async (resident) => {
             const message = `Hi Mr/Mrs. ${resident.firstname} ${resident.lastname} 🎉 Join us at ${payload.location} on ${(0, moment_1.default)(payload.eventDate).format('MM/DD/YYYY')} at ${(0, moment_1.default)(payload.eventDate).format('LT')} for ${payload.eventName}. ${payload.description}`;
-            await this.emailService.sendMail({ to: resident.email, text: message });
+            await this.mailgunService.sendMail({
+                to: resident.email,
+                text: message,
+            });
             await this.twilioService.sendSms(resident.contact, message);
             return resident;
         }));
@@ -65,6 +70,7 @@ EventsService = __decorate([
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         twilio_service_1.TwilioService,
         email_service_1.EmailService,
+        mailgun_service_1.MailgunService,
         residents_service_1.ResidentsService])
 ], EventsService);
 exports.EventsService = EventsService;

@@ -7,6 +7,7 @@ import { Prisma, RESIDENT_STATUS } from '@prisma/client';
 import { TwilioService } from 'src/twilio/twilio.service';
 import { EmailService } from 'src/email/email.service';
 import { NotificationService } from 'src/notification/notification.service';
+import { MailgunService } from 'src/mailgun/mailgun.service';
 
 @Injectable()
 export class ResidentsService {
@@ -15,6 +16,7 @@ export class ResidentsService {
     private readonly twilioService: TwilioService,
     private readonly emailService: EmailService,
     private readonly notificationService: NotificationService,
+    private readonly mailGunService: MailgunService,
   ) {}
 
   private selectedResidents = {
@@ -57,7 +59,7 @@ export class ResidentsService {
       await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
-      await this.emailService.sendMail({ to: payload.email, text: message });
+      await this.mailGunService.sendMail({ to: payload.email, text: message });
     } catch (err) {
       console.log('err', err);
 

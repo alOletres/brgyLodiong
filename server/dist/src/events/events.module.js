@@ -15,6 +15,7 @@ const email_service_1 = require("../email/email.service");
 const twilio_service_1 = require("../twilio/twilio.service");
 const residents_service_1 = require("../residents/residents.service");
 const notification_service_1 = require("../notification/notification.service");
+const mailgun_service_1 = require("../mailgun/mailgun.service");
 let EventsModule = class EventsModule {
 };
 EventsModule = __decorate([
@@ -26,6 +27,7 @@ EventsModule = __decorate([
             email_service_1.EmailService,
             twilio_service_1.TwilioService,
             notification_service_1.NotificationService,
+            mailgun_service_1.MailgunService,
         ],
         controllers: [events_controller_1.EventsController],
     })

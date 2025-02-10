@@ -28,12 +28,14 @@ const client_1 = require("@prisma/client");
 const twilio_service_1 = require("../twilio/twilio.service");
 const email_service_1 = require("../email/email.service");
 const notification_service_1 = require("../notification/notification.service");
+const mailgun_service_1 = require("../mailgun/mailgun.service");
 let ResidentsService = class ResidentsService {
-    constructor(prisma, twilioService, emailService, notificationService) {
+    constructor(prisma, twilioService, emailService, notificationService, mailGunService) {
         this.prisma = prisma;
         this.twilioService = twilioService;
         this.emailService = emailService;
         this.notificationService = notificationService;
+        this.mailGunService = mailGunService;
         this.selectedResidents = {
             id: true,
             firstname: true,
@@ -65,7 +67,7 @@ let ResidentsService = class ResidentsService {
             });
             const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
             await this.twilioService.sendSms(payload.contact, message);
-            await this.emailService.sendMail({ to: payload.email, text: message });
+            await this.mailGunService.sendMail({ to: payload.email, text: message });
         }
         catch (err) {
             console.log('err', err);
@@ -148,7 +150,8 @@ ResidentsService = __decorate([
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         twilio_service_1.TwilioService,
         email_service_1.EmailService,
-        notification_service_1.NotificationService])
+        notification_service_1.NotificationService,
+        mailgun_service_1.MailgunService])
 ], ResidentsService);
 exports.ResidentsService = ResidentsService;
 //# sourceMappingURL=residents.service.js.map

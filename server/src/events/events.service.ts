@@ -7,6 +7,7 @@ import { TwilioService } from 'src/twilio/twilio.service';
 import { EmailService } from 'src/email/email.service';
 import { ResidentsService } from 'src/residents/residents.service';
 import moment from 'moment';
+import { MailgunService } from 'src/mailgun/mailgun.service';
 
 @Injectable()
 export class EventsService {
@@ -14,6 +15,7 @@ export class EventsService {
     private readonly prisma: PrismaService,
     private readonly twilioService: TwilioService,
     private readonly emailService: EmailService,
+    private readonly mailgunService: MailgunService,
     private readonly residentService: ResidentsService,
   ) {}
 
@@ -34,7 +36,10 @@ export class EventsService {
         )} for ${payload.eventName}. ${payload.description}`;
 
         // Send event ot every resident email
-        await this.emailService.sendMail({ to: resident.email, text: message });
+        await this.mailgunService.sendMail({
+          to: resident.email,
+          text: message,
+        });
 
         // Send events to every residents mobile number
         await this.twilioService.sendSms(resident.contact, message);
