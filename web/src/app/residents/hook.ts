@@ -397,7 +397,7 @@ export const useHooks = () => {
         contact: `+63${values.contact}`,
       };
 
-      console.log("image files", imageFile);
+      console.log("image files", files);
 
       const formData = new FormData();
 
@@ -412,7 +412,7 @@ export const useHooks = () => {
         }
       }
 
-      // await edit(id, formData);
+      await edit(id, formData);
 
       setOpen(false);
       setBtnName("Submit");
@@ -422,6 +422,11 @@ export const useHooks = () => {
 
       setSnackbarProps({ message: err?.message, severity: "error" });
     }
+  };
+
+  // Handle file changes
+  const handleFileChange = (files: File[]) => {
+    setFiles(files);
   };
 
   const handleSubmit = useCallback(
@@ -443,12 +448,6 @@ export const useHooks = () => {
     [btnName]
   );
 
-  useEffect(() => {
-    if (files.length) {
-      setImage(files);
-    }
-  }, [files]);
-
   const formProps: CustomFormGroupProps = {
     initialValues: formValues,
     validationSchema:
@@ -459,16 +458,11 @@ export const useHooks = () => {
   };
 
   const fileUploaderProps: FileUploadProps = {
-    onChange: (newFiles) => {
-      console.log("New files from child:", newFiles);
-      setImage(newFiles);
-      setFiles(newFiles);
-    },
+    onChange: handleFileChange,
     value: files,
     handleSubmit: () => console.log("Upload images"),
     multiple: false,
     accept: ["image/jpeg", "image/png"],
-    // handleSetImage: (files: File[]) => console.log("Set image", files),
   };
 
   // Create stepper props here!

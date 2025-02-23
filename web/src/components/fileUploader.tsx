@@ -20,7 +20,6 @@ export interface FileUploadProps {
   handleSubmit: () => void;
   btnName?: string;
   onFileChange?: (hasFile: boolean) => void; // ✅ New Prop
-  // handleSetImage: (image: File[]) => void;
 }
 
 const MIMETypes = [
