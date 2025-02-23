@@ -468,7 +468,7 @@ export const useHooks = () => {
     handleSubmit: () => console.log("Upload images"),
     multiple: false,
     accept: ["image/jpeg", "image/png"],
-    handleSetImage: (files: File[]) => console.log("Set image", files),
+    // handleSetImage: (files: File[]) => console.log("Set image", files),
   };
 
   // Create stepper props here!

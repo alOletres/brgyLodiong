@@ -20,7 +20,7 @@ export interface FileUploadProps {
   handleSubmit: () => void;
   btnName?: string;
   onFileChange?: (hasFile: boolean) => void; // ✅ New Prop
-  handleSetImage: (image: File[]) => void;
+  // handleSetImage: (image: File[]) => void;
 }
 
 const MIMETypes = [
@@ -44,15 +44,15 @@ const MUIFileUpload = ({
   handleSubmit,
   btnName,
   onFileChange, // ✅ Capture the prop
-  handleSetImage,
-}: //
+}: // handleSetImage,
+//
 FileUploadProps) => {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   // ✅ Effect: Trigger onFileChange when value changes
   useEffect(() => {
     if (value.length > 0) {
-      handleSetImage(value);
+      // handleSetImage(value);
       onFileChange?.(true);
     } else {
       onFileChange?.(false);
@@ -76,7 +76,7 @@ FileUploadProps) => {
           )
         : newFiles;
 
-      handleSetImage(finalFiles);
+      // handleSetImage(finalFiles);
 
       onChange(finalFiles);
       onFileChange?.(finalFiles.length > 0);
