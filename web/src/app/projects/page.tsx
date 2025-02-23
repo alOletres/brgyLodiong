@@ -20,6 +20,11 @@ const ProjectsPage = () => {
     btnName,
     tableCellActions,
     handleSearch,
+    openModalFiles,
+    handleToggleAttachFiles,
+    files,
+    setFiles,
+    handleUploadFiles,
   } = useHooks();
 
   return (
@@ -37,6 +42,22 @@ const ProjectsPage = () => {
         btnName={btnName}
         width={500}
       />
+
+      <Modal
+        title="Attach Document Narrative"
+        open={openModalFiles}
+        handleClose={handleToggleAttachFiles}
+        modalFor="fileUploader"
+        fileUploaderProps={{
+          onChange: setFiles,
+          value: files,
+          multiple: true,
+          handleSubmit: handleUploadFiles,
+          btnName: "Upload Files",
+        }}
+        width={500}
+      />
+
       <SearchBar label="Search project" onChange={handleSearch} />
       <CustomTable
         tableHeader="Projects list"

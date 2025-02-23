@@ -172,7 +172,11 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
                     {label.icon}
                   </ListItemIcon>
                   <ListItemText
-                    primary={label.link}
+                    primary={
+                      label.link === "notifications"
+                        ? "Transaction History"
+                        : label.link
+                    }
                     sx={[
                       { textTransform: "capitalize" },
                       open

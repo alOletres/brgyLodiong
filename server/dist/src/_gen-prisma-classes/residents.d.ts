@@ -5,6 +5,7 @@ import { EventNotifications } from './event_notifications';
 import { CIVIL_STATUS, RESIDENT_STATUS } from '@prisma/client';
 export declare class Residents {
     id: number;
+    image?: string;
     firstname: string;
     civilStatus: CIVIL_STATUS;
     lastname: string;

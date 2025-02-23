@@ -21,6 +21,7 @@ export class ResidentsService {
 
   private selectedResidents = {
     id: true,
+    image: true,
     firstname: true,
     lastname: true,
     civilStatus: true,
@@ -45,6 +46,7 @@ export class ResidentsService {
       await this.prisma.residents.create({
         data: {
           ...payload,
+          status: 'PENDING',
           Auth: {
             create: {
               email: payload.email,
@@ -56,10 +58,10 @@ export class ResidentsService {
       });
       const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
       // Send to resident mobile number
-      await this.twilioService.sendSms(payload.contact, message);
+      // await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
-      await this.mailGunService.sendMail({ to: payload.email, text: message });
+      // await this.mailGunService.sendMail({ to: payload.email, text: message });
     } catch (err) {
       console.log('err', err);
 
@@ -97,10 +99,10 @@ export class ResidentsService {
       }
 
       // Send to resident mobile number
-      await this.twilioService.sendSms(payload.contact, message);
+      // await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
-      await this.emailService.sendMail({ to: payload.email, text: message });
+      // await this.emailService.sendMail({ to: payload.email, text: message });
     } catch (err) {
       console.log('err', err);
 
@@ -159,6 +161,17 @@ export class ResidentsService {
 
           role: Auth?.role || 'RESIDENT',
         };
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async updateResidentStatus(id: number, status: RESIDENT_STATUS) {
+    try {
+      return await this.prisma.residents.update({
+        where: { id },
+        data: { status },
       });
     } catch (err) {
       throw err;

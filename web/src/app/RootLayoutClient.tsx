@@ -11,7 +11,7 @@ export default function RootLayoutClient({
   const pathname = usePathname(); // Client-side hook
 
   // Check if the current route is the login page
-  const isLoginPage = pathname === "/";
+  const isLoginPage = pathname === "/" || pathname === "/signup";
 
   return (
     <>

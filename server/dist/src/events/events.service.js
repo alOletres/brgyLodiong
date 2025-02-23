@@ -17,15 +17,13 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const client_1 = require("@prisma/client");
 const twilio_service_1 = require("../twilio/twilio.service");
-const email_service_1 = require("../email/email.service");
 const residents_service_1 = require("../residents/residents.service");
 const moment_1 = __importDefault(require("moment"));
 const mailgun_service_1 = require("../mailgun/mailgun.service");
 let EventsService = class EventsService {
-    constructor(prisma, twilioService, emailService, mailgunService, residentService) {
+    constructor(prisma, twilioService, mailgunService, residentService) {
         this.prisma = prisma;
         this.twilioService = twilioService;
-        this.emailService = emailService;
         this.mailgunService = mailgunService;
         this.residentService = residentService;
     }
@@ -44,7 +42,6 @@ let EventsService = class EventsService {
     async create(payload) {
         try {
             await this.prisma.events.create({ data: Object.assign({}, payload) });
-            await this.notificationBlasting(payload);
         }
         catch (err) {
             throw err;
@@ -53,7 +50,6 @@ let EventsService = class EventsService {
     async update(id, payload) {
         try {
             await this.prisma.events.update({ where: { id }, data: Object.assign({}, payload) });
-            await this.notificationBlasting(payload);
         }
         catch (err) {
             throw err;
@@ -69,7 +65,6 @@ EventsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         twilio_service_1.TwilioService,
-        email_service_1.EmailService,
         mailgun_service_1.MailgunService,
         residents_service_1.ResidentsService])
 ], EventsService);

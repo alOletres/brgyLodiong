@@ -17,6 +17,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailService } from './email/email.service';
 import { NotificationService } from './notification/notification.service';
 import { MailgunService } from './mailgun/mailgun.service';
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     AuthModule,
@@ -29,6 +30,7 @@ import { MailgunService } from './mailgun/mailgun.service';
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    MulterModule.register({ dest: './uploads' }),
     MailerModule.forRoot({
       transport: {
         service: 'gmail',

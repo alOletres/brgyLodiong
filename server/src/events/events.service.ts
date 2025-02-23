@@ -4,7 +4,6 @@ import { CreateEventsDto } from './dto/create-events.dto';
 import { Prisma } from '@prisma/client';
 import { FindAllEventsDto } from './dto/findall-events.dto';
 import { TwilioService } from 'src/twilio/twilio.service';
-import { EmailService } from 'src/email/email.service';
 import { ResidentsService } from 'src/residents/residents.service';
 import moment from 'moment';
 import { MailgunService } from 'src/mailgun/mailgun.service';
@@ -14,7 +13,6 @@ export class EventsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly twilioService: TwilioService,
-    private readonly emailService: EmailService,
     private readonly mailgunService: MailgunService,
     private readonly residentService: ResidentsService,
   ) {}
@@ -52,7 +50,7 @@ export class EventsService {
     try {
       await this.prisma.events.create({ data: { ...payload } });
 
-      await this.notificationBlasting(payload);
+      // await this.notificationBlasting(payload);
     } catch (err) {
       throw err;
     }
@@ -62,7 +60,7 @@ export class EventsService {
     try {
       await this.prisma.events.update({ where: { id }, data: { ...payload } });
 
-      await this.notificationBlasting(payload);
+      // await this.notificationBlasting(payload);
     } catch (err) {
       throw err;
     }

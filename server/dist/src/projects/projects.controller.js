@@ -19,6 +19,9 @@ const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const create_projects_dto_1 = require("./dto/create-projects.dto");
 const swagger_1 = require("@nestjs/swagger");
 const find_all_projects_dto_1 = require("./dto/find-all-projects.dto");
+const multer_1 = require("../lib/multer");
+const platform_express_1 = require("@nestjs/platform-express");
+const filereader_1 = require("../lib/filereader");
 let ProjectsController = class ProjectsController {
     constructor(projectsService) {
         this.projectsService = projectsService;
@@ -28,6 +31,13 @@ let ProjectsController = class ProjectsController {
     }
     async update(id, payload) {
         return await this.projectsService.update(id, payload);
+    }
+    async uploadFiles(id, files) {
+        if (!files || files.length === 0) {
+            throw new common_1.BadRequestException('No files uploaded');
+        }
+        const documents = files.map((file) => (0, filereader_1.generateFileName)(file));
+        return await this.projectsService.uploadFiles(id, documents);
     }
     async fetch() {
         return await this.projectsService.fetch();
@@ -48,6 +58,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, create_projects_dto_1.CreateProjectsDto]),
     __metadata("design:returntype", Promise)
 ], ProjectsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Put)('files/:id'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', 10, multer_1.multerOption)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Array]),
+    __metadata("design:returntype", Promise)
+], ProjectsController.prototype, "uploadFiles", null);
 __decorate([
     (0, common_1.Get)('/'),
     (0, swagger_1.ApiExtraModels)(find_all_projects_dto_1.FindAllProjectsDto),

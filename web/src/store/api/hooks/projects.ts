@@ -7,6 +7,7 @@ export const useProjectsApi = () => {
 
   const [create] = projectsApi.useProjectsControllerCreateMutation();
   const [update] = projectsApi.useProjectsControllerUpdateMutation();
+  const [uploadFiles] = projectsApi.useProjectsControllerUploadFilesMutation();
 
   const handleCreate = async (payload: CreateProjectsDto) => {
     try {
@@ -26,5 +27,20 @@ export const useProjectsApi = () => {
       throw err;
     }
   };
-  return { isFetchingProjects, projects, handleCreate, handleUpdate };
+
+  const handleUploadFiles = async (id: number, files: FormData) => {
+    try {
+      const result = await uploadFiles({ id, formData: files });
+      handleErrors(result);
+    } catch (err) {
+      throw err;
+    }
+  };
+  return {
+    isFetchingProjects,
+    projects,
+    handleCreate,
+    handleUpdate,
+    handleUploadFiles,
+  };
 };

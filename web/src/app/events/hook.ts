@@ -4,7 +4,11 @@ import {
   HeaderActions,
   TableActions,
 } from "@/components/Table";
-import { CreateEventsDto, FindAllEventsDto } from "@/store/api/gen/event";
+import {
+  CreateEventsDto,
+  EventStatus,
+  FindAllEventsDto,
+} from "@/store/api/gen/event";
 import { useEventsApi } from "@/store/api/hooks/event";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
@@ -17,6 +21,7 @@ import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { CustomDateTimePickerProps } from "@/components/DateTimePicker";
 import { decodeToken } from "@/lib/tokenStorage";
 import { DecodedTokenValues } from "@/components/hooks/useDrawer";
+import { OptionSelect, SelectFieldProps } from "@/components/Select";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const initialValues: CreateEventsDto | any = {
@@ -24,7 +29,10 @@ const initialValues: CreateEventsDto | any = {
   description: "",
   location: "",
   eventDate: "",
+  status: "ONGOING",
 };
+
+const eventStatusArray: EventStatus[] = ["SUCCEED", "ONGOING", "CANCELED"];
 
 export const useHooks = () => {
   const {
@@ -60,6 +68,7 @@ export const useHooks = () => {
       format: (value) => moment(value).format("lll"),
     },
     { key: "location", label: "location" },
+    { key: "status", label: "status" },
     {
       key: "createdAt",
       label: "created at",
@@ -77,6 +86,7 @@ export const useHooks = () => {
     | TextareaAutosizeProps
     | CustomDatePickerProps
     | CustomDateTimePickerProps
+    | SelectFieldProps
   >[] = [
     {
       fieldType: "text",
@@ -113,6 +123,22 @@ export const useHooks = () => {
         name: "location",
         id: "location",
         type: "text",
+        margin: "dense",
+      },
+    },
+
+    {
+      fieldType: "select",
+      fieldProps: <SelectFieldProps>{
+        id: "status",
+        label: "Select status",
+        name: "status",
+        inputLabelId: "status",
+        labelId: "status",
+        options: eventStatusArray.map((value): OptionSelect => {
+          return { key: value, value };
+        }),
+
         margin: "dense",
       },
     },

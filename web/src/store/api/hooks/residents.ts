@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { residentsApi } from "@/store/enhanceApi";
-import { CreateResidentsDto } from "../gen/residents";
 import { handleErrors } from "@/utils/error";
+import { ResidentStatus } from "../gen/residents";
 export const useResidentsApi = () => {
   const { isFetching: isFetchingResidents, data: residents } =
     residentsApi.useResidentsControllerFetchQuery();
@@ -12,10 +13,14 @@ export const useResidentsApi = () => {
 
   const [create] = residentsApi.useResidentsControllerCreateMutation();
   const [update] = residentsApi.useResidentsControllerUpdateMutation();
+  const [updaterResidentStatus] =
+    residentsApi.useResidentsControllerUpdateResidentStatusMutation();
 
-  const handleCreate = async (payload: CreateResidentsDto) => {
+  const handleCreate = async (payload: FormData) => {
     try {
-      const result = await create({ createResidentsDto: payload });
+      const result = await create({
+        createResidentsDto: payload as any,
+      }).unwrap();
 
       handleErrors(result);
     } catch (err) {
@@ -23,9 +28,25 @@ export const useResidentsApi = () => {
     }
   };
 
-  const handleEdit = async (id: number, payload: CreateResidentsDto) => {
+  const handleEdit = async (id: number, payload: FormData) => {
     try {
-      const result = await update({ id, createResidentsDto: payload });
+      const result = await update({
+        id,
+        createResidentsDto: payload as any,
+      }).unwrap();
+      handleErrors(result);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const handleUpdateResidentStatus = async (
+    id: number,
+    status: ResidentStatus
+  ) => {
+    try {
+      const result = await updaterResidentStatus({ id, status }).unwrap();
+
       handleErrors(result);
     } catch (err) {
       throw err;
@@ -38,5 +59,6 @@ export const useResidentsApi = () => {
     handleEdit,
     residentsByStatus,
     isFetchingStatus,
+    handleUpdateResidentStatus,
   };
 };

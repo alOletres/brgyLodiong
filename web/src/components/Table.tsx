@@ -14,6 +14,8 @@ import {
   Box,
   Theme,
   Chip,
+  Link,
+  styled,
 } from "@mui/material";
 import React, { memo } from "react";
 import { useHook } from "./hooks/useTable";
@@ -48,6 +50,13 @@ const tableHeaderWrapper: SxProps<Theme> = {
   padding: 1,
 };
 
+export const formContentStyle: SxProps<Theme> = {
+  display: "flex",
+  flexDirection: "row", // Ensures all children are in a row
+  gap: 2, // Adds spacing between children
+  width: "100%", // Makes sure the container spans the full width
+};
+
 /**
  * extends {@link ButtonProps}
  */
@@ -71,6 +80,10 @@ export interface TableActions {
     ActionButtonProps<any> | CustomDateRangePickerProps
   >[];
 }
+
+export const Image = styled("img")({
+  marginBottom: "10px",
+});
 
 /**
  * Column properties
@@ -141,14 +154,7 @@ const CustomTable = ({
           {({ submitForm, isSubmitting, setFieldValue, values }) => {
             return (
               <Form>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row", // Ensures all children are in a row
-                    gap: 2, // Adds spacing between children
-                    width: "100%", // Makes sure the container spans the full width
-                  }}
-                >
+                <Box sx={formContentStyle}>
                   {formProps.fields.map((field, index) => {
                     if (isInputField(field)) {
                       return (
@@ -369,7 +375,7 @@ const CustomTable = ({
                           if (column.key !== "cellActions") {
                             {
                               return row[column.key] &&
-                                typeof row[column.key] === "object" ? (
+                                column.key === "members" ? (
                                 Object.values(row[column.key]).map(
                                   (c: any, cIndex: number) => {
                                     return (
@@ -387,6 +393,47 @@ const CustomTable = ({
                                     );
                                   }
                                 )
+                              ) : column.key === "documents" ? (
+                                <TableCell key={cellIndex} align={column.align}>
+                                  {row[column.key]?.map(
+                                    (file: any, key: number) => {
+                                      return (
+                                        <>
+                                          <Link
+                                            key={key}
+                                            href={file}
+                                            download
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            {file}
+                                          </Link>
+                                          <br />
+                                        </>
+                                      );
+                                    }
+                                  )}
+                                </TableCell>
+                              ) : column.key === "image" ? (
+                                <TableCell key={cellIndex} align={column.align}>
+                                  <Link
+                                    href={`${
+                                      process.env.NEXT_PUBLIC_API_ORIGIN
+                                    }/uploads/${row[column.key]}`}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <Image
+                                      width="120px"
+                                      height="120px"
+                                      src={`${
+                                        process.env.NEXT_PUBLIC_API_ORIGIN
+                                      }/uploads/${row[column.key]}`}
+                                      alt="Resident Valid ID"
+                                    />
+                                  </Link>
+                                </TableCell>
                               ) : (
                                 <TableCell key={cellIndex} align={column.align}>
                                   {column?.format && row[column.key]

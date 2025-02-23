@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { EVENT_STATUS } from '@prisma/client';
 import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateEventsDto {
@@ -21,4 +22,9 @@ export class CreateEventsDto {
   @IsNotEmpty()
   @IsString()
   location: string;
+
+  @ApiProperty({ enum: EVENT_STATUS, enumName: 'EVENT_STATUS' })
+  @IsNotEmpty()
+  @IsString()
+  status: EVENT_STATUS = EVENT_STATUS.ONGOING;
 }

@@ -6,7 +6,6 @@ import { useState } from "react";
 import { setToken } from "@/lib/tokenStorage";
 import { useRouter } from "next/navigation";
 import { EROUTE_PROTECTED } from "@/constants/route.enum";
-import { useResidentsApi } from "@/store/api/hooks/residents";
 import { CreateResidentsDto } from "@/store/api/gen/residents";
 import { jwtDecode } from "jwt-decode";
 import { UserRole } from "../../store/api/gen/residents";
@@ -42,7 +41,7 @@ export const useHooks = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
 
-  const { handleCreate: create } = useResidentsApi();
+  // const { handleCreate: create } = useResidentsApi();
 
   const fields: Field<
     SelectFieldProps | CustomInputProps | TextareaAutosizeProps
@@ -139,7 +138,10 @@ export const useHooks = () => {
       },
     },
   ];
-  const handleToggleModal = () => setOpen((state) => !state);
+  const handleToggleModal = () => {
+    window.open("/signup", "_blank"); // Opens in a new tab
+    // setOpen((state) => !state);
+  };
 
   const handleSubmit = async (
     values: ILoginPayload,
@@ -182,12 +184,11 @@ export const useHooks = () => {
     { resetForm, setSubmitting }: FormikHelpers<CreateResidentsDto>
   ) => {
     try {
-      const result = await create({
-        ...values,
-        status: "PENDING",
-        contact: `+63${values.contact}`,
-      });
-      console.log("result", result);
+      // const result = await create({
+      //   ...values,
+      //   status: "PENDING",
+      //   contact: `+63${values.contact}`,
+      // });
 
       setSubmitting(false);
       setOpen(false);

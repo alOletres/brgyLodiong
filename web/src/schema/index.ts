@@ -144,4 +144,5 @@ export const EventSchema = yup.object().shape({
   description: yup.string().required("This field is required"),
   eventDate: yup.date().required("This field is required"),
   location: yup.string().required("This field is required"),
+  status: yup.string().required("This field is required"),
 });

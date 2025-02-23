@@ -26,6 +26,17 @@ export class ProjectsService {
     }
   }
 
+  async uploadFiles(id: number, files: string[]) {
+    try {
+      await this.prisma.projects.update({
+        where: { id },
+        data: { documents: JSON.stringify(files) },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async fetch(): Promise<FindAllProjectsDto[]> {
     const projects = await this.prisma.projects.findMany({
       select: {
@@ -36,6 +47,7 @@ export class ProjectsService {
         startDate: true,
         endDate: true,
         officialId: true,
+        documents: true,
         official: {
           select: {
             firstname: true,

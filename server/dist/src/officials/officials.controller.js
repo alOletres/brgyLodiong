@@ -23,7 +23,7 @@ let OfficialsController = class OfficialsController {
         this.officialsService = officialsService;
     }
     async create(payload) {
-        await this.officialsService.create(payload);
+        await this.officialsService.create(Object.assign({}, payload));
     }
     async update(id, payload) {
         await this.officialsService.update(id, payload);

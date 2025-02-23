@@ -18,7 +18,7 @@ export class OfficialsController {
 
   @Post('/')
   async create(@Body() payload: CreateOfficialsDto) {
-    await this.officialsService.create(payload);
+    await this.officialsService.create({ ...payload });
   }
 
   @Put('/:id')

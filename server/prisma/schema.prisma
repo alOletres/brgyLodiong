@@ -33,6 +33,7 @@ model Auth {
 
 model Residents {
   id                Int             @id @default(autoincrement())
+  image             String?          @db.VarChar(200)
   firstname         String          @db.VarChar(50)
   civilStatus       CIVIL_STATUS    @default(SINGLE)
   lastname          String          @db.VarChar(50)
@@ -89,6 +90,7 @@ model Projects {
   officialId  Int
   official    Officials?     @relation(fields: [officialId], references: [id])
   status      PROJECT_STATUS @default(PENDING)
+  documents   String?        @db.Text
 }
 
 model Notifications {
@@ -104,13 +106,13 @@ model Notifications {
 }
 
 model Events {
-  id          Int      @id @default(autoincrement())
-  eventName   String   @db.VarChar(255)
-  description String   @db.Text
-  eventDate   DateTime
-  location    String   @db.VarChar(255)
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
-
+  id                 Int                  @id @default(autoincrement())
+  eventName          String               @db.VarChar(255)
+  description        String               @db.Text
+  eventDate          DateTime
+  location           String               @db.VarChar(255)
+  createdAt          DateTime             @default(now()) @db.Timestamp(0)
+  status             EVENT_STATUS         @default(ONGOING)
   EventNotifications EventNotifications[]
 }
 
@@ -174,4 +176,10 @@ enum RESIDENT_STATUS {
   PENDING
   REGISTERED
   DISAPPROVED
+}
+
+enum EVENT_STATUS {
+  SUCCEED
+  ONGOING
+  CANCELED
 }

@@ -20,6 +20,11 @@ class CreateResidentsDto {
     }
 }
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateResidentsDto.prototype, "image", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ enum: client_1.CIVIL_STATUS, enumName: 'CIVIL_STATUS' }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),

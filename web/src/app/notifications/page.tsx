@@ -10,7 +10,7 @@ const NotificationsPage = () => {
     <>
       {isFetchingNotification && <LinearLoader height={4} />}
       <CustomTable
-        tableHeader="Nofications"
+        tableHeader="Transaction History"
         columns={columnSchema}
         dataSource={dataSource}
       />

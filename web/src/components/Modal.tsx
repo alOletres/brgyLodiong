@@ -27,6 +27,9 @@ import DatePicker, { CustomDatePickerProps } from "./DatePicker";
 import CustomDateTimePicker, {
   CustomDateTimePickerProps,
 } from "./DateTimePicker";
+import CustomFileUpload, { FileUploadProps } from "./fileUploader";
+import FormGroup from "./FormGroup";
+import CustomStepper, { CustomStepperProps } from "./Stepper";
 
 const contentWrapperStyle: SxProps<Theme> = {
   position: "absolute",
@@ -34,6 +37,7 @@ const contentWrapperStyle: SxProps<Theme> = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
+  maxHeight: "90vh", // Set a maximum height
   backgroundColor: "background.paper",
   border: "1px solid gray",
   boxShadow: "24",
@@ -84,10 +88,12 @@ interface Props<T extends Maybe<AnyObject>> extends Partial<ModalProps> {
   handleClose: () => void;
   formProps?: ModalFormProps<T>;
   listProps?: ModalListProps;
+  fileUploaderProps?: FileUploadProps;
+  stepperProps?: CustomStepperProps;
   open: boolean;
   title: string;
   btnName?: string;
-  modalFor?: "form" | "list" | "stepper";
+  modalFor?: "form" | "list" | "fileUploader" | "stepper";
   width?: number;
 }
 
@@ -96,146 +102,14 @@ const CustomModal = ({
   open,
   formProps,
   listProps,
+  fileUploaderProps,
+  stepperProps,
   title,
   btnName = "Save",
   modalFor = "form",
   width,
   ...props
 }: Props<any>) => {
-  const {
-    isInputField,
-    isSelectField,
-    isTextAreaField,
-    isDateField,
-    isDateTimeField,
-  } = useModalHook();
-
-  // Custom formFields
-  const FormFields = (formProps: ModalFormProps<any>) => {
-    return (
-      <Box sx={{ width: "100%", alignItems: "center", maxHeight: "80vh" }}>
-        <Formik
-          initialValues={formProps.initialValues}
-          validationSchema={formProps.validationSchema}
-          onSubmit={formProps.handleSubmit}
-          enableReinitialize
-        >
-          {({ submitForm, isSubmitting, setFieldValue, values }) => {
-            return (
-              <Form>
-                {formProps.fields.map((field, index) => {
-                  if (isInputField(field)) {
-                    return (
-                      <Input
-                        {...field.fieldProps}
-                        onChange={(e) => {
-                          if (field.fieldProps.name) {
-                            if (field.fieldProps.type === "file") {
-                              const target = e.target as HTMLInputElement; // Type assertion
-
-                              const file = target.files?.[0];
-
-                              setFieldValue(field.fieldProps.name, file); // Update Formik state with file object
-                            } else {
-                              setFieldValue(
-                                field.fieldProps.name,
-                                e.target.value
-                              ); // Handle other input types
-                            }
-                          }
-                        }}
-                        key={index}
-                      />
-                    );
-                  }
-
-                  if (isSelectField(field)) {
-                    const { handleSelectChange, onChange, ...props } =
-                      field.fieldProps;
-
-                    return (
-                      <Select
-                        {...props}
-                        handleChange={(e) => {
-                          if (field.fieldProps.name) {
-                            setFieldValue(field.fieldProps.name, e);
-                          }
-
-                          if (handleSelectChange) {
-                            const { propertyName, value } =
-                              handleSelectChange(e);
-
-                            setFieldValue(propertyName, value);
-                          }
-                        }}
-                        value={values[props.name as string]}
-                        key={index}
-                      />
-                    );
-                  }
-
-                  if (isTextAreaField(field)) {
-                    return (
-                      <TextArea
-                        {...field.fieldProps}
-                        onChange={(e) => {
-                          if (field.fieldProps.name) {
-                            setFieldValue(
-                              field.fieldProps.name,
-                              e.target.value
-                            );
-                          }
-                        }}
-                        key={index}
-                      />
-                    );
-                  }
-
-                  if (isDateField(field)) {
-                    return (
-                      <DatePicker
-                        {...field.fieldProps}
-                        key={index}
-                        onChange={(e) => {
-                          if (field.fieldProps.name) {
-                            setFieldValue(field.fieldProps.name, e);
-                          }
-                        }}
-                      />
-                    );
-                  }
-
-                  if (isDateTimeField(field)) {
-                    return (
-                      <CustomDateTimePicker
-                        {...field.fieldProps}
-                        key={index}
-                        onChange={(e) => {
-                          if (field.fieldProps.name) {
-                            setFieldValue(field.fieldProps.name, e);
-                          }
-                        }}
-                      />
-                    );
-                  }
-                })}
-                <Box sx={saveButtonWrapper}>
-                  <Button
-                    disabled={isSubmitting}
-                    variant="contained"
-                    onClick={submitForm}
-                  >
-                    {btnName}
-                  </Button>
-                </Box>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Box>
-    );
-  };
-
   return (
     <Modal keepMounted open={open} onClose={handleClose} {...props}>
       <Box
@@ -244,9 +118,11 @@ const CustomModal = ({
           width,
         }}
       >
-        <Typography>{title}</Typography>
+        <Box>
+          <Typography variant="h6">{title}</Typography>
+        </Box>
         {modalFor === "form" && formProps ? (
-          <FormFields {...formProps} />
+          <FormGroup {...formProps} btnName={btnName} />
         ) : modalFor === "list" && listProps ? (
           <Box sx={{ width: "100%", alignItems: "center" }}>
             <Table
@@ -257,6 +133,10 @@ const CustomModal = ({
               headerActions={listProps.headerActions}
             />
           </Box>
+        ) : modalFor === "fileUploader" && fileUploaderProps ? (
+          <CustomFileUpload {...fileUploaderProps} />
+        ) : modalFor === "stepper" && stepperProps ? (
+          <CustomStepper {...stepperProps} />
         ) : null}
       </Box>
     </Modal>

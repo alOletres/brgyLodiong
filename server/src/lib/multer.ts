@@ -7,6 +7,10 @@ enum EValidFileExtension {
   PNG = 'png',
   JPG = 'jpg',
   JPEG = 'jpeg',
+  WORDX = 'docx',
+  WORDS = 'docs',
+  EXCEL = 'xls',
+  EXCELX = 'xlsx',
 }
 
 enum EValidMimeType {
@@ -15,6 +19,8 @@ enum EValidMimeType {
   IMAGE_JPEG = 'image/jpeg',
   APPLICATION_SPREADSHEET = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   APPLICATION_VND = 'application/vnd.ms-excel',
+  MS_WORD = 'application/msword',
+  MS_WORD_APPLICATION = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 }
 
 type validFileExtension = `${EValidFileExtension}`;

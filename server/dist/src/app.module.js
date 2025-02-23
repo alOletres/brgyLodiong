@@ -26,6 +26,7 @@ const mailer_1 = require("@nestjs-modules/mailer");
 const email_service_1 = require("./email/email.service");
 const notification_service_1 = require("./notification/notification.service");
 const mailgun_service_1 = require("./mailgun/mailgun.service");
+const platform_express_1 = require("@nestjs/platform-express");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -41,6 +42,7 @@ AppModule = __decorate([
             config_1.ConfigModule.forRoot(),
             schedule_1.ScheduleModule.forRoot(),
             passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
+            platform_express_1.MulterModule.register({ dest: './uploads' }),
             mailer_1.MailerModule.forRoot({
                 transport: {
                     service: 'gmail',

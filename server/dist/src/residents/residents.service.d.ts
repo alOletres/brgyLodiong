@@ -21,6 +21,7 @@ export declare class ResidentsService {
         id: number;
         status: import(".prisma/client").$Enums.RESIDENT_STATUS;
         createdAt: Date;
+        image: string;
         firstname: string;
         civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
         lastname: string;
@@ -31,4 +32,18 @@ export declare class ResidentsService {
         requestsId: number;
     }>;
     fetchByStatus(status: RESIDENT_STATUS): Promise<FindAllResidentsDto[]>;
+    updateResidentStatus(id: number, status: RESIDENT_STATUS): Promise<{
+        id: number;
+        status: import(".prisma/client").$Enums.RESIDENT_STATUS;
+        createdAt: Date;
+        image: string;
+        firstname: string;
+        civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
+        lastname: string;
+        email: string;
+        contact: string;
+        address: string;
+        disApprovedReason: string;
+        requestsId: number;
+    }>;
 }

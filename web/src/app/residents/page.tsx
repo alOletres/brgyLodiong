@@ -2,11 +2,7 @@
 import CustomTable from "@/components/Table";
 import { useHooks } from "./hook";
 import Modal from "@/components/Modal";
-import {
-  DisApproveSchema,
-  ResidentSchema,
-  residentUpdateSchema,
-} from "@/schema";
+import { DisApproveSchema } from "@/schema";
 import SearchBar from "@/components/SearchBar";
 import LinearLoader from "@/components/LinearLoader";
 import DialogBox from "@/components/Dialog";
@@ -18,9 +14,6 @@ const ResidentPage = () => {
     isFetchingResidents,
     tableHeaderActions,
     tableCellActions,
-    initialValues,
-    handleSubmit,
-    fields,
     handleToggleModal,
     open,
     btnName,
@@ -33,6 +26,7 @@ const ResidentPage = () => {
     handleToggleRejectionModal,
     rejectionField,
     handleSubmitDisApproveReason,
+    stepperProps,
   } = useHooks();
 
   return (
@@ -40,17 +34,12 @@ const ResidentPage = () => {
       {isFetchingResidents && <LinearLoader height={4} />}
       <Modal
         title="Resident"
-        formProps={{
-          initialValues,
-          validationSchema:
-            btnName === "Submit" ? ResidentSchema : residentUpdateSchema,
-          fields,
-          handleSubmit,
-        }}
         handleClose={handleToggleModal}
         open={open}
         width={500}
         btnName={btnName}
+        modalFor="stepper"
+        stepperProps={stepperProps}
       />
 
       <DialogBox

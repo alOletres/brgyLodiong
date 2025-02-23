@@ -11,8 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateEventsDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
 class CreateEventsDto {
+    constructor() {
+        this.status = client_1.EVENT_STATUS.ONGOING;
+    }
 }
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
@@ -38,5 +42,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateEventsDto.prototype, "location", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.EVENT_STATUS, enumName: 'EVENT_STATUS' }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateEventsDto.prototype, "status", void 0);
 exports.CreateEventsDto = CreateEventsDto;
 //# sourceMappingURL=create-events.dto.js.map

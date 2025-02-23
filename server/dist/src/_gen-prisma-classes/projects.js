@@ -54,5 +54,9 @@ __decorate([
     (0, swagger_1.ApiProperty)({ enum: client_1.PROJECT_STATUS, enumName: 'PROJECT_STATUS' }),
     __metadata("design:type", String)
 ], Projects.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    __metadata("design:type", String)
+], Projects.prototype, "documents", void 0);
 exports.Projects = Projects;
 //# sourceMappingURL=projects.js.map

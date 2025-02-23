@@ -22,6 +22,7 @@ import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { isValidDate } from "@/utils/error";
 import { ProjectStatus } from "@/store/api/gen/officials";
+import { convertUrlToFile } from "@/utils/convertFilet";
 
 export const useHooks = () => {
   const initialFormValues: any = {
@@ -41,16 +42,24 @@ export const useHooks = () => {
     isFetchingProjects,
     handleCreate: create,
     handleUpdate: update,
+    handleUploadFiles: uploadFiles,
   } = useProjectsApi();
   const { officials } = useOfficialsApi();
   const { setSnackbarProps } = useSnackbar();
 
   const [dataSource, setDataSource] = useState<FindAllProjectsDto[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModalFiles, setOpenModalFiles] = useState<boolean>(false);
+
   const [btnName, setBtnName] = useState<IHandleSubmitType>("Submit");
   const [formValues, setFormValues] =
     useState<CreateProjectsDto>(initialFormValues);
   const [members, setMembers] = useState<OptionSelect[]>([]);
+
+  const [files, setFiles] = useState<File[]>([]);
+
+  const [attachFileElement, setAttachFileElement] =
+    useState<FindAllProjectsDto>();
 
   const columnSchema: ColumnSchema<FindAllProjectsDto & TableActions>[] = [
     { key: "officialName", label: "Official" },
@@ -71,9 +80,14 @@ export const useHooks = () => {
       key: "status",
       label: "status",
     },
+
     {
       key: "cellActions",
       label: "actions",
+    },
+    {
+      key: "documents",
+      label: "Attached documents",
     },
   ];
 
@@ -126,11 +140,39 @@ export const useHooks = () => {
     },
   ];
 
+  const handleToggleAttachFiles = async (element?: FindAllProjectsDto) => {
+    if (element?.id) {
+      setAttachFileElement(element);
+
+      if (element?.documents) {
+        const documents = element.documents as unknown as string[];
+        const files = await Promise.all(
+          documents.map(async (doc) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const [_, mimeType] = doc.split(".");
+            return await convertUrlToFile(doc, doc, mimeType);
+          })
+        );
+
+        setFiles(files);
+      }
+    } else if (!element?.documents) {
+      setFiles([]);
+    }
+
+    setOpenModalFiles((state) => !state);
+  };
+
   const tableCellActions: ActionButtonProps<FindAllProjectsDto>[] = [
     {
       name: "Edit",
       variant: "contained",
       handleClick: handleToggleModal,
+    },
+    {
+      name: "Attach Document Narrative",
+      variant: "outlined",
+      handleClick: (element) => handleToggleAttachFiles(element),
     },
   ];
 
@@ -338,6 +380,15 @@ export const useHooks = () => {
         if (typeof value.members === "string") {
           value.members = JSON.parse(value.members);
         }
+
+        if (value.documents && typeof value.documents === "string") {
+          const documents = JSON.parse(value.documents);
+          value.documents = documents.map(
+            (doc: string) =>
+              `${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${doc}`
+          );
+        }
+
         return value;
       });
 
@@ -362,6 +413,27 @@ export const useHooks = () => {
     }
   };
 
+  const handleUploadFiles = async () => {
+    try {
+      if (attachFileElement) {
+        const formData = new FormData();
+
+        files.forEach((file) => formData.append("files", file));
+
+        await uploadFiles(attachFileElement.id, formData);
+      }
+
+      handleToggleAttachFiles();
+
+      setSnackbarProps({
+        message: "Projects successfully uploaded documents!",
+        severity: "success",
+      });
+    } catch (err: any) {
+      setSnackbarProps({ message: err?.message, severity: "error" });
+    }
+  };
+
   return {
     dataSource,
     columnSchema,
@@ -375,5 +447,10 @@ export const useHooks = () => {
     btnName,
     tableCellActions,
     handleSearch,
+    handleToggleAttachFiles,
+    openModalFiles,
+    files,
+    setFiles,
+    handleUploadFiles,
   };
 };

@@ -5,6 +5,10 @@ import { Auth as AuthEntity } from './../../_gen-prisma-classes/auth';
 import { CIVIL_STATUS, RESIDENT_STATUS, USER_ROLE } from '@prisma/client';
 
 export class CreateResidentsDto {
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  image?: string;
+
   @ApiProperty({ enum: CIVIL_STATUS, enumName: 'CIVIL_STATUS' })
   @IsNotEmpty()
   @IsString()

@@ -46,6 +46,17 @@ let ProjectsService = class ProjectsService {
             throw err;
         }
     }
+    async uploadFiles(id, files) {
+        try {
+            await this.prisma.projects.update({
+                where: { id },
+                data: { documents: JSON.stringify(files) },
+            });
+        }
+        catch (err) {
+            throw err;
+        }
+    }
     async fetch() {
         const projects = await this.prisma.projects.findMany({
             select: {
@@ -56,6 +67,7 @@ let ProjectsService = class ProjectsService {
                 startDate: true,
                 endDate: true,
                 officialId: true,
+                documents: true,
                 official: {
                     select: {
                         firstname: true,

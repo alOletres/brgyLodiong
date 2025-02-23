@@ -38,6 +38,7 @@ let ResidentsService = class ResidentsService {
         this.mailGunService = mailGunService;
         this.selectedResidents = {
             id: true,
+            image: true,
             firstname: true,
             lastname: true,
             civilStatus: true,
@@ -57,7 +58,7 @@ let ResidentsService = class ResidentsService {
         try {
             const hash = (0, bcypt_1.hashPassword)(password);
             await this.prisma.residents.create({
-                data: Object.assign(Object.assign({}, payload), { Auth: {
+                data: Object.assign(Object.assign({}, payload), { status: 'PENDING', Auth: {
                         create: {
                             email: payload.email,
                             password: hash,
@@ -66,8 +67,6 @@ let ResidentsService = class ResidentsService {
                     } }),
             });
             const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
-            await this.twilioService.sendSms(payload.contact, message);
-            await this.mailGunService.sendMail({ to: payload.email, text: message });
         }
         catch (err) {
             console.log('err', err);
@@ -96,8 +95,6 @@ let ResidentsService = class ResidentsService {
             else {
                 message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
             }
-            await this.twilioService.sendSms(payload.contact, message);
-            await this.emailService.sendMail({ to: payload.email, text: message });
         }
         catch (err) {
             console.log('err', err);
@@ -138,6 +135,17 @@ let ResidentsService = class ResidentsService {
             return result.map((value) => {
                 const { Auth } = value, data = __rest(value, ["Auth"]);
                 return Object.assign(Object.assign({}, data), { role: (Auth === null || Auth === void 0 ? void 0 : Auth.role) || 'RESIDENT' });
+            });
+        }
+        catch (err) {
+            throw err;
+        }
+    }
+    async updateResidentStatus(id, status) {
+        try {
+            return await this.prisma.residents.update({
+                where: { id },
+                data: { status },
             });
         }
         catch (err) {

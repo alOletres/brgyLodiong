@@ -2,6 +2,8 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { createApplication, createSwaggerDocument } from './application.config';
 import { INestApplication } from '@nestjs/common';
 import { writeFile } from 'fs/promises';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 let app: INestApplication;
 async function bootstrap() {
   app = await createApplication();
@@ -18,6 +20,11 @@ async function bootstrap() {
       'Content-Type, Authorization',
     );
     next();
+  });
+
+  const expressApp = app as NestExpressApplication;
+  expressApp.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads',
   });
 
   const document = createSwaggerDocument(app);

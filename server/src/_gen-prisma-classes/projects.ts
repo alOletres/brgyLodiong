@@ -29,4 +29,7 @@ export class Projects {
 
   @ApiProperty({ enum: PROJECT_STATUS, enumName: 'PROJECT_STATUS' })
   status: PROJECT_STATUS = PROJECT_STATUS.PENDING;
+
+  @ApiPropertyOptional({ type: String })
+  documents?: string;
 }

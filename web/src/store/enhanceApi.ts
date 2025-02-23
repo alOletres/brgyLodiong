@@ -42,6 +42,9 @@ const enhanceProjectsApi = projectsApi.enhanceEndpoints({
     projectsControllerUpdate: {
       invalidatesTags: ["projects"],
     },
+    projectsControllerUploadFiles: {
+      invalidatesTags: ["projects"],
+    },
   },
 });
 
@@ -59,6 +62,9 @@ const enhanceResidentsApi = residentsApi.enhanceEndpoints({
     },
     residentsControllerFetchByStatus: {
       providesTags: ["resident-status", "residents"],
+    },
+    residentsControllerUpdateResidentStatus: {
+      invalidatesTags: ["residents"],
     },
   },
 });

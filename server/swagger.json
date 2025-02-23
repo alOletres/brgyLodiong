@@ -142,6 +142,34 @@
         }
       }
     },
+    "/api/residents/status/{id}/{status}": {
+      "put": {
+        "operationId": "ResidentsController_updateResidentStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/officials": {
       "post": {
         "operationId": "OfficialsController_create",
@@ -372,6 +400,26 @@
         }
       }
     },
+    "/api/projects/files/{id}": {
+      "put": {
+        "operationId": "ProjectsController_uploadFiles",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/events": {
       "post": {
         "operationId": "EventsController_create",
@@ -497,6 +545,9 @@
       "CreateResidentsDto": {
         "type": "object",
         "properties": {
+          "image": {
+            "type": "string"
+          },
           "civilStatus": {
             "$ref": "#/components/schemas/CIVIL_STATUS"
           },
@@ -555,6 +606,9 @@
         "properties": {
           "id": {
             "type": "number"
+          },
+          "image": {
+            "type": "string"
           },
           "firstname": {
             "type": "string"
@@ -690,6 +744,9 @@
           },
           "status": {
             "$ref": "#/components/schemas/PROJECT_STATUS"
+          },
+          "documents": {
+            "type": "string"
           }
         },
         "required": [
@@ -981,6 +1038,9 @@
           "status": {
             "$ref": "#/components/schemas/PROJECT_STATUS"
           },
+          "documents": {
+            "type": "string"
+          },
           "officialName": {
             "type": "string"
           }
@@ -994,6 +1054,14 @@
           "officialId",
           "status",
           "officialName"
+        ]
+      },
+      "EVENT_STATUS": {
+        "type": "string",
+        "enum": [
+          "SUCCEED",
+          "ONGOING",
+          "CANCELED"
         ]
       },
       "CreateEventsDto": {
@@ -1011,13 +1079,17 @@
           },
           "location": {
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EVENT_STATUS"
           }
         },
         "required": [
           "eventName",
           "description",
           "eventDate",
-          "location"
+          "location",
+          "status"
         ]
       },
       "FindAllEventsDto": {
@@ -1042,6 +1114,9 @@
           "createdAt": {
             "format": "date-time",
             "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EVENT_STATUS"
           }
         },
         "required": [
@@ -1050,7 +1125,8 @@
           "description",
           "eventDate",
           "location",
-          "createdAt"
+          "createdAt",
+          "status"
         ]
       },
       "NOTIFICATION_TYPE": {

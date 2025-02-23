@@ -11,8 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Events = void 0;
 const event_notifications_1 = require("./event_notifications");
+const client_1 = require("@prisma/client");
 const swagger_1 = require("@nestjs/swagger");
 class Events {
+    constructor() {
+        this.status = client_1.EVENT_STATUS.ONGOING;
+    }
 }
 __decorate([
     (0, swagger_1.ApiProperty)({ type: Number }),
@@ -38,6 +42,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: Date }),
     __metadata("design:type", Date)
 ], Events.prototype, "createdAt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: client_1.EVENT_STATUS, enumName: 'EVENT_STATUS' }),
+    __metadata("design:type", String)
+], Events.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ isArray: true, type: () => event_notifications_1.EventNotifications }),
     __metadata("design:type", Array)

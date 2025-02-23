@@ -2,6 +2,7 @@ import { Residents as ResidentEntity } from './../../_gen-prisma-classes/residen
 import { Auth as AuthEntity } from './../../_gen-prisma-classes/auth';
 import { CIVIL_STATUS, RESIDENT_STATUS } from '@prisma/client';
 export declare class CreateResidentsDto {
+    image?: string;
     civilStatus: CIVIL_STATUS;
     firstname: ResidentEntity['firstname'];
     lastname: ResidentEntity['lastname'];

@@ -43,11 +43,13 @@ export type EventsControllerUpdateArgs = {
   id: number;
   createEventsDto: CreateEventsDto;
 };
+export type EventStatus = "SUCCEED" | "ONGOING" | "CANCELED";
 export type CreateEventsDto = {
   eventName: string;
   description: string;
   eventDate: string;
   location: string;
+  status: EventStatus;
 };
 export type FindAllEventsDto = {
   id: number;
@@ -56,6 +58,7 @@ export type FindAllEventsDto = {
   eventDate: string;
   location: string;
   createdAt: string;
+  status: EventStatus;
 };
 export const {
   useEventsControllerCreateMutation,

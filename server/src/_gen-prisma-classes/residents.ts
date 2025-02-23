@@ -9,6 +9,9 @@ export class Residents {
   @ApiProperty({ type: Number })
   id: number;
 
+  @ApiPropertyOptional({ type: String })
+  image?: string;
+
   @ApiProperty({ type: String })
   firstname: string;
 

@@ -33,6 +33,15 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/api/residents/${queryArg.status}` }),
     }),
+    residentsControllerUpdateResidentStatus: build.mutation<
+      ResidentsControllerUpdateResidentStatusResponse,
+      ResidentsControllerUpdateResidentStatusArgs
+    >({
+      query: (queryArg) => ({
+        url: `/api/residents/status/${queryArg.id}/${queryArg.status}`,
+        method: "PUT",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -54,9 +63,15 @@ export type ResidentsControllerFetchByStatusResponse =
 export type ResidentsControllerFetchByStatusArgs = {
   status: string;
 };
+export type ResidentsControllerUpdateResidentStatusResponse = unknown;
+export type ResidentsControllerUpdateResidentStatusArgs = {
+  id: number;
+  status: string;
+};
 export type CivilStatus = "SINGLE" | "MARRIED" | "WIDOW";
 export type ResidentStatus = "PENDING" | "REGISTERED" | "DISAPPROVED";
 export type CreateResidentsDto = {
+  image?: string;
   civilStatus: CivilStatus;
   firstname: string;
   lastname: string;
@@ -71,6 +86,7 @@ export type CreateResidentsDto = {
 export type UserRole = "ADMIN" | "RESIDENT";
 export type FindAllResidentsDto = {
   id: number;
+  image?: string;
   firstname: string;
   civilStatus: CivilStatus;
   lastname: string;
@@ -87,4 +103,5 @@ export const {
   useResidentsControllerFetchQuery,
   useResidentsControllerUpdateMutation,
   useResidentsControllerFetchByStatusQuery,
+  useResidentsControllerUpdateResidentStatusMutation,
 } = injectedRtkApi;

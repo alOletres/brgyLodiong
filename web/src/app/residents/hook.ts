@@ -16,11 +16,18 @@ import {
 } from "@/store/api/gen/residents";
 import { useResidentsApi } from "@/store/api/hooks/residents";
 import { TextareaAutosizeProps } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { IHandleSubmitType } from "../officials/hook";
 import { FormikHelpers } from "formik";
 import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { OptionSelect, SelectFieldProps } from "@/components/Select";
+import { CustomStepperProps, StepperContent } from "@/components/Stepper";
+import { ResidentSchema, residentUpdateSchema } from "@/schema";
+import { FileUploadProps } from "@/components/fileUploader";
+import { CustomFormGroupProps } from "@/components/FormGroup";
+import { convertUrlToFile } from "@/utils/convertFilet";
+import { useSelector } from "react-redux";
+import { selectImage } from "@/store/slice/image.slice";
 
 export const residentInitialValues: CreateResidentsDto = {
   firstname: "",
@@ -41,6 +48,7 @@ const residentStatus: ResidentStatus[] = ["PENDING", "REGISTERED"];
 const columnSchema: ColumnSchema<
   FindAllResidentsDto & { password: string } & TableActions
 >[] = [
+  { key: "image", label: "Valid ID" },
   { key: "firstname", label: "firstname" },
   { key: "lastname", label: "lastname" },
   { key: "civilStatus", label: "civil status" },
@@ -74,6 +82,10 @@ export const useHooks = () => {
 
   const [isShowDialog, setShowDialog] = useState<boolean>(false);
   const [rejectionOpenModal, setRejectionOpenModal] = useState<boolean>(false);
+
+  const [files, setFiles] = useState<File[]>([]);
+
+  const [imageFile, setImage] = useState<File[]>(files);
 
   const fields: Field<
     SelectFieldProps | CustomInputProps | TextareaAutosizeProps
@@ -151,54 +163,7 @@ export const useHooks = () => {
 
   const [residentFields, setResidentFields] = useState<
     Field<SelectFieldProps | CustomInputProps | TextareaAutosizeProps>[]
-  >(
-    [...fields].concat([
-      {
-        fieldType: "text",
-        fieldProps: {
-          id: "password",
-          name: "password",
-          label: "Password",
-          type: "password",
-          margin: "dense",
-        },
-      },
-
-      {
-        fieldType: "text",
-        fieldProps: {
-          id: "confirmPassword",
-          name: "confirmPassword",
-          label: "confirmPassword",
-          type: "password",
-          margin: "dense",
-        },
-      },
-
-      {
-        fieldType: "select",
-        fieldProps: <SelectFieldProps>{
-          id: "status",
-          label: "Select status",
-          name: "status",
-          inputLabelId: "status",
-          labelId: "status",
-          options:
-            btnName === "Submit"
-              ? residentStatus.map((value): OptionSelect => {
-                  return { key: value, value };
-                })
-              : residentStatus
-                  .concat("DISAPPROVED")
-                  .map((value): OptionSelect => {
-                    return { key: value, value };
-                  }),
-
-          margin: "dense",
-        },
-      },
-    ])
-  );
+  >([]);
 
   const initialRejectionValues = { disApprovedReason: "" };
 
@@ -215,13 +180,24 @@ export const useHooks = () => {
     },
   ];
 
-  const handleToggleModal = (
+  const handleToggleModal = async (
     values?: FindAllResidentsDto & { password: string }
   ) => {
     if (values && Object.keys(values).length) {
       const mobileNumber = values.contact ? values.contact.slice(3) : "";
 
-      //
+      // Preserve the uploaded image if already present
+      if (values.image && files.length === 0) {
+        const [_, mimeType] = values.image?.split(".");
+        const image = await convertUrlToFile(
+          `${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${values.image}`,
+          values.image,
+          mimeType
+        );
+
+        setFiles([image]);
+      }
+
       setResidentFields(
         [...fields].concat({
           fieldType: "select",
@@ -253,8 +229,58 @@ export const useHooks = () => {
 
       setBtnName("Save Changes");
     } else {
+      setFiles([]);
       setBtnName("Submit");
       setFormValues(residentInitialValues);
+
+      setResidentFields(
+        [...fields].concat([
+          {
+            fieldType: "text",
+            fieldProps: {
+              id: "password",
+              name: "password",
+              label: "Password",
+              type: "password",
+              margin: "dense",
+            },
+          },
+
+          {
+            fieldType: "text",
+            fieldProps: {
+              id: "confirmPassword",
+              name: "confirmPassword",
+              label: "Confirm Password",
+              type: "password",
+              margin: "dense",
+            },
+          },
+
+          {
+            fieldType: "select",
+            fieldProps: <SelectFieldProps>{
+              id: "status",
+              label: "Select status",
+              name: "status",
+              inputLabelId: "status",
+              labelId: "status",
+              options:
+                btnName === "Submit"
+                  ? residentStatus.map((value): OptionSelect => {
+                      return { key: value, value };
+                    })
+                  : residentStatus
+                      .concat("DISAPPROVED")
+                      .map((value): OptionSelect => {
+                        return { key: value, value };
+                      }),
+
+              margin: "dense",
+            },
+          },
+        ])
+      );
     }
     setOpen((state) => !state);
   };
@@ -294,8 +320,28 @@ export const useHooks = () => {
     values: CreateResidentsDto,
     { resetForm, setSubmitting }: FormikHelpers<CreateResidentsDto>
   ) => {
+    const payload = {
+      ...values,
+      contact: `+63${values.contact}`,
+    };
+
     try {
-      await create({ ...values, contact: `+63${values.contact}` });
+      const formData = new FormData();
+
+      console.log("Create image file", files);
+
+      if (files?.length) {
+        formData.append("image", files[0] as unknown as Blob);
+      }
+
+      for (const element of Object.keys(payload)) {
+        const key = element as keyof CreateResidentsDto;
+        if (payload[key]) {
+          formData.append(key, payload[key]);
+        }
+      }
+
+      await create(formData);
       setSubmitting(false);
       setOpen(false);
       resetForm();
@@ -343,65 +389,33 @@ export const useHooks = () => {
 
   const handleUpdateResidents = async (
     id: number,
-    values: CreateResidentsDto
+    { image, ...values }: CreateResidentsDto
   ) => {
     try {
-      await edit(id, {
+      const payload = {
         ...values,
         contact: `+63${values.contact}`,
-      } as unknown as CreateResidentsDto);
+      };
 
-      // Set fields
-      setResidentFields(
-        [...fields].concat([
-          {
-            fieldType: "text",
-            fieldProps: {
-              id: "password",
-              name: "password",
-              label: "Password",
-              type: "password",
-              margin: "dense",
-            },
-          },
+      console.log("image files", imageFile);
 
-          {
-            fieldType: "text",
-            fieldProps: {
-              id: "confirmPassword",
-              name: "confirmPassword",
-              label: "confirmPassword",
-              type: "password",
-              margin: "dense",
-            },
-          },
+      const formData = new FormData();
 
-          {
-            fieldType: "select",
-            fieldProps: <SelectFieldProps>{
-              id: "status",
-              label: "Select status",
-              name: "status",
-              inputLabelId: "status",
-              labelId: "status",
-              options:
-                btnName === "Submit"
-                  ? residentStatus.map((value): OptionSelect => {
-                      return { key: value, value };
-                    })
-                  : residentStatus
-                      .concat("DISAPPROVED")
-                      .map((value): OptionSelect => {
-                        return { key: value, value };
-                      }),
+      if (files?.length) {
+        formData.append("image", files[0] as unknown as Blob);
+      }
 
-              margin: "dense",
-            },
-          },
-        ])
-      );
+      for (const element of Object.keys(payload)) {
+        const key = element as keyof Omit<CreateResidentsDto, "image">;
+        if (payload[key]) {
+          formData.append(key, payload[key]);
+        }
+      }
+
+      // await edit(id, formData);
 
       setOpen(false);
+      setBtnName("Submit");
       setSnackbarProps({ message: "Resident successfully updated!" });
     } catch (err: any) {
       console.log("err", err);
@@ -413,7 +427,7 @@ export const useHooks = () => {
   const handleSubmit = useCallback(
     function (
       values: CreateResidentsDto | FindAllResidentsDto,
-      formikHelpers: FormikHelpers<FindAllResidentsDto | CreateResidentsDto>
+      formikHelpers?: FormikHelpers<FindAllResidentsDto | CreateResidentsDto>
     ) {
       return btnName === "Submit"
         ? handleCreate(
@@ -430,8 +444,44 @@ export const useHooks = () => {
   );
 
   useEffect(() => {
+    if (files.length) {
+      setImage(files);
+    }
+  }, [files]);
+
+  const formProps: CustomFormGroupProps = {
+    initialValues: formValues,
+    validationSchema:
+      btnName === "Submit" ? ResidentSchema : residentUpdateSchema,
+    fields: residentFields,
+    handleSubmit,
+    onFinish: handleSubmit,
+  };
+
+  const fileUploaderProps: FileUploadProps = {
+    onChange: (newFiles) => {
+      console.log("New files from child:", newFiles);
+      setImage(newFiles);
+      setFiles(newFiles);
+    },
+    value: files,
+    handleSubmit: () => console.log("Upload images"),
+    multiple: false,
+    accept: ["image/jpeg", "image/png"],
+    handleSetImage: (files: File[]) => {},
+  };
+
+  // Create stepper props here!
+  const stepperContent: StepperContent[] = [
+    { label: "Attach Valid Government ID", fileUploaderProps },
+    { label: "Register", formProps },
+  ];
+
+  const stepperProps: CustomStepperProps = { stepperContent };
+
+  useEffect(() => {
     if (residents?.length) {
-      const data = residents as FindAllResidentsDto[];
+      const data = residents;
       const filteredResidents = data?.filter(
         (value) => value.role === "RESIDENT"
       );
@@ -477,5 +527,6 @@ export const useHooks = () => {
     rejectionField,
     initialRejectionValues,
     handleSubmitDisApproveReason,
+    stepperProps,
   };
 };

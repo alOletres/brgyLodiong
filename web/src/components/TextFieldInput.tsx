@@ -70,7 +70,7 @@ export const CustomInput = ({
         margin={margin}
         onChange={handleChange}
         className={meta.touched && meta.error ? "input-error" : ""}
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", height: "fit-content" }}
         slotProps={{
           htmlInput: props.type === "file" ? { accept: "image/*" } : undefined,
           input:
@@ -85,8 +85,15 @@ export const CustomInput = ({
         }}
         type={props.type} // Pass type directly
         value={props.type === "file" ? undefined : field.value} // Ensure file input does not bind value
+        helperText={
+          meta.touched && meta.error ? (
+            <ErrorWrapper>*{meta.error}</ErrorWrapper>
+          ) : (
+            ""
+          )
+        }
       />
-      {meta.touched && meta.error && <ErrorWrapper>*{meta.error}</ErrorWrapper>}
+      {/* {meta.touched && meta.error && <ErrorWrapper>*{meta.error}</ErrorWrapper>} */}
 
       {props.type === "file" && (
         <Box

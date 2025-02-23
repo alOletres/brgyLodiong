@@ -10,4 +10,5 @@ export declare class Projects {
     officialId: number;
     official?: Officials;
     status: PROJECT_STATUS;
+    documents?: string;
 }

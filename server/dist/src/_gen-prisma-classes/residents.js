@@ -27,6 +27,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Residents.prototype, "id", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String }),
+    __metadata("design:type", String)
+], Residents.prototype, "image", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ type: String }),
     __metadata("design:type", String)
 ], Residents.prototype, "firstname", void 0);

@@ -2,13 +2,14 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import { baseApi } from "@/store/api/baseApi";
 import snackbarReducer from "@/store/slice/snackbarSlice";
-
+import imageReducer from "@/store/slice/image.slice";
 const reducer = combineReducers({
   // apis
   [baseApi.reducerPath]: baseApi.reducer,
 
   // slices
   snackbar: snackbarReducer,
+  image: imageReducer,
 });
 
 /**

@@ -27,6 +27,15 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createProjectsDto,
       }),
     }),
+    projectsControllerUploadFiles: build.mutation<
+      ProjectsControllerUploadFilesResponse,
+      ProjectsControllerUploadFilesArgs
+    >({
+      query: (queryArg) => ({
+        url: `/api/projects/files/${queryArg.id}`,
+        method: "PUT",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -42,6 +51,11 @@ export type ProjectsControllerUpdateResponse = unknown;
 export type ProjectsControllerUpdateArgs = {
   id: number;
   createProjectsDto: CreateProjectsDto;
+};
+export type ProjectsControllerUploadFilesResponse = unknown;
+export type ProjectsControllerUploadFilesArgs = {
+  id: number;
+  formData: FormData;
 };
 export type ProjectStatus = "PENDING" | "SUCCEED";
 export type CreateProjectsDto = {
@@ -62,10 +76,12 @@ export type FindAllProjectsDto = {
   endDate?: string;
   officialId: number;
   status: ProjectStatus;
+  documents?: string;
   officialName: string;
 };
 export const {
   useProjectsControllerCreateMutation,
   useProjectsControllerFetchQuery,
   useProjectsControllerUpdateMutation,
+  useProjectsControllerUploadFilesMutation,
 } = injectedRtkApi;

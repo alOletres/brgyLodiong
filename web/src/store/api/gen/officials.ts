@@ -67,6 +67,7 @@ export type Projects = {
   officialId: number;
   official?: Officials;
   status: ProjectStatus;
+  documents?: string;
 };
 export type CreateOfficialsDto = {
   firstname: string;

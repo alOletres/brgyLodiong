@@ -6,5 +6,6 @@ export declare class ProjectsService {
     constructor(prisma: PrismaService);
     create(payload: CreateProjectsDto): Promise<void>;
     update(id: number, payload: CreateProjectsDto): Promise<void>;
+    uploadFiles(id: number, files: string[]): Promise<void>;
     fetch(): Promise<FindAllProjectsDto[]>;
 }
