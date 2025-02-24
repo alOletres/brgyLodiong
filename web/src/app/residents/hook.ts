@@ -445,7 +445,7 @@ export const useHooks = () => {
           );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [btnName]
+    [btnName, files]
   );
 
   const formProps: CustomFormGroupProps = {
