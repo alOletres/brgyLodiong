@@ -17,7 +17,7 @@ import { CustomAppBar } from "@/components/AppBar";
 import Image from "next/image";
 
 import BrgyLogo from "@/assets/logo.png";
-import { Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import { useHooks } from "@/components/hooks/useDrawer";
 import Link from "next/link";
 
@@ -131,29 +131,89 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
         </DrawerHeader>
         <Divider />
         <List>
-          {list.map((label) => (
-            <ListItem key={label.link} disablePadding sx={{ display: "block" }}>
-              <Link href={label.link}>
-                <ListItemButton
-                  sx={[
-                    pathname === label.link
-                      ? {
-                          background: "#e7e6e3",
-                        }
-                      : {},
-                    {
-                      minHeight: 48,
-                      px: 2.5,
-                    },
-                    open
-                      ? {
-                          justifyContent: "initial",
-                        }
-                      : {
+          {list.map((label, key) => (
+            <Tooltip
+              sx={{ textTransform: "capitalize" }}
+              key={key}
+              title={!open ? label.link : ""}
+              placement="right"
+              arrow
+            >
+              <ListItem
+                key={label.link}
+                disablePadding
+                sx={{ display: "block" }}
+              >
+                <Link href={label.link}>
+                  <ListItemButton
+                    sx={[
+                      pathname === label.link
+                        ? {
+                            background: "#e7e6e3",
+                          }
+                        : {},
+                      {
+                        minHeight: 48,
+                        px: 2.5,
+                      },
+                      open
+                        ? {
+                            justifyContent: "initial",
+                          }
+                        : {
+                            justifyContent: "center",
+                          },
+                    ]}
+                  >
+                    <ListItemIcon
+                      sx={[
+                        {
+                          minWidth: 0,
                           justifyContent: "center",
                         },
-                  ]}
-                >
+                        open
+                          ? {
+                              mr: 3,
+                            }
+                          : {
+                              mr: "auto",
+                            },
+                      ]}
+                    >
+                      {label.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        label.link === "notifications"
+                          ? "Transaction History"
+                          : label.link
+                      }
+                      sx={[
+                        { textTransform: "capitalize" },
+                        open
+                          ? {
+                              opacity: 1,
+                            }
+                          : {
+                              opacity: 0,
+                            },
+                      ]}
+                    />
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            </Tooltip>
+          ))}
+
+          {reportList?.length ? (
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <Tooltip
+                sx={{ textTransform: "capitalize" }}
+                title={!open ? "Reports" : ""}
+                placement="right"
+                arrow
+              >
+                <ListItemButton onClick={handleReportsClick}>
                   <ListItemIcon
                     sx={[
                       {
@@ -163,20 +223,17 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
                       open
                         ? {
                             mr: 3,
+                            pl: 1,
                           }
                         : {
                             mr: "auto",
                           },
                     ]}
                   >
-                    {label.icon}
+                    <ViewAgendaOutlined />
                   </ListItemIcon>
                   <ListItemText
-                    primary={
-                      label.link === "notifications"
-                        ? "Transaction History"
-                        : label.link
-                    }
+                    primary="Reports"
                     sx={[
                       { textTransform: "capitalize" },
                       open
@@ -188,106 +245,76 @@ export const MiniDrawer = ({ children }: React.PropsWithChildren) => {
                           },
                     ]}
                   />
+                  {reportsOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
-              </Link>
-            </ListItem>
-          ))}
-
-          {reportList?.length ? (
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton onClick={handleReportsClick}>
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: "center",
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                          pl: 1,
-                        }
-                      : {
-                          mr: "auto",
-                        },
-                  ]}
-                >
-                  <ViewAgendaOutlined />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Reports"
-                  sx={[
-                    { textTransform: "capitalize" },
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-                {reportsOpen ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
+              </Tooltip>
               <Collapse in={reportsOpen} timeout="auto" unmountOnExit>
                 <List>
-                  {reportList.map(({ link, label, icon }) => (
-                    <ListItem
-                      key={link}
-                      disablePadding
-                      sx={{ display: "flex", alignItems: "center" }}
+                  {reportList.map(({ link, label, icon }, key) => (
+                    <Tooltip
+                      sx={{ textTransform: "capitalize" }}
+                      key={key}
+                      title={!open ? label : ""}
+                      placement="right"
+                      arrow
                     >
-                      <Link href={link}>
-                        <ListItemButton
-                          sx={[
-                            pathname === link
-                              ? {
-                                  background: "#e7e6e3",
-                                }
-                              : {},
-                            {
-                              minHeight: 48,
-                              px: 5,
-                              pl: open ? 5 : 2, // Adjust padding based on sidebar state
-                            },
-                            open
-                              ? {
-                                  justifyContent: "initial",
-                                }
-                              : {
-                                  justifyContent: "center",
-                                },
-                          ]}
-                        >
-                          <ListItemIcon
+                      <ListItem
+                        key={link}
+                        disablePadding
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        <Link href={link}>
+                          <ListItemButton
                             sx={[
+                              pathname === link
+                                ? {
+                                    background: "#e7e6e3",
+                                  }
+                                : {},
                               {
-                                minWidth: 0,
-                                justifyContent: "center",
+                                minHeight: 48,
+                                px: 5,
+                                pl: open ? 5 : 2, // Adjust padding based on sidebar state
                               },
                               open
                                 ? {
-                                    mr: 3,
+                                    justifyContent: "initial",
                                   }
                                 : {
-                                    mr: "auto",
+                                    justifyContent: "center",
                                   },
                             ]}
                           >
-                            {icon}
-                          </ListItemIcon>
-                          {open && (
-                            <ListItemText
-                              primary={label}
-                              sx={{
-                                textTransform: "capitalize",
-                                opacity: 1,
-                              }}
-                            />
-                          )}
-                        </ListItemButton>
-                      </Link>
-                    </ListItem>
+                            <ListItemIcon
+                              sx={[
+                                {
+                                  minWidth: 0,
+                                  justifyContent: "center",
+                                },
+                                open
+                                  ? {
+                                      mr: 3,
+                                    }
+                                  : {
+                                      mr: "auto",
+                                    },
+                              ]}
+                            >
+                              {icon}
+                            </ListItemIcon>
+                            {open && (
+                              <ListItemText
+                                primary={label}
+                                sx={{
+                                  textTransform: "capitalize",
+                                  opacity: 1,
+                                }}
+                              />
+                            )}
+                          </ListItemButton>
+                        </Link>
+                      </ListItem>
+                    </Tooltip>
                   ))}
                 </List>
               </Collapse>
