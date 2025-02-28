@@ -423,7 +423,7 @@ export const useHooks = () => {
         await uploadFiles(attachFileElement.id, formData);
       }
 
-      handleToggleAttachFiles();
+      setOpenModalFiles(false);
 
       setSnackbarProps({
         message: "Projects successfully uploaded documents!",

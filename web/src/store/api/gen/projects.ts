@@ -34,10 +34,11 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/projects/files/${queryArg.id}`,
         method: "PUT",
+        body: queryArg.formData,
       }),
     }),
   }),
-  overrideExisting: false,
+  overrideExisting: true,
 });
 export { injectedRtkApi as enhancedApi };
 export type ProjectsControllerCreateResponse = unknown;

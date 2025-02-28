@@ -22,7 +22,7 @@ let MailgunService = class MailgunService {
     }
     async sendMail(data) {
         try {
-            const response = await this.client.messages.create(process.env.MAILGUN_DOMAIN, Object.assign(Object.assign({}, data), { from: 'mailgun@sandbox64f2849500814639a693339686fd10da.mailgun.org', subject: 'Brgy. Lower Lodiong Notification' }));
+            const response = await this.client.messages.create(process.env.MAILGUN_DOMAIN, Object.assign(Object.assign({}, data), { from: 'sandbox64f2849500814639a693339686fd10da.mailgun.org', subject: 'Brgy. Lower Lodiong Notification' }));
             console.log('Mail gun response', response, 'data', data);
         }
         catch (err) {

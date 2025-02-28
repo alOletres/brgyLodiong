@@ -291,7 +291,8 @@ export const useHooks = () => {
 
   useEffect(() => {
     const data = requests as FindAllRequestsDto[];
-    if (data?.length) {
+
+    if (data?.length && Object.keys(user).length) {
       const decoded = decodeToken() as DecodedTokenValues;
       if (decoded?.role === "RESIDENT") {
         setDataSource(
@@ -302,7 +303,7 @@ export const useHooks = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requests]);
+  }, [requests, user]);
 
   const handleSearch = (
     event?:

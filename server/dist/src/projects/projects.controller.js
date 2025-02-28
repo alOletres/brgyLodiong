@@ -33,6 +33,7 @@ let ProjectsController = class ProjectsController {
         return await this.projectsService.update(id, payload);
     }
     async uploadFiles(id, files) {
+        console.log('files', files);
         if (!files || files.length === 0) {
             throw new common_1.BadRequestException('No files uploaded');
         }

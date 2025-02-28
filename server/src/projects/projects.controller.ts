@@ -44,6 +44,8 @@ export class ProjectsController {
     @Param('id', ParseIntPipe) id: number,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
+    console.log('files', files);
+
     if (!files || files.length === 0) {
       throw new BadRequestException('No files uploaded');
     }

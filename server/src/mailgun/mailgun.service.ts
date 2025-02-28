@@ -20,7 +20,7 @@ export class MailgunService {
         process.env.MAILGUN_DOMAIN,
         {
           ...data,
-          from: 'mailgun@sandbox64f2849500814639a693339686fd10da.mailgun.org',
+          from: 'sandbox64f2849500814639a693339686fd10da.mailgun.org',
           subject: 'Brgy. Lower Lodiong Notification',
         },
       );
