@@ -402,14 +402,46 @@ export const useHooks = () => {
       | undefined
   ) => {
     if (event?.target.value) {
-      const filteredSource = dataSource.filter((row) => {
-        return row.projectName
-          .toLowerCase()
-          .includes(event?.target.value.toLowerCase());
-      });
+      const filteredSource = dataSource
+        .filter((row) => {
+          return row.projectName
+            .toLowerCase()
+            .includes(event?.target.value.toLowerCase());
+        })
+        .map((value) => {
+          if (typeof value.members === "string") {
+            value.members = JSON.parse(value.members);
+          }
+
+          if (value.documents && typeof value.documents === "string") {
+            const documents = JSON.parse(value.documents);
+            value.documents = documents.map(
+              (doc: string) =>
+                `${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${doc}`
+            );
+          }
+
+          return value;
+        });
       setDataSource(filteredSource);
     } else {
-      setDataSource(projects as FindAllProjectsDto[]);
+      const data = projects?.length ? projects : [];
+      const filteredData = structuredClone([...data])?.map((value) => {
+        if (typeof value.members === "string") {
+          value.members = JSON.parse(value.members);
+        }
+
+        if (value.documents && typeof value.documents === "string") {
+          const documents = JSON.parse(value.documents);
+          value.documents = documents.map(
+            (doc: string) =>
+              `${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${doc}`
+          );
+        }
+
+        return value;
+      });
+      setDataSource(filteredData?.length ? filteredData : []);
     }
   };
 

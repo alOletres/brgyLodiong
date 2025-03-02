@@ -5,6 +5,7 @@ import { useResidentsApi } from "@/store/api/hooks/residents";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useSnackbar } from "./useSnackbar";
+import { useRequestApi } from "@/store/api/hooks/request";
 
 export const useAppBar = () => {
   const pathName = usePathname();
@@ -44,7 +45,17 @@ export const useAppBar = () => {
     isFetchingResidents,
   } = useResidentsApi();
 
+  const { requests } = useRequestApi();
+
   const { setSnackbarProps } = useSnackbar();
+
+  const dataSourceRequest = useMemo(
+    () =>
+      requests?.length
+        ? requests.filter((value) => value.status === "PENDING")
+        : [],
+    [requests]
+  );
 
   const dataSource = useMemo(
     () =>
@@ -79,5 +90,6 @@ export const useAppBar = () => {
     dataSource,
     handleApprove,
     isFetchingResidents,
+    dataSourceRequest,
   };
 };
