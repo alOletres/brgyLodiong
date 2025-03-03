@@ -61,11 +61,6 @@ export const requestColumnSchema: ColumnSchema<FindAllRequestsDto>[] = [
     label: "Date Requested",
     format: (value) => moment(value).format("MM/DD/YYYY"),
   },
-  {
-    key: "dateCompleted",
-    label: "Date Completed",
-    format: (value) => moment(value).format("MM/DD/YYYY"),
-  },
 
   {
     key: "dateClaimed",
