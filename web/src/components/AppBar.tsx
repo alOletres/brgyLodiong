@@ -10,6 +10,7 @@ import {
   ListItemText,
   Avatar,
   Link,
+  Divider,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -19,6 +20,7 @@ import {
 import { styled } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import { useAppBar } from "./hooks/useAppBar";
+import React from "react";
 
 const drawerWidth = 240;
 
@@ -60,7 +62,11 @@ export const CustomAppBar = ({
     anchorEl,
     dataSource,
     handleApprove,
+    dataSourceRequest,
+    handleApproveRequest,
   } = useAppBar();
+
+  console.log("resident", resident);
 
   return (
     <AppBar position="fixed" open={open}>
@@ -93,18 +99,24 @@ export const CustomAppBar = ({
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* Notification Icon with Badge */}
-            <IconButton
-              id="demo-positioned-button"
-              aria-controls={menuOpen ? "demo-positioned-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={menuOpen ? "true" : undefined}
-              onClick={handleClick}
-              color="inherit"
-            >
-              <Badge badgeContent={dataSource.length || 0} color="error">
-                <Notifications />
-              </Badge>
-            </IconButton>
+            {resident.role === "ADMIN" ? (
+              <IconButton
+                id="demo-positioned-button"
+                aria-controls={menuOpen ? "demo-positioned-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={menuOpen ? "true" : undefined}
+                onClick={handleClick}
+                color="inherit"
+              >
+                <Badge
+                  badgeContent={dataSource.length + dataSourceRequest.length}
+                  color="error"
+                >
+                  <Notifications />
+                </Badge>
+              </IconButton>
+            ) : null}
+
             <Menu
               id="demo-positioned-menu"
               aria-labelledby="demo-positioned-button"
@@ -120,10 +132,90 @@ export const CustomAppBar = ({
                 horizontal: "left",
               }}
             >
-              {dataSource?.length ? (
-                dataSource
-                  .sort((a, b) => (a.lastname > b.lastname ? 1 : -1))
-                  .map((value, key) => (
+              <>
+                <Typography sx={{ padding: 1 }}>
+                  <Badge badgeContent={dataSource.length || 0} color="error">
+                    Pending Residents
+                  </Badge>
+                </Typography>
+                <Divider />
+                {dataSource?.length ? (
+                  dataSource
+                    .sort((a, b) => (a.lastname > b.lastname ? 1 : -1))
+                    .map((value, key) => (
+                      <MenuItem key={key}>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          width="100%"
+                        >
+                          {/* Avatar and user info */}
+                          <Box display="flex" alignItems="center" gap={2}>
+                            <Link
+                              href={`${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${value.image}`}
+                              download
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Avatar
+                                src={`${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${value.image}`}
+                                alt={value.firstname}
+                              />
+                            </Link>
+                            <ListItemText
+                              primary={`${value.lastname}, ${value.firstname}`}
+                              secondary={
+                                <>
+                                  <span>{value.role}</span>
+                                  <br />
+                                  <span>{value.email}</span>
+                                  <br />
+                                  <span>Status: {value.status}</span>
+                                </>
+                              }
+                            />
+                          </Box>
+                          {/* Button aligned consistently */}
+                          <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => handleApprove(value)}
+                          >
+                            Approve
+                          </Button>
+                        </Box>
+                      </MenuItem>
+                    ))
+                ) : (
+                  <MenuItem>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      width="100%"
+                    >
+                      <ListItemText primary="No pending available" />
+                      <Button variant="contained" size="small" disabled>
+                        Approve
+                      </Button>
+                    </Box>
+                  </MenuItem>
+                )}
+                <Divider />
+
+                {/* Resident request here */}
+                <Typography sx={{ padding: 1 }}>
+                  <Badge
+                    badgeContent={dataSourceRequest.length || 0}
+                    color="error"
+                  >
+                    Pending Requests
+                  </Badge>
+                </Typography>
+                <Divider />
+
+                {dataSourceRequest?.length ? (
+                  dataSourceRequest.map((value, key) => (
                     <MenuItem key={key}>
                       <Box
                         display="flex"
@@ -133,24 +225,15 @@ export const CustomAppBar = ({
                       >
                         {/* Avatar and user info */}
                         <Box display="flex" alignItems="center" gap={2}>
-                          <Link
-                            href={`${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${value.image}`}
-                            download
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Avatar
-                              src={`${process.env.NEXT_PUBLIC_API_ORIGIN}/uploads/${value.image}`}
-                              alt={value.firstname}
-                            />
-                          </Link>
                           <ListItemText
-                            primary={`${value.lastname}, ${value.firstname}`}
+                            primary={value.requestedBy}
                             secondary={
                               <>
-                                <span>{value.role}</span>
+                                <span>{value.requestType}</span>
                                 <br />
-                                <span>{value.email}</span>
+                                <span>{value.address}</span>
+                                <br />
+                                <span>{value.contact}</span>
                                 <br />
                                 <span>Status: {value.status}</span>
                               </>
@@ -161,27 +244,28 @@ export const CustomAppBar = ({
                         <Button
                           variant="contained"
                           size="small"
-                          onClick={() => handleApprove(value)}
+                          onClick={() => handleApproveRequest(value)}
                         >
                           Approve
                         </Button>
                       </Box>
                     </MenuItem>
                   ))
-              ) : (
-                <MenuItem>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    width="100%"
-                  >
-                    <ListItemText primary="No pending available" />
-                    <Button variant="contained" size="small" disabled>
-                      Approve
-                    </Button>
-                  </Box>
-                </MenuItem>
-              )}
+                ) : (
+                  <MenuItem>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      width="100%"
+                    >
+                      <ListItemText primary="No pending available" />
+                      <Button variant="contained" size="small" disabled>
+                        Approve
+                      </Button>
+                    </Box>
+                  </MenuItem>
+                )}
+              </>
             </Menu>
 
             <Box sx={{ marginRight: 4, marginLeft: 2 }}>
