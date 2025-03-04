@@ -78,9 +78,10 @@ let RequestService = class RequestService {
             const isCompleted = payload.status === client_1.REQUEST_STATUS.COMPLETED;
             const isClaimed = payload.status === client_1.REQUEST_STATUS.CLAIMED;
             if (payload.status !== 'PENDING') {
-                const { firstname, lastname, contact, email } = await this.residentService.findOne(payload.residentId);
+                const { firstname, lastname, contact } = await this.residentService.findOne(payload.residentId);
                 const completeName = `${firstname} ${lastname}`;
                 const body = this.twilioService.notifyResident(completeName, payload.requestType, payload.status);
+                await this.twilioService.sendSms(contact, body);
                 await this.notificationService.create({
                     message: body,
                     notificationType: 'SMS',

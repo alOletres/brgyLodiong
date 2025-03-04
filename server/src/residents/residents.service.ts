@@ -58,7 +58,7 @@ export class ResidentsService {
       });
       const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
       // Send to resident mobile number
-      // await this.twilioService.sendSms(payload.contact, message);
+      await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
       // await this.mailGunService.sendMail({ to: payload.email, text: message });
@@ -99,7 +99,7 @@ export class ResidentsService {
       }
 
       // Send to resident mobile number
-      // await this.twilioService.sendSms(payload.contact, message);
+      await this.twilioService.sendSms(payload.contact, message);
 
       // Send to resident email account
       // await this.emailService.sendMail({ to: payload.email, text: message });

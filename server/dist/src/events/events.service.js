@@ -31,10 +31,6 @@ let EventsService = class EventsService {
         const registeredResidents = await this.residentService.fetchByStatus('REGISTERED');
         await Promise.all(registeredResidents.map(async (resident) => {
             const message = `Hi Mr/Mrs. ${resident.firstname} ${resident.lastname} 🎉 Join us at ${payload.location} on ${(0, moment_1.default)(payload.eventDate).format('MM/DD/YYYY')} at ${(0, moment_1.default)(payload.eventDate).format('LT')} for ${payload.eventName}. ${payload.description}`;
-            await this.mailgunService.sendMail({
-                to: resident.email,
-                text: message,
-            });
             await this.twilioService.sendSms(resident.contact, message);
             return resident;
         }));
@@ -42,6 +38,7 @@ let EventsService = class EventsService {
     async create(payload) {
         try {
             await this.prisma.events.create({ data: Object.assign({}, payload) });
+            await this.notificationBlasting(payload);
         }
         catch (err) {
             throw err;
@@ -50,6 +47,7 @@ let EventsService = class EventsService {
     async update(id, payload) {
         try {
             await this.prisma.events.update({ where: { id }, data: Object.assign({}, payload) });
+            await this.notificationBlasting(payload);
         }
         catch (err) {
             throw err;

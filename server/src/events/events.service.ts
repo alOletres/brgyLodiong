@@ -34,10 +34,10 @@ export class EventsService {
         )} for ${payload.eventName}. ${payload.description}`;
 
         // Send event ot every resident email
-        await this.mailgunService.sendMail({
-          to: resident.email,
-          text: message,
-        });
+        // await this.mailgunService.sendMail({
+        //   to: resident.email,
+        //   text: message,
+        // });
 
         // Send events to every residents mobile number
         await this.twilioService.sendSms(resident.contact, message);
@@ -50,7 +50,7 @@ export class EventsService {
     try {
       await this.prisma.events.create({ data: { ...payload } });
 
-      // await this.notificationBlasting(payload);
+      await this.notificationBlasting(payload);
     } catch (err) {
       throw err;
     }
@@ -60,7 +60,7 @@ export class EventsService {
     try {
       await this.prisma.events.update({ where: { id }, data: { ...payload } });
 
-      // await this.notificationBlasting(payload);
+      await this.notificationBlasting(payload);
     } catch (err) {
       throw err;
     }

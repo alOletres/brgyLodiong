@@ -67,6 +67,7 @@ let ResidentsService = class ResidentsService {
                     } }),
             });
             const message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
+            await this.twilioService.sendSms(payload.contact, message);
         }
         catch (err) {
             console.log('err', err);
@@ -95,6 +96,7 @@ let ResidentsService = class ResidentsService {
             else {
                 message = `Dear Mr/Mrs. ${payload.firstname} ${payload.lastname}, your account is pending. We will notify you once the review is complete. Brgy. Lower Lodiong Tambulig, Zamboanga del Sur.`;
             }
+            await this.twilioService.sendSms(payload.contact, message);
         }
         catch (err) {
             console.log('err', err);

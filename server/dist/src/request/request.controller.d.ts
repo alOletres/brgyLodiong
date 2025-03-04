@@ -5,10 +5,10 @@ export declare class RequestController {
     private requestService;
     constructor(requestService: RequestService);
     create(payload: CreateRequestDto): Promise<{
+        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         id: number;
         residentId: number;
         requestType: string;
-        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;
@@ -17,10 +17,10 @@ export declare class RequestController {
         requestMode: import(".prisma/client").$Enums.REQUEST_MODE;
     }>;
     update(id: number, payload: CreateRequestDto): Promise<{
+        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         id: number;
         residentId: number;
         requestType: string;
-        status: import(".prisma/client").$Enums.REQUEST_STATUS;
         rejectionReason: string;
         purpose: string;
         dateRequested: Date;
