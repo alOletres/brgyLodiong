@@ -48,7 +48,7 @@ export const useHooks = () => {
 
   //
   const [labelEventStatus] = useState<EventStatus[]>([
-    "ONGOING",
+    "CANCELED",
     "ONGOING",
     "SUCCEED",
   ]);
