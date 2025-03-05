@@ -26,13 +26,18 @@ const DashBoardPage = () => {
 
     dataSetRequestStatus,
     requestStatus,
+
+    labelEventStatus,
+    dataSetEventStatus,
+    isFetchingEvents,
   } = useHooks();
 
   return (
     <>
-      {(isFetchingRequest || isFetchingProjects || isFetchingResidents) && (
-        <LinearLoader height={4} />
-      )}
+      {(isFetchingRequest ||
+        isFetchingProjects ||
+        isFetchingResidents ||
+        isFetchingEvents) && <LinearLoader height={4} />}
       <Box sx={CardStyle}>
         <Box sx={{ width: "25%" }}>
           <CustomChart
@@ -70,7 +75,14 @@ const DashBoardPage = () => {
             labels={requestStatus}
           />
         </Box>
-        <Box sx={{ width: "25%" }}></Box>
+        <Box sx={{ width: "25%" }}>
+          <CustomChart
+            title="Event status statistics"
+            type="doughnut"
+            datasets={dataSetEventStatus}
+            labels={labelEventStatus}
+          />
+        </Box>
         <Box sx={{ width: "35%" }}></Box>
       </Box>
     </>

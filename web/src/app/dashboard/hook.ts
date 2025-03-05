@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ECERTIFICATES } from "@/constants/certificates.enum";
+import { EventStatus } from "@/store/api/gen/event";
 import { ProjectStatus } from "@/store/api/gen/officials";
 import { RequestStatus } from "@/store/api/gen/request";
 import { ResidentStatus } from "@/store/api/gen/residents";
+import { useEventsApi } from "@/store/api/hooks/event";
 import { useProjectsApi } from "@/store/api/hooks/projects";
 import { useRequestApi } from "@/store/api/hooks/request";
 import { useResidentsApi } from "@/store/api/hooks/residents";
@@ -32,6 +34,7 @@ export const useHooks = () => {
   const [dataSetRequest, setDataSetRequest] = useState<ChartDataset[]>([]);
   const { requests, isFetchingRequest } = useRequestApi();
 
+  // Request status chart
   const [requestStatus] = useState<RequestStatus[]>([
     "REJECTED",
     "APPROVED",
@@ -42,6 +45,32 @@ export const useHooks = () => {
   const [dataSetRequestStatus, setDataSetRequestStatus] = useState<
     ChartDataset[]
   >([]);
+
+  //
+  const [labelEventStatus] = useState<EventStatus[]>([
+    "ONGOING",
+    "ONGOING",
+    "SUCCEED",
+  ]);
+  const [dataSetEventStatus, setDataSetEventStatus] = useState<ChartDataset[]>(
+    []
+  );
+  const { events, isFetchingEvents } = useEventsApi();
+
+  // Event hooks
+  const eventCountByStatus = useMemo(() => {
+    if (!events?.length) return [];
+
+    return labelEventStatus.map(
+      (status) => events.filter((event) => event.status === status).length
+    );
+  }, [events]);
+
+  useEffect(() => {
+    setDataSetEventStatus([
+      { data: eventCountByStatus, label: "Datasets Event status" },
+    ]);
+  }, [eventCountByStatus]);
 
   // Projects hooks
   const projectsCountByStatus = useMemo(() => {
@@ -124,5 +153,10 @@ export const useHooks = () => {
 
     requestStatus,
     dataSetRequestStatus,
+
+    // events
+    labelEventStatus,
+    dataSetEventStatus,
+    isFetchingEvents,
   };
 };
