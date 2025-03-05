@@ -260,30 +260,6 @@ export const useHooks = () => {
     setOpenModal((state) => !state);
   };
 
-  // const columnSchema: ColumnSchema<FindAllOfficialsDto & TableActions>[] = [
-  //   { key: "committee", label: "Committee" },
-  //   { key: "position", label: "position" },
-  //   { key: "firstname", label: "firstname" },
-  //   { key: "lastname", label: "lastname" },
-  //   { key: "suffix", label: "Suffix" },
-  //   { key: "achievements", label: "achievements" },
-  //   {
-  //     key: "startTerm",
-  //     label: "start term",
-  //     format: (value) => moment(value).format("MM/DD/YYYY"),
-  //   },
-  //   {
-  //     key: "endTerm",
-  //     label: "end term",
-  //     format: (value) => moment(value).format("MM/DD/YYYY"),
-  //   },
-
-  //   {
-  //     key: "cellActions",
-  //     label: "actions",
-  //   },
-  // ];
-
   const tableHeaderActions: HeaderActions<ActionButtonProps<any>>[] = [
     {
       actionType: "button",

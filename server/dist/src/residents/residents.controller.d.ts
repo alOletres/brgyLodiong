@@ -11,17 +11,17 @@ export declare class ResidentsController {
     fetch(): Promise<FindAllResidentsDto[]>;
     fetchByStatus(status: RESIDENT_STATUS): Promise<FindAllResidentsDto[]>;
     updateResidentStatus(id: number, status: RESIDENT_STATUS): Promise<{
+        id: number;
+        status: import(".prisma/client").$Enums.RESIDENT_STATUS;
+        createdAt: Date;
         image: string;
-        civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
         firstname: string;
+        civilStatus: import(".prisma/client").$Enums.CIVIL_STATUS;
         lastname: string;
         email: string;
         contact: string;
         address: string;
-        status: import(".prisma/client").$Enums.RESIDENT_STATUS;
         disApprovedReason: string;
-        id: number;
-        createdAt: Date;
         requestsId: number;
     }>;
 }

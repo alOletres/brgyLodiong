@@ -23,6 +23,8 @@ import { useSnackbar } from "@/components/hooks/useSnackbar";
 import { isValidDate } from "@/utils/error";
 import { ProjectStatus } from "@/store/api/gen/officials";
 import { convertUrlToFile } from "@/utils/convertFilet";
+import { DecodedTokenValues } from "@/components/hooks/useDrawer";
+import { decodeToken } from "@/lib/tokenStorage";
 
 export const useHooks = () => {
   const initialFormValues: any = {
@@ -61,7 +63,21 @@ export const useHooks = () => {
   const [attachFileElement, setAttachFileElement] =
     useState<FindAllProjectsDto>();
 
-  const columnSchema: ColumnSchema<FindAllProjectsDto & TableActions>[] = [
+  const [user, setUser] = useState<DecodedTokenValues>(
+    {} as DecodedTokenValues
+  );
+
+  useEffect(() => {
+    const decoded = decodeToken() as DecodedTokenValues;
+
+    if (decoded) {
+      setUser(decoded);
+    }
+  }, []);
+
+  const projectsColumnSchema: ColumnSchema<
+    FindAllProjectsDto & TableActions
+  >[] = [
     { key: "officialName", label: "Official" },
     { key: "members", label: "members" },
     { key: "projectName", label: "project" },
@@ -80,16 +96,21 @@ export const useHooks = () => {
       key: "status",
       label: "status",
     },
-
-    {
-      key: "cellActions",
-      label: "actions",
-    },
-    {
-      key: "documents",
-      label: "Attached documents",
-    },
   ];
+
+  const columnSchema: ColumnSchema<FindAllProjectsDto & TableActions>[] =
+    user.role === "ADMIN"
+      ? projectsColumnSchema.concat([
+          {
+            key: "cellActions",
+            label: "actions",
+          },
+          {
+            key: "documents",
+            label: "Attached documents",
+          },
+        ])
+      : projectsColumnSchema;
 
   const handleToggleModal = (values?: FindAllProjectsDto) => {
     if (values && Object.keys(values).length) {
@@ -469,7 +490,7 @@ export const useHooks = () => {
   return {
     dataSource,
     columnSchema,
-    headerActions,
+    headerActions: user.role === "ADMIN" ? headerActions : undefined,
     isFetchingProjects,
     initialValues: formValues,
     handleToggleModal,
