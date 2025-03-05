@@ -70,14 +70,14 @@ export const useHooks = () => {
       (types) =>
         requests.filter(
           (request) =>
-            request.requestType === types && request.status === "COMPLETED"
+            request.requestType === types && request.status === "CLAIMED"
         ).length
     );
   }, [requests]);
 
   useEffect(() => {
     setDataSetRequest([
-      { data: requestCountByTypes, label: "Dataset Request Completed" },
+      { data: requestCountByTypes, label: "Dataset Request Claimed" },
     ]);
   }, [requestCountByTypes]);
   return {

@@ -96,6 +96,10 @@ export const useHooks = () => {
       key: "status",
       label: "status",
     },
+    {
+      key: "documents",
+      label: "Attached documents",
+    },
   ];
 
   const columnSchema: ColumnSchema<FindAllProjectsDto & TableActions>[] =
@@ -104,10 +108,6 @@ export const useHooks = () => {
           {
             key: "cellActions",
             label: "actions",
-          },
-          {
-            key: "documents",
-            label: "Attached documents",
           },
         ])
       : projectsColumnSchema;
