@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ECERTIFICATES } from "@/constants/certificates.enum";
 import { ProjectStatus } from "@/store/api/gen/officials";
+import { RequestStatus } from "@/store/api/gen/request";
 import { ResidentStatus } from "@/store/api/gen/residents";
 import { useProjectsApi } from "@/store/api/hooks/projects";
 import { useRequestApi } from "@/store/api/hooks/request";
@@ -31,6 +32,17 @@ export const useHooks = () => {
   const [dataSetRequest, setDataSetRequest] = useState<ChartDataset[]>([]);
   const { requests, isFetchingRequest } = useRequestApi();
 
+  const [requestStatus] = useState<RequestStatus[]>([
+    "CLAIMED",
+    "APPROVED",
+    "PENDING",
+    "REJECTED",
+    "UNCLAIMED",
+  ]);
+  const [dataSetRequestStatus, setDataSetRequestStatus] = useState<
+    ChartDataset[]
+  >([]);
+
   // Projects hooks
   const projectsCountByStatus = useMemo(() => {
     if (!projects?.length) return [];
@@ -56,6 +68,7 @@ export const useHooks = () => {
         ).length
     );
   }, [residents]);
+
   useEffect(() => {
     setDatasetResidents([
       { data: residentsCountByStatus, label: "Datasets Resident" },
@@ -80,6 +93,22 @@ export const useHooks = () => {
       { data: requestCountByTypes, label: "Dataset Request Claimed" },
     ]);
   }, [requestCountByTypes]);
+
+  // Request types hooks
+  const requestStatusCount = useMemo(() => {
+    if (!requests?.length) return [];
+
+    return requestStatus.map(
+      (status) => requests.filter((request) => request.status === status).length
+    );
+  }, [requests]);
+
+  useEffect(() => {
+    setDataSetRequestStatus([
+      { data: requestStatusCount, label: "Dataset Request Status" },
+    ]);
+  }, [requestStatusCount]);
+
   return {
     dataSetProjects,
     isFetchingProjects,
@@ -92,5 +121,8 @@ export const useHooks = () => {
     labelRequestTypes,
     dataSetRequest,
     isFetchingRequest,
+
+    requestStatus,
+    dataSetRequestStatus,
   };
 };

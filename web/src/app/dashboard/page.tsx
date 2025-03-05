@@ -23,6 +23,9 @@ const DashBoardPage = () => {
     isFetchingRequest,
     isFetchingProjects,
     isFetchingResidents,
+
+    dataSetRequestStatus,
+    requestStatus,
   } = useHooks();
 
   return (
@@ -56,6 +59,19 @@ const DashBoardPage = () => {
             labels={labelRequestTypes}
           />
         </Box>
+      </Box>
+
+      <Box sx={CardStyle}>
+        <Box sx={{ width: "25%" }}>
+          <CustomChart
+            title="Requests Status Statistics"
+            type="polarArea"
+            datasets={dataSetRequestStatus}
+            labels={requestStatus}
+          />
+        </Box>
+        <Box sx={{ width: "25%" }}></Box>
+        <Box sx={{ width: "35%" }}></Box>
       </Box>
     </>
   );
