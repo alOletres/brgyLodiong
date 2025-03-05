@@ -33,10 +33,10 @@ export const useHooks = () => {
   const { requests, isFetchingRequest } = useRequestApi();
 
   const [requestStatus] = useState<RequestStatus[]>([
-    "CLAIMED",
+    "REJECTED",
     "APPROVED",
     "PENDING",
-    "REJECTED",
+    "CLAIMED",
     "UNCLAIMED",
   ]);
   const [dataSetRequestStatus, setDataSetRequestStatus] = useState<
